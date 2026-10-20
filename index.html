@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESAA — Enterprise AI Platform</title>
+  <meta name="description" content="ESAA turns foundational LLMs into secure, context-aware digital coworkers and autonomous agents connected to SAP, ServiceNow, Salesforce, Jira, Google Drive and communication channels.">
+  <meta name="color-scheme" content="light">
+  <link rel="stylesheet" href="styles.css?v=13">
+</head>
+<body>
+
+  <!-- Fixed Left Rail -->
+  <!-- Fixed Left Rail with Expandable Touch/Hover Menu -->
+  <aside class="fixed-left-rail" id="fixed-rail" aria-label="Section navigation">
+    <a href="#statement" class="rail-item is-active" data-target="statement" aria-label="Problem Statement">
+      <div class="rail-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 8V5a1 1 0 0 1 1-1h3"></path>
+          <path d="M16 4h3a1 1 0 0 1 1 1v3"></path>
+          <path d="M20 16v3a1 1 0 0 1-1 1h-3"></path>
+          <path d="M8 20H5a1 1 0 0 1-1-1v-3"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <circle cx="12" cy="16" r="0.8" fill="currentColor"></circle>
+        </svg>
+      </div>
+      <span class="rail-label">Problem Statement</span>
+    </a>
+
+    <a href="#split-feature" class="rail-item" data-target="split-feature" aria-label="Solution">
+      <div class="rail-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18h6"></path>
+          <path d="M10 22h4"></path>
+          <path d="M12 2a7 7 0 0 0-7 7c0 2.5 1.5 4.5 3 6h8c1.5-1.5 3-3.5 3-6a7 7 0 0 0-7-7z"></path>
+        </svg>
+      </div>
+      <span class="rail-label">Solution</span>
+    </a>
+
+    <a href="#dark-section" class="rail-item" data-target="dark-section" aria-label="Security">
+      <div class="rail-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          <rect x="10" y="12" width="4" height="4" rx="1"></rect>
+          <path d="M11 12v-1.5a1 1 0 0 1 2 0V12"></path>
+        </svg>
+      </div>
+      <span class="rail-label">Security</span>
+    </a>
+
+    <a href="#stats" class="rail-item" data-target="stats" aria-label="Statistics">
+      <div class="rail-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+          <line x1="6" y1="20" x2="6" y2="16"></line>
+          <line x1="10" y1="20" x2="10" y2="13"></line>
+          <line x1="14" y1="20" x2="14" y2="17"></line>
+          <line x1="18" y1="20" x2="18" y2="11"></line>
+        </svg>
+      </div>
+      <span class="rail-label">Statistics</span>
+    </a>
+
+    <a href="#carousel" class="rail-item" data-target="carousel" aria-label="Customers">
+      <div class="rail-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="5" width="20" height="14" rx="3"></rect>
+          <circle cx="8" cy="12" r="2.5"></circle>
+          <line x1="15" y1="9" x2="15" y2="15"></line>
+          <line x1="18" y1="9" x2="18" y2="15"></line>
+        </svg>
+      </div>
+      <span class="rail-label">Customers</span>
+    </a>
+
+    <a href="#tabs" class="rail-item" data-target="tabs" aria-label="Platform">
+      <div class="rail-icon-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 12 12 17 22 12"></polyline>
+          <polyline points="2 17 12 22 22 17"></polyline>
+        </svg>
+      </div>
+      <span class="rail-label">Platform</span>
+    </a>
+  </aside>
+
+  <!-- 1. Announcement Bar -->
+  <header class="announcement-bar" id="announcement-bar">
+    <div class="announcement-content">
+      <span><strong>New Release:</strong> ESAA Enterprise v2.4 with SAP S/4HANA &amp; ServiceNow live actions is now available.</span>
+      <a href="#pillars" class="announcement-link">Read release notes &rarr;</a>
+    </div>
+    <button class="announcement-close" id="announcement-close" aria-label="Close announcement">&times;</button>
+  </header>
+
+  <!-- 2. Sticky Header -->
+  <div class="sticky-header" id="sticky-header">
+    <div class="container header-container">
+      <div class="nav-left">
+        <a href="#hero" class="logo-brand" aria-label="ESAA Home">
+          <img src="esaa-logo-light.png" alt="ESAA" class="brand-logo-img">
+        </a>
+        <nav class="nav-menu-wrapper" aria-label="Main menu">
+          <ul class="nav-menu" id="desktop-nav-menu">
+            <li class="nav-item" data-menu="product">
+              <button class="nav-link" aria-expanded="false">
+                Product <span class="nav-caret"></span>
+              </button>
+            </li>
+            <li class="nav-item" data-menu="customers">
+              <button class="nav-link" aria-expanded="false">
+                Customers <span class="nav-caret"></span>
+              </button>
+            </li>
+            <li class="nav-item" data-menu="solutions">
+              <button class="nav-link" aria-expanded="false">
+                Solutions <span class="nav-caret"></span>
+              </button>
+            </li>
+            <li class="nav-item" data-menu="resources">
+              <button class="nav-link" aria-expanded="false">
+                Resources <span class="nav-caret"></span>
+              </button>
+            </li>
+            <li class="nav-item" data-menu="company">
+              <button class="nav-link" aria-expanded="false">
+                Company <span class="nav-caret"></span>
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="nav-right">
+        <button class="header-search-btn" id="open-search-btn" aria-label="Search platform">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span>Search platform...</span>
+          <span class="search-shortcut">⌘K</span>
+        </button>
+        <button class="btn btn-sm btn-outline" id="sign-in-btn">Sign in</button>
+        <button class="btn btn-sm btn-primary demo-trigger-btn">Get a demo</button>
+        <button class="hamburger-btn" id="hamburger-btn" aria-label="Toggle mobile menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mega Menu Panel & Backdrop -->
+    <div class="mega-menu-overlay" id="mega-menu-overlay"></div>
+    <div class="mega-menu-panel" id="mega-menu-panel">
+      <div class="container mega-menu-inner" id="mega-menu-content">
+        <!-- Injected via JavaScript based on hovered menu item -->
+      </div>
+    </div>
+
+    <!-- Mobile Stacked Navigation -->
+    <div class="mobile-nav-panel" id="mobile-nav-panel">
+      <ul class="mobile-nav-links">
+        <li><a href="#hero" class="mobile-nav-link">Product Overview</a></li>
+        <li><a href="#statement" class="mobile-nav-link">Architecture &amp; Rules</a></li>
+        <li><a href="#stats" class="mobile-nav-link">Platform Numbers</a></li>
+        <li><a href="#tabs" class="mobile-nav-link">Capabilities</a></li>
+        <li><a href="#accordion" class="mobile-nav-link">8 Pillars</a></li>
+        <li><a href="#carousel" class="mobile-nav-link">Challenges &amp; Solutions</a></li>
+        <li><a href="#resources" class="mobile-nav-link">Resources</a></li>
+      </ul>
+      <div class="mobile-nav-actions">
+        <button class="btn btn-outline" id="mobile-search-btn">Search Topics</button>
+        <button class="btn btn-outline" id="mobile-sign-in-btn">Sign in</button>
+        <button class="btn btn-primary demo-trigger-btn">Get a demo</button>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- 3. Hero Section (Wide Layout) -->
+    <section class="hero-section" id="hero">
+      <div class="container hero-header-container">
+        <div class="hero-header">
+          <div class="hero-pill-tag">
+            <span class="hero-pill-badge">Enterprise AI</span>
+            <span>Governed LLM Infrastructure</span>
+          </div>
+          <h1 class="hero-title">One AI platform to put work at enterprise scale.</h1>
+          <p class="hero-subtext">
+            ESAA turns foundational LLMs into secure, context-aware digital coworkers and autonomous agents connected to SAP, ServiceNow, Salesforce, Jira, Google Drive and communication channels, with cited, permission-aware answers inside a governed security boundary.
+          </p>
+          <div class="hero-cta-group">
+            <button class="btn btn-primary demo-trigger-btn">Get a demo</button>
+            <a href="#tabs" class="btn btn-outline">Explore capabilities &darr;</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wide Panoramic 3D Hero Canvas -->
+      <div class="hero-wide-container">
+        <div class="hero-visual-wrapper">
+          <div class="hero-gradient-stage">
+            <img src="glean-hero-bg.webp" class="hero-bg-media" alt="ESAA Enterprise Work AI" />
+            
+            <!-- Glass Outer Frame (Glean style) -->
+            <div class="hero-glass-frame">
+              <div class="hero-search-card">
+                <!-- Search input pill with + icon, typing prompt, and action buttons -->
+                <div class="hero-search-bar">
+                  <button class="search-plus-btn" aria-label="Add context" title="Attach context or files">
+                    <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 2.583V13.416M2.583 8H13.416" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                  </button>
+
+                  <div class="search-typing-viewport">
+                    <span class="search-typed-text" id="hero-typing-target"></span>
+                    <span class="blinking-cursor"></span>
+                  </div>
+
+                  <div class="search-actions-group">
+                    <button class="search-tuning-btn" aria-label="Tuning filters" title="Tuning filters">
+                      <svg width="17" height="17" viewBox="0 0 16 16" fill="none"><path d="M1.75 3.25L3.62247 3.25M7.5 3.25H14.25M1.75 12.25H3.5M7.5 12.25H14.25M14.25 7.75H12.4483M8.58228 7.75H1.75M7 3.5C7 4.32843 6.32843 5 5.5 5C4.67157 5 4 4.32843 4 3.5C4 2.67157 4.67157 2 5.5 2C6.32843 2 7 2.67157 7 3.5ZM7 12.5C7 13.3284 6.32843 14 5.5 14C4.67157 14 4 13.3284 4 12.5C4 11.6716 4.67157 11 5.5 11C6.32843 11 7 11.6716 7 12.5ZM9 7.5C9 6.67157 9.67157 6 10.5 6C11.3284 6 12 6.67157 12 7.5C12 8.32843 11.3284 9 10.5 9C9.67157 9 9 8.32843 9 7.5Z" stroke="currentColor" stroke-width="1.5"></path></svg>
+                    </button>
+                    <button class="search-voice-btn" aria-label="Voice input" title="Voice & Real-Time Synthesis">
+                      <svg width="18" height="18" viewBox="0 0 34 34" fill="none"><path d="M8.38464 15.2769V17.8615M11.8308 11.8307V21.3076M15.2769 9.24609V24.7538M18.7231 13.5538V19.5845M22.1692 10.9692V22.1691M25.6154 15.2769V17.8615" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Connector pills row with exact brand SVG icons -->
+                <div class="prompt-chips-row">
+                  <div class="chip" data-source="Slack">
+                    <img src="icons/slack.svg" width="16" height="16" alt="Slack" class="chip-icon" />
+                    <span>Slack</span>
+                  </div>
+                  <div class="chip" data-source="Google Drive">
+                    <img src="icons/gdrive.svg" width="16" height="16" alt="Google Drive" class="chip-icon" />
+                    <span>Google Drive</span>
+                  </div>
+                  <div class="chip" data-source="Jira">
+                    <img src="icons/jira.svg" width="16" height="16" alt="Jira" class="chip-icon" />
+                    <span>Jira</span>
+                  </div>
+                  <div class="chip" data-source="Confluence">
+                    <img src="icons/confluence.svg" width="16" height="16" alt="Confluence" class="chip-icon" />
+                    <span>Confluence</span>
+                  </div>
+                  <div class="chip" data-source="SharePoint">
+                    <img src="icons/sharepoint.svg" width="16" height="16" alt="SharePoint" class="chip-icon" />
+                    <span>SharePoint</span>
+                  </div>
+                  <div class="chip" data-source="GitHub">
+                    <img src="icons/github.svg" width="16" height="16" alt="GitHub" class="chip-icon" />
+                    <span>GitHub</span>
+                  </div>
+                  <div class="chip" data-source="Salesforce">
+                    <img src="icons/salesforce.svg" width="16" height="16" alt="Salesforce" class="chip-icon" />
+                    <span>Salesforce</span>
+                  </div>
+                  <button class="chip-more-btn" aria-label="More connectors" title="50+ enterprise connectors">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2.2"></circle><circle cx="12" cy="12" r="2.2"></circle><circle cx="19" cy="12" r="2.2"></circle></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Logo Marquee Strip -->
+    <section class="logo-strip-section" aria-label="Connected integrations marquee">
+      <div class="logo-strip-label">
+        50+ Connectors
+      </div>
+      <div class="marquee-container">
+        <div class="marquee-track">
+          <span class="marquee-item">SAP S/4HANA</span><span class="marquee-dot"></span>
+          <span class="marquee-item">ServiceNow</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Salesforce</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Jira Software</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Confluence</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Google Drive</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Slack</span><span class="marquee-dot"></span>
+          <span class="marquee-item">GitHub Enterprise</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Microsoft Teams</span><span class="marquee-dot"></span>
+          <span class="marquee-item">SharePoint</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Notion</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Zendesk</span><span class="marquee-dot"></span>
+          <span class="marquee-item">GitLab</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Asana</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Linear</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Workday</span><span class="marquee-dot"></span>
+          <!-- Duplicate for seamless loop -->
+          <span class="marquee-item">SAP S/4HANA</span><span class="marquee-dot"></span>
+          <span class="marquee-item">ServiceNow</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Salesforce</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Jira Software</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Confluence</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Google Drive</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Slack</span><span class="marquee-dot"></span>
+          <span class="marquee-item">GitHub Enterprise</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Microsoft Teams</span><span class="marquee-dot"></span>
+          <span class="marquee-item">SharePoint</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Notion</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Zendesk</span><span class="marquee-dot"></span>
+          <span class="marquee-item">GitLab</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Asana</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Linear</span><span class="marquee-dot"></span>
+          <span class="marquee-item">Workday</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Promo Banner -->
+    <section class="promo-banner-section">
+      <div class="container">
+        <div class="promo-gradient-box">
+          <div class="promo-watermark">esaa</div>
+          <span class="promo-badge">Autonomous Execution</span>
+          <h2 class="promo-headline">Enterprise intelligence without boundaries.</h2>
+          <p class="promo-subtext">
+            Unite your knowledge base, internal APIs, and autonomous reasoning into one unified workflow engine trusted by Global 2000 leaders.
+          </p>
+          <div class="promo-actions">
+            <button class="btn btn-white demo-trigger-btn">Schedule a demo</button>
+            <a href="#tabs" class="btn btn-outline" style="border-color: rgba(255,255,255,0.4); color: #fff; background: rgba(0,0,0,0.2);">Explore connectors &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Statement & 4 Pillars Summary -->
+    <section class="statement-section" id="statement">
+      <div class="container">
+        <div class="statement-grid">
+          <h2 class="statement-headline">
+            Knowledge is scattered. Answers are unreliable. ESAA is built for enterprise scale.
+          </h2>
+          <div class="hatched-stat-box">
+            <div class="hatched-number" data-count="50">0</div>
+            <div class="hatched-label">Connectors Unified</div>
+            <div class="hatched-sub">Across cloud storage, ERP &amp; communication</div>
+          </div>
+        </div>
+
+        <div class="four-rules-grid">
+          <div class="rule-col">
+            <div class="rule-col-num">01 / ARCHITECTURE</div>
+            <h3 class="rule-col-title">Context</h3>
+            <p class="rule-col-desc">
+              Connects directly to internal tools, enterprise systems, and communication channels without creating unmanageable data silos.
+            </p>
+          </div>
+          <div class="rule-col">
+            <div class="rule-col-num">02 / RETRIEVAL</div>
+            <h3 class="rule-col-title">Intelligence</h3>
+            <p class="rule-col-desc">
+              Dense vector + BM25 keyword hybrid search with cross-encoder re-ranking and inline citations for verified precision.
+            </p>
+          </div>
+          <div class="rule-col">
+            <div class="rule-col-num">03 / GOVERNANCE</div>
+            <h3 class="rule-col-title">Permissions</h3>
+            <p class="rule-col-desc">
+              Document-level ACL mirroring and Enterprise SSO ensure users only see content they are explicitly authorized to view.
+            </p>
+          </div>
+          <div class="rule-col">
+            <div class="rule-col-num">04 / AUTOMATION</div>
+            <h3 class="rule-col-title">Efficiency</h3>
+            <p class="rule-col-desc">
+              Built-in actions with SAP, ServiceNow, and MCP support turn static answers into autonomous multi-step execution.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Split Feature Section -->
+    <section class="split-feature-section" id="split-feature">
+      <div class="container">
+        <div class="split-feature-panel">
+          <div class="split-left-visual">
+            <div class="split-slide-row">
+              <div>
+                <span class="split-row-num">01</span>
+                <span class="split-row-title">Better answers</span>
+              </div>
+              <span class="split-row-arrow">&rarr;</span>
+            </div>
+            <div class="split-slide-row">
+              <div>
+                <span class="split-row-num">02</span>
+                <span class="split-row-title">Stronger security</span>
+              </div>
+              <span class="split-row-arrow">&rarr;</span>
+            </div>
+            <div class="split-slide-row">
+              <div>
+                <span class="split-row-num">03</span>
+                <span class="split-row-title">Faster work</span>
+              </div>
+              <span class="split-row-arrow">&rarr;</span>
+            </div>
+          </div>
+          <div class="split-right-content">
+            <span class="split-tag">The Enterprise AI Advantage</span>
+            <h2 class="split-statement">
+              Transforming unstructured enterprise knowledge into verified, actionable execution.
+            </h2>
+            <p class="split-desc">
+              Stop toggling across 20 browser tabs. ESAA brings your ERP records, engineering wikis, Slack messages, and cloud documents into one coherent workspace.
+            </p>
+            <div>
+              <button class="btn btn-black demo-trigger-btn">Request platform access</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Stats Grid (3x2) -->
+    <section class="stats-section" id="stats">
+      <div class="container">
+        <div class="stats-header">
+          <h2 class="stats-title">Engineered for production scale</h2>
+          <p class="text-muted">Rigorous architectural benchmarks tested against high-concurrency enterprise workloads.</p>
+        </div>
+
+        <div class="stats-grid-box">
+          <div class="stat-cell">
+            <div class="stat-number-display">
+              <span class="stat-num-val" data-target="50">0</span><span class="stat-unit">+</span>
+            </div>
+            <div class="stat-cell-title">Connectors</div>
+            <div class="stat-cell-desc">Pre-built integrations across ERP, CRMs, document stores, and team chats.</div>
+          </div>
+
+          <div class="stat-cell">
+            <div class="stat-number-display">
+              <span class="stat-num-val" data-target="8">0</span>
+            </div>
+            <div class="stat-cell-title">Pillars</div>
+            <div class="stat-cell-desc">Comprehensive unified platform architecture from ingestion to omnichannel bots.</div>
+          </div>
+
+          <div class="stat-cell">
+            <div class="stat-number-display">
+              <span class="stat-num-val" data-target="6">0</span><span class="stat-unit">+</span>
+            </div>
+            <div class="stat-cell-title">Model Providers</div>
+            <div class="stat-cell-desc">Model-agnostic: OpenAI, Claude, Gemini, Bedrock, Azure, or private Ollama/vLLM.</div>
+          </div>
+
+          <div class="stat-cell">
+            <div class="stat-number-display">
+              <span class="stat-num-val" data-target="2.0" data-decimal="true">0</span>
+            </div>
+            <div class="stat-cell-title">SCIM Protocol</div>
+            <div class="stat-cell-desc">Automated user provisioning, deprovisioning, and enterprise group sync.</div>
+          </div>
+
+          <div class="stat-cell">
+            <div class="stat-number-display">
+              <span class="stat-num-val" data-target="6">0</span>
+            </div>
+            <div class="stat-cell-title">Search Connectors</div>
+            <div class="stat-cell-desc">Built-in live web search providers including Google PSE, Brave, Serper &amp; Exa.</div>
+          </div>
+
+          <div class="stat-cell">
+            <div class="stat-number-display">
+              <span class="stat-unit">&lt;</span><span class="stat-num-val" data-target="1">0</span><span class="stat-unit">GB</span>
+            </div>
+            <div class="stat-cell-title">Lite Mode RAM</div>
+            <div class="stat-cell-desc">Ultra-efficient runtime profile for edge containers and sovereign air-gapped instances.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Tabs Section (Capabilities) -->
+    <section class="tabs-section" id="tabs">
+      <div class="container">
+        <div class="tabs-nav-wrapper">
+          <ul class="tabs-nav-list" id="tabs-nav">
+            <li><button class="tab-btn is-active" data-tab="knowledge">Knowledge</button></li>
+            <li><button class="tab-btn" data-tab="agents">Agents</button></li>
+            <li><button class="tab-btn" data-tab="deep-research">Deep Research</button></li>
+            <li><button class="tab-btn" data-tab="actions">Actions</button></li>
+            <li><button class="tab-btn" data-tab="workflows">Workflows</button></li>
+            <li><button class="tab-btn" data-tab="security">Security</button></li>
+          </ul>
+          <div class="tab-active-indicator" id="tab-indicator"></div>
+        </div>
+
+        <div class="tabs-content-stage">
+          <!-- Left Card -->
+          <div class="tab-left-card">
+            <div>
+              <div class="tab-title-badge" id="tab-badge">Pillar 1 &amp; 2</div>
+              <h3 class="tab-card-headline" id="tab-headline">Unified Enterprise Knowledge &amp; Agentic RAG</h3>
+              <ul class="tab-ruled-bullets" id="tab-bullets">
+                <li class="tab-bullet-item">
+                  <div class="tab-bullet-title">Hybrid Dense + Sparse Indexing</div>
+                  <div class="tab-bullet-desc">Combines vector embeddings with BM25 keyword matching for exact part numbers, SKUs, and jargon.</div>
+                </li>
+                <li class="tab-bullet-item">
+                  <div class="tab-bullet-title">Cross-Encoder Re-Ranking</div>
+                  <div class="tab-bullet-desc">Dynamically scores candidate passages so LLMs receive the most accurate semantic context.</div>
+                </li>
+                <li class="tab-bullet-item">
+                  <div class="tab-bullet-title">Document Sets &amp; Inline Citations</div>
+                  <div class="tab-bullet-desc">Group knowledge by department; every generated answer links directly back to verified source files.</div>
+                </li>
+              </ul>
+            </div>
+            <div style="margin-top: 32px;">
+              <button class="btn btn-sm btn-black demo-trigger-btn">See in action &rarr;</button>
+            </div>
+          </div>
+
+          <!-- Right Floating Prompt Card with Dynamic Gradient -->
+          <div class="tab-right-gradient-panel" id="tab-gradient-panel" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.45), rgba(10, 16, 32, 0.78)), url('tab-knowledge.png') center/cover no-repeat;">
+            <div class="tab-floating-prompt">
+              <span class="floating-prompt-pill" id="tab-prompt-tag">Live Query</span>
+              <div class="floating-prompt-text" id="tab-prompt-text">
+                "Locate the latest GDPR compliance policy across Confluence and Google Drive, then highlight Article 17 obligations."
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Accordion: 8 Pillars -->
+    <section class="accordion-section" id="accordion">
+      <div class="container">
+        <div class="accordion-header">
+          <h2 class="accordion-title">8 Pillars of Enterprise AI</h2>
+          <p class="text-muted">An end-to-end foundation engineered for security, modularity, and enterprise reliability.</p>
+        </div>
+
+        <div class="accordion-list" id="accordion-list">
+          <!-- Pillar 1 -->
+          <div class="accordion-item is-open">
+            <button class="accordion-trigger" aria-expanded="true">
+              <div class="accordion-trigger-left">
+                <span class="accordion-num">01</span>
+                <span class="accordion-item-title">Knowledge Ingestion (50+ Connectors)</span>
+              </div>
+              <div class="accordion-circle-icon"><span>+</span></div>
+            </button>
+            <div class="accordion-content" style="max-height: 240px;">
+              <div class="accordion-body-inner">
+                The platform continuously indexes and syncs organizational data with automated incremental polling and webhook triggers across ERP (SAP, ServiceNow, Salesforce), Cloud Storage (Drive, SharePoint, S3), and Team Chat.
+                <div class="pillar-tags-row">
+                  <span class="pillar-tag">SAP S/4HANA</span>
+                  <span class="pillar-tag">ServiceNow</span>
+                  <span class="pillar-tag">Confluence</span>
+                  <span class="pillar-tag">Federated Live Search</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pillar 2 -->
+          <div class="accordion-item">
+            <button class="accordion-trigger" aria-expanded="false">
+              <div class="accordion-trigger-left">
+                <span class="accordion-num">02</span>
+                <span class="accordion-item-title">Agentic Hybrid RAG</span>
+              </div>
+              <div class="accordion-circle-icon"><span>+</span></div>
+            </button>
+            <div class="accordion-content">
+              <div class="accordion-body-inner">
+                Dense vector + BM25 keyword matching, cross-encoder re-ranking, curated document sets, inline source citations, and direct file analysis supporting PDFs, Excel, CSVs, and Word documents.
+                <div class="pillar-tags-row">
+                  <span class="pillar-tag">Dense Vectors</span>
+                  <span class="pillar-tag">BM25 Retrieval</span>
+                  <span class="pillar-tag">Cross-Encoder</span>
+                  <span class="pillar-tag">Inline Citations</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pillar 3 -->
+          <div class="accordion-item">
+            <button class="accordion-trigger" aria-expanded="false">
+              <div class="accordion-trigger-left">
+                <span class="accordion-num">03</span>
+                <span class="accordion-item-title">Specialized Agents and Personas</span>
+              </div>
+              <div class="accordion-circle-icon"><span>+</span></div>
+            </button>
+            <div class="accordion-content">
+              <div class="accordion-body-inner">
+                Tailored personas with custom system prompts, temperature controls, tool permissions, and scoped document sets. Publish agents globally, restrict by user group, or keep private.
+                <div class="pillar-tags-row">
+                  <span class="pillar-tag">IT Support Agent</span>
+                  <span class="pillar-tag">ERP Sales Agent</span>
+                  <span class="pillar-tag">Role-Based Sharing</span>
+                  <span class="pillar-tag">Starter Prompts</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pillar 4 -->
+          <div class="accordion-item">
+            <button class="accordion-trigger" aria-expanded="false">
+              <div class="accordion-trigger-left">
+                <span class="accordion-num">04</span>
+                <span class="accordion-item-title">Autonomous Deep Research</span>
+              </div>
+              <div class="accordion-circle-icon"><span>+</span></div>
+            </button>
+            <div class="accordion-content">
+              <div class="accordion-body-inner">
+                Multi-step iterative research agent that breaks complex user queries into sub-questions, synthesizes findings across internal repositories and external web searches, and outputs comprehensive analytical reports.
+                <div class="pillar-tags-row">
+                  <span class="pillar-tag">Sub-query Generation</span>
+                  <span class="pillar-tag">Web Synthesis</span>
+                  <span class="pillar-tag">Executive Reports</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pillar 5 -->
+          <div class="accordion-item">
+            <button class="accordion-trigger" aria-expanded="false">
+              <div class="accordion-trigger-left">
+                <span class="accordion-num">05</span>
+                <span class="accordion-item-title">Actions and Tools</span>
+              </div>
+              <div class="accordion-circle-icon"><span>+</span></div>
+            </button>
+            <div class="accordion-content">
+              <div class="accordion-body-inner">
+                Direct creation of SAP Sales Orders, ServiceNow incident lookup/resolution, Model Context Protocol (MCP) server support, OpenAPI/Swagger import, sandboxed Python code execution, voice STT/TTS, and artifacts generation.
+                <div class="pillar-tags-row">
+                  <span class="pillar-tag">SAP OData</span>
+                  <span class="pillar-tag">ServiceNow Incidents</span>
+                  <span class="pillar-tag">Model Context Protocol</span>
+                  <span class="pillar-tag">Python Sandbox</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pillar 6 -->
+          <div class="accordion-item">
+            <button class="accordion-trigger" aria-expanded="false">
+              <div class="accordion-trigger-left">
+                <span class="accordion-num">06</span>
+                <span class="accordion-item-title">Autonomous Workflow Orchestration</span>
+              </div>
+              <div class="accordion-circle-icon"><span>+</span></div>
+            </button>
+            <div class="accordion-content">
+              <div class="accordion-body-inner">
+                Multi-agent orchestration mesh where AI coworkers formulate plans, call enterprise APIs (SAP, ServiceNow, Jira), and execute complex cross-platform workflows with human-in-the-loop oversight.
+                <div class="pillar-tags-row">
+                  <span class="pillar-tag">Multi-Agent Mesh</span>
+                  <span class="pillar-tag">API Tool Calling</span>
+                  <span class="pillar-tag">Human-in-the-Loop</span>
+                  <span class="pillar-tag">Autonomous Execution</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pillar 7 -->
+          <div class="accordion-item">
+            <button class="accordion-trigger" aria-expanded="false">
+              <div class="accordion-trigger-left">
+                <span class="accordion-num">07</span>
+                <span class="accordion-item-title">Security and Governance</span>
+              </div>
+              <div class="accordion-circle-icon"><span>+</span></div>
+            </button>
+            <div class="accordion-content">
+              <div class="accordion-body-inner">
+                Enterprise SSO (SAML 2.0, Okta, Microsoft Entra ID), SCIM 2.0 user provisioning, document-level ACL mirroring, granular RBAC, audit logging, PII guardrails, OpenTelemetry/Langfuse tracing, and Evals CLI.
+                <div class="pillar-tags-row">
+                  <span class="pillar-tag">SAML 2.0 / SCIM 2.0</span>
+                  <span class="pillar-tag">ACL Mirroring</span>
+                  <span class="pillar-tag">Audit Trail</span>
+                  <span class="pillar-tag">Evals CLI</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pillar 8 -->
+          <div class="accordion-item">
+            <button class="accordion-trigger" aria-expanded="false">
+              <div class="accordion-trigger-left">
+                <span class="accordion-num">08</span>
+                <span class="accordion-item-title">Omnichannel and Customization</span>
+              </div>
+              <div class="accordion-circle-icon"><span>+</span></div>
+            </button>
+            <div class="accordion-content">
+              <div class="accordion-body-inner">
+                Slack and Discord bots, complete white-labeling (custom branding, domain, color themes), deployment on Kubernetes/Docker/AWS/GCP/Azure, and Lite mode under 1GB RAM.
+                <div class="pillar-tags-row">
+                  <span class="pillar-tag">Slack &amp; Discord Bots</span>
+                  <span class="pillar-tag">White-labeling</span>
+                  <span class="pillar-tag">Private Cloud</span>
+                  <span class="pillar-tag">&lt;1GB Lite Mode</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. Carousel: 5 Challenges -->
+    <section class="carousel-section" id="carousel">
+      <div class="container">
+        <div class="carousel-header">
+          <div>
+            <span class="label-xs text-muted">Enterprise Value Matrix</span>
+            <h2 class="headline" style="font-size: 38px; margin-top: 6px;">Trusted answers for every challenge.</h2>
+          </div>
+          <div class="carousel-controls">
+            <button class="carousel-btn" id="carousel-prev-btn" aria-label="Previous slide">&larr;</button>
+            <button class="carousel-btn" id="carousel-next-btn" aria-label="Next slide">&rarr;</button>
+          </div>
+        </div>
+
+        <div class="carousel-stage" id="carousel-stage">
+          <!-- Card 1: Autonomous Deep Research (User Image) -->
+          <div class="carousel-card is-active" data-index="0">
+            <div>
+              <div class="carousel-card-num">01 / DEEP RESEARCH</div>
+              <h3 class="carousel-card-title">Autonomous Deep Research</h3>
+              <p class="carousel-challenge-desc">Synthesizes petabytes of siloed documents, frontier models, and multi-step reasoning.</p>
+            </div>
+            <div class="carousel-detail-block">
+              <div class="carousel-solution-title">Platform Solution</div>
+              <div class="carousel-solution-text">Autonomous Multi-Step Synthesis</div>
+              <div class="carousel-benefit-text">Explores complex hypotheses across internal knowledge graphs and live web verification.</div>
+            </div>
+          </div>
+
+          <!-- Card 2: Hallucinations (User Image) -->
+          <div class="carousel-card" data-index="1">
+            <div>
+              <div class="carousel-card-num">02 / TRUST</div>
+              <h3 class="carousel-card-title">Hallucinations</h3>
+              <p class="carousel-challenge-desc">Untruthful outputs and ungrounded fabrications.</p>
+            </div>
+            <div class="carousel-detail-block">
+              <div class="carousel-solution-title">Platform Solution</div>
+              <div class="carousel-solution-text">Agentic RAG with Real-Time Citations</div>
+              <div class="carousel-benefit-text">Every answer links back directly to the source document with exact citations.</div>
+            </div>
+          </div>
+
+          <!-- Card 3: Data Leaks (User Image) -->
+          <div class="carousel-card" data-index="2">
+            <div>
+              <div class="carousel-card-num">03 / COMPLIANCE</div>
+              <h3 class="carousel-card-title">Data Leaks</h3>
+              <p class="carousel-challenge-desc">Sensitive information exposed across user tiers.</p>
+            </div>
+            <div class="carousel-detail-block">
+              <div class="carousel-solution-title">Platform Solution</div>
+              <div class="carousel-solution-text">Document-Level ACLs &amp; SSO Mirroring</div>
+              <div class="carousel-benefit-text">Users can only see answers derived from documents they are authorized to access.</div>
+            </div>
+          </div>
+
+          <!-- Card 4: Vendor Lock-in (User Image) -->
+          <div class="carousel-card" data-index="3">
+            <div>
+              <div class="carousel-card-num">04 / SOVEREIGNTY</div>
+              <h3 class="carousel-card-title">Vendor Lock-in</h3>
+              <p class="carousel-challenge-desc">Dependence on a single commercial model provider.</p>
+            </div>
+            <div class="carousel-detail-block">
+              <div class="carousel-solution-title">Platform Solution</div>
+              <div class="carousel-solution-text">Model &amp; Infrastructure Agnostic</div>
+              <div class="carousel-benefit-text">Swap between OpenAI, Claude, Gemini, Bedrock, Azure, or local Ollama/vLLM anytime.</div>
+            </div>
+          </div>
+
+          <!-- Card 5: Static AI (User Image) -->
+          <div class="carousel-card" data-index="4">
+            <div>
+              <div class="carousel-card-num">05 / EXECUTION</div>
+              <h3 class="carousel-card-title">Static AI</h3>
+              <p class="carousel-challenge-desc">Passive conversational bots unable to trigger work.</p>
+            </div>
+            <div class="carousel-detail-block">
+              <div class="carousel-solution-title">Platform Solution</div>
+              <div class="carousel-solution-text">Built-in Actions, SAP, ServiceNow &amp; MCP</div>
+              <div class="carousel-benefit-text">Agents trigger workflows, create sales orders, log tickets, and run code.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rotate Progress Track -->
+        <div class="carousel-progress-track" aria-hidden="true">
+          <div class="carousel-progress-bar" id="carousel-progress-bar"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12. Dark Section (The ONLY Dark Block) -->
+    <section class="dark-section" id="dark-section">
+      <div class="container">
+        <div class="dark-header">
+          <div class="dark-logo-brand">
+            <img src="esaa-logo-dark.png" alt="ESAA" class="brand-logo-img">
+          </div>
+          <h2 class="dark-headline">Engineered for sovereign control, high precision, and frontier evals.</h2>
+        </div>
+
+        <div class="dark-rows-list">
+          <div class="dark-row-item" data-thumb="url('autonomous-deep-research.jpg')">
+            <span class="dark-row-title">Autonomous Deep Research</span>
+            <span class="dark-row-tag">Multi-step synthesis &rarr;</span>
+          </div>
+          <div class="dark-row-item" data-thumb="url('static-ai.png')">
+            <span class="dark-row-title">Autonomous Workflow Orchestration</span>
+            <span class="dark-row-tag">Multi-agent action mesh &rarr;</span>
+          </div>
+          <div class="dark-row-item" data-thumb="linear-gradient(135deg, #d46bff, #ff9a76)">
+            <span class="dark-row-title">Model Evaluations CLI</span>
+            <span class="dark-row-tag">Recall &amp; latency benchmark &rarr;</span>
+          </div>
+        </div>
+      </div>
+      <!-- Cursor-following thumbnail -->
+      <div class="cursor-thumbnail" id="cursor-thumbnail"></div>
+    </section>
+
+    <!-- 13. From Knowledge to Action -->
+    <section class="action-plan-section" id="action-plan">
+      <div class="container">
+        <div class="action-plan-grid">
+          <div class="action-intro-card">
+            <div>
+              <span class="label-xs text-muted">Autonomous Workflow Orchestration</span>
+              <h2 class="action-intro-title">From knowledge to action in one continuous thread.</h2>
+              <p class="action-intro-text">
+                When an operational discrepancy occurs, ESAA doesn't just surface the PDF policy—it formulates a multi-step execution plan, verifies system parameters, and executes the resolution across your IT service mesh.
+              </p>
+            </div>
+            <div>
+              <button class="btn btn-black demo-trigger-btn">See interactive workflow</button>
+            </div>
+          </div>
+
+          <!-- Right Card: Plan Checklist with Progress Bar -->
+          <div class="action-plan-card" id="plan-trigger-card">
+            <div class="plan-card-header">
+              <span class="plan-title-badge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                Autonomous Plan: Incident #8921
+              </span>
+              <span class="label-xs text-muted" id="plan-counter">0 of 3 completed</span>
+            </div>
+
+            <div class="plan-progress-wrapper">
+              <div class="plan-progress-bar-bg">
+                <div class="plan-progress-fill" id="plan-progress-bar"></div>
+              </div>
+              <div class="plan-status-text">
+                <span>Execution status</span>
+                <span id="plan-status-label">Standby</span>
+              </div>
+            </div>
+
+            <ul class="plan-checklist">
+              <li class="checklist-item" id="check-item-1">
+                <div class="check-icon-circle">&#10003;</div>
+                <div class="checklist-text">Fetch SAP Q3 ledger and cross-reference Jira ticket</div>
+              </li>
+              <li class="checklist-item" id="check-item-2">
+                <div class="check-icon-circle">&#10003;</div>
+                <div class="checklist-text">Run anomaly verification against policy doc</div>
+              </li>
+              <li class="checklist-item" id="check-item-3">
+                <div class="check-icon-circle">&#10003;</div>
+                <div class="checklist-text">Push remediation to ServiceNow &amp; notify on Slack</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 14. Resources Section -->
+    <section class="resources-section" id="resources">
+      <div class="container">
+        <div class="resources-header">
+          <span class="label-xs text-muted">Guides &amp; Research</span>
+          <h2 class="headline" style="font-size: 38px; margin-top: 6px;">Enterprise AI Engineering Notes</h2>
+        </div>
+
+        <div class="resources-grid">
+          <article class="resource-cell">
+            <div>
+              <span class="resource-label">Whitepaper</span>
+              <div class="resource-divider"></div>
+              <h3 class="resource-title">Hybrid RAG at Enterprise Scale</h3>
+            </div>
+            <div class="resource-bottom-link">Read whitepaper &rarr;</div>
+          </article>
+
+          <article class="resource-cell">
+            <div>
+              <span class="resource-label">Architecture Guide</span>
+              <div class="resource-divider"></div>
+              <h3 class="resource-title">Zero-Trust Document ACL Mirroring</h3>
+            </div>
+            <div class="resource-bottom-link">View guide &rarr;</div>
+          </article>
+
+          <article class="resource-cell">
+            <div>
+              <span class="resource-label">Benchmark</span>
+              <div class="resource-divider"></div>
+              <h3 class="resource-title">Evals CLI &amp; Frontier Model Comparison</h3>
+            </div>
+            <div class="resource-bottom-link">Review benchmark &rarr;</div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 15. Footer -->
+  <footer class="footer-section">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand-col">
+          <div class="logo-brand">
+            <img src="esaa-logo-light.png" alt="ESAA" class="brand-logo-img">
+          </div>
+          <p>
+            Governed enterprise generative intelligence connecting knowledge, workflows, and autonomous agents across modern IT ecosystems.
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Platform</div>
+          <ul class="footer-link-list">
+            <li><a href="#statement">Hybrid RAG</a></li>
+            <li><a href="#stats">50+ Connectors</a></li>
+            <li><a href="#tabs">Deep Research</a></li>
+            <li><a href="#accordion">Pillars</a></li>
+            <li><a href="#tabs">Lite Mode</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Actions</div>
+          <ul class="footer-link-list">
+            <li><a href="#action-plan">SAP S/4HANA</a></li>
+            <li><a href="#action-plan">ServiceNow</a></li>
+            <li><a href="#accordion">Model Context (MCP)</a></li>
+            <li><a href="#accordion">Python Sandbox</a></li>
+            <li><a href="#accordion">OpenAPI Tools</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Security</div>
+          <ul class="footer-link-list">
+            <li><a href="#resources">SAML 2.0 / SSO</a></li>
+            <li><a href="#resources">SCIM 2.0 Sync</a></li>
+            <li><a href="#resources">Document ACLs</a></li>
+            <li><a href="#resources">PII Guardrails</a></li>
+            <li><a href="#dark-section">Evals CLI</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Deployment</div>
+          <ul class="footer-link-list">
+            <li><a href="#accordion">Self-Hosted Kubernetes</a></li>
+            <li><a href="#accordion">AWS / Azure / GCP</a></li>
+            <li><a href="#accordion">Air-Gapped Docker</a></li>
+            <li><a href="#accordion">Slack &amp; Discord Bots</a></li>
+            <li><a href="#accordion">White-labeling</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Badge Row -->
+      <div class="footer-badge-row">
+        <span class="footer-badge">&#10003; SAML 2.0</span>
+        <span class="footer-badge">&#10003; OIDC Certified</span>
+        <span class="footer-badge">&#10003; Okta Verified</span>
+        <span class="footer-badge">&#10003; Microsoft Entra ID</span>
+        <span class="footer-badge">&#10003; Langfuse Traced</span>
+        <span class="footer-badge">&#10003; OpenTelemetry Native</span>
+      </div>
+
+      <div class="footer-bottom-row">
+        <div>&copy; 2026 ESAA Intelligence Inc. All rights reserved. Light theme production build.</div>
+        <div>SOC2 Type II &bull; ISO 27001 &bull; GDPR Ready</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 17. Bottom-Right Chat Widget -->
+  <div class="chat-widget-wrapper">
+    <div class="chat-greeting-bubble" id="chat-greeting-bubble">
+      <span>Need answers about ESAA? Ask Esa.</span>
+      <span class="chat-bubble-close" id="chat-bubble-close">&times;</span>
+    </div>
+    <button class="chat-toggle-pill" id="chat-toggle-btn" aria-label="Open Esa chat assistant">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      <span>Ask Esa</span>
+    </button>
+
+    <!-- Chat Panel -->
+    <div class="chat-panel" id="chat-panel">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <div class="chat-avatar">E</div>
+          <div>
+            <div class="chat-header-title">Esa Assistant</div>
+            <div class="chat-header-status">&bull; Online &bull; ESAA Intelligence</div>
+          </div>
+        </div>
+        <button class="chat-close-btn" id="chat-close-btn">&times;</button>
+      </div>
+
+      <div class="chat-messages-container" id="chat-messages">
+        <div class="chat-msg esa">
+          Hello! I am Esa, your enterprise AI assistant. Ask me anything about our 50+ connectors, document ACL security, autonomous deep research, or deployment options.
+        </div>
+        <div class="chat-typing-indicator" id="chat-typing-indicator">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <form class="chat-input-row" id="chat-form">
+        <input type="text" class="chat-input-field" id="chat-input" placeholder="Type a message (e.g., connectors, security, demo)..." autocomplete="off">
+        <button type="submit" class="chat-send-btn" aria-label="Send message">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Search Modal -->
+  <div class="modal-backdrop" id="search-modal">
+    <div class="modal-box search-modal-box">
+      <div class="search-input-header">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" class="search-main-input" id="search-query-input" placeholder="Search site topics, features, documentation..." autocomplete="off">
+        <button class="modal-close-icon" id="search-modal-close" style="position: static;">&times;</button>
+      </div>
+      <ul class="search-results-list" id="search-results-container">
+        <!-- Injected via JavaScript -->
+      </ul>
+    </div>
+  </div>
+
+  <!-- "Get a Demo" Modal -->
+  <div class="modal-backdrop" id="demo-modal">
+    <div class="modal-box" id="demo-modal-box">
+      <button class="modal-close-icon" id="demo-modal-close">&times;</button>
+      <div id="demo-form-container">
+        <h3 class="modal-title">Experience ESAA</h3>
+        <p class="modal-subtitle">Connect with our enterprise architecture team for a tailored walkthrough.</p>
+        <form id="demo-form">
+          <div class="form-group">
+            <label class="form-label" for="demo-name">Full Name</label>
+            <input type="text" id="demo-name" class="form-input" placeholder="Alex Morgan" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="demo-email">Work Email</label>
+            <input type="email" id="demo-email" class="form-input" placeholder="alex@company.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="demo-company">Company</label>
+            <input type="text" id="demo-company" class="form-input" placeholder="Acme Enterprises" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 8px;">Schedule Enterprise Demo</button>
+        </form>
+      </div>
+      <div id="demo-success-screen" style="display: none; text-align: center; padding: 24px 0;">
+        <div style="font-size: 42px; margin-bottom: 12px;">🎉</div>
+        <h3 class="modal-title">Thank you!</h3>
+        <p class="modal-subtitle" style="margin-bottom: 0;">Our solutions architect will contact you within 24 hours.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sign In Modal -->
+  <div class="modal-backdrop" id="signin-modal">
+    <div class="modal-box">
+      <button class="modal-close-icon" id="signin-modal-close">&times;</button>
+      <h3 class="modal-title">Sign in to ESAA</h3>
+      <p class="modal-subtitle">Enter your enterprise credentials or single sign-on email.</p>
+      <form id="signin-form">
+        <div class="form-group">
+          <label class="form-label" for="signin-email">Corporate Email</label>
+          <input type="email" id="signin-email" class="form-input" placeholder="user@enterprise.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signin-password">Password</label>
+          <input type="password" id="signin-password" class="form-input" placeholder="••••••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 8px;">Sign in with SSO</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Vanilla JavaScript -->
+  <script src="script.js?v=13"></script>
+</body>
+</html>
