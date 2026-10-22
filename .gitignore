@@ -24,3 +24,6 @@ Thumbs.db
 
 # Scratch temporary directory
 scratch
+
+.vercel
+.env*

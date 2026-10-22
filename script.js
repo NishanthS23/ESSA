@@ -1,8 +1,172 @@
 /**
  * ESAA Enterprise AI Platform — Production Vanilla JavaScript
  */
+import { initConnectorsCard } from './src/components/ConnectorsAnimatedCard.js';
+import { initSecurityTabs } from './src/components/SecurityTabs.js';
+import { renderPlatformDropdown, renderPlatformOverviewPage, renderPlatformDetailPage } from './src/components/platformRenderer.js';
+import { getPlatformItemBySlug } from './src/data/platform.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+function initActionsCarousel() {
+  const actionsSection = document.getElementById('actions');
+  const track = document.getElementById('actions-carousel-track');
+  const prevBtn = document.getElementById('actions-prev-btn');
+  const nextBtn = document.getElementById('actions-next-btn');
+  const counter = document.getElementById('actions-counter');
+  if (!actionsSection || !track) return;
+
+  const cards = track.querySelectorAll('.action-card');
+  if (!cards.length) return;
+
+  function getStep() {
+    const firstCard = cards[0];
+    const gap = parseFloat(window.getComputedStyle(track).gap) || 16;
+    return firstCard.offsetWidth + gap;
+  }
+
+  // Arrow button clicks
+  prevBtn?.addEventListener('click', () => {
+    track.scrollBy({ left: -getStep(), behavior: 'smooth' });
+  });
+
+  nextBtn?.addEventListener('click', () => {
+    track.scrollBy({ left: getStep(), behavior: 'smooth' });
+  });
+
+  // Counter and button states
+  function updateState() {
+    const step = getStep();
+    const scrollLeft = track.scrollLeft;
+    const maxScroll = track.scrollWidth - track.clientWidth;
+
+    const currentIndex = Math.min(cards.length, Math.max(1, Math.round(scrollLeft / step) + 1));
+    if (counter) {
+      counter.textContent = `${String(currentIndex).padStart(2, '0')} / ${String(cards.length).padStart(2, '0')}`;
+    }
+
+    if (prevBtn) {
+      prevBtn.disabled = scrollLeft <= 4;
+    }
+    if (nextBtn) {
+      nextBtn.disabled = scrollLeft >= maxScroll - 4;
+    }
+  }
+
+  track.addEventListener('scroll', updateState, { passive: true });
+  window.addEventListener('resize', updateState);
+  updateState();
+
+  // Mouse drag support
+  let isDragging = false;
+  let startX = 0;
+  let startScrollLeft = 0;
+  let dragMoved = false;
+
+  track.addEventListener('mousedown', (e) => {
+    if (e.target.closest('a')) return;
+    isDragging = true;
+    dragMoved = false;
+    startX = e.pageX - track.offsetLeft;
+    startScrollLeft = track.scrollLeft;
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (isDragging) {
+      isDragging = false;
+      track.classList.remove('is-dragging');
+      setTimeout(() => {
+        dragMoved = false;
+      }, 80);
+    }
+  });
+
+  track.addEventListener('mouseleave', () => {
+    if (isDragging) {
+      isDragging = false;
+      track.classList.remove('is-dragging');
+      setTimeout(() => {
+        dragMoved = false;
+      }, 80);
+    }
+  });
+
+  track.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const x = e.pageX - track.offsetLeft;
+    const walk = x - startX;
+    if (Math.abs(walk) > 5) {
+      dragMoved = true;
+      track.classList.add('is-dragging');
+      e.preventDefault();
+      track.scrollLeft = startScrollLeft - walk;
+    }
+  });
+
+  // Keyboard navigation when track or card is focused
+  track.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      track.scrollBy({ left: -getStep(), behavior: 'smooth' });
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      track.scrollBy({ left: getStep(), behavior: 'smooth' });
+    }
+  });
+
+  // Touch tap handling & mouseenter/mouseleave hover class
+  cards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      card.classList.add('is-hovered');
+    });
+    card.addEventListener('mouseleave', () => {
+      card.classList.remove('is-hovered');
+    });
+    card.addEventListener('focus', () => {
+      card.classList.add('is-hovered');
+    });
+    card.addEventListener('blur', () => {
+      card.classList.remove('is-hovered');
+    });
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;
+      if (dragMoved) return;
+
+      const wasActive = card.classList.contains('is-active');
+      cards.forEach(c => c.classList.remove('is-active'));
+      if (!wasActive) {
+        card.classList.add('is-active');
+      }
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#actions-carousel-track')) {
+      cards.forEach(c => c.classList.remove('is-active'));
+    }
+  });
+
+  // Entrance animation: 25% visible, play once
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          actionsSection.classList.add('is-entered');
+          setTimeout(() => {
+            actionsSection.classList.add('entrance-complete');
+          }, 1200);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.25 });
+    observer.observe(actionsSection);
+  } else {
+    actionsSection.classList.add('is-entered', 'entrance-complete');
+  }
+}
+
+function initApp() {
+  initConnectorsCard();
+  initSecurityTabs();
+  initActionsCarousel();
   // Check reduced motion preference
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -26,20 +190,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, duration);
   }
 
-  /* ==========================================================================
-     2. ANNOUNCEMENT BAR
-     ========================================================================== */
-  const announcementBar = document.getElementById('announcement-bar');
-  const announcementClose = document.getElementById('announcement-close');
-
-  if (announcementClose && announcementBar) {
-    announcementClose.addEventListener('click', () => {
-      announcementBar.classList.add('is-hidden');
-      setTimeout(() => {
-        announcementBar.style.display = 'none';
-      }, 300);
-    });
-  }
 
   /* ==========================================================================
      3. STICKY HEADER & SCROLL BEHAVIOR
@@ -54,16 +204,49 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: true });
 
   /* ==========================================================================
-     4. MEGA MENU DATA & LOGIC
+     4. MOBILE NAV PANEL
+     ========================================================================== */
+  const hamburgerBtn = document.getElementById('hamburger-btn');
+  const mobileNavPanel = document.getElementById('mobile-nav-panel');
+
+  if (hamburgerBtn && mobileNavPanel) {
+    hamburgerBtn.addEventListener('click', () => {
+      const isOpen = mobileNavPanel.classList.toggle('is-open');
+      hamburgerBtn.classList.toggle('is-active', isOpen);
+      hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    mobileNavPanel.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileNavPanel.classList.remove('is-open');
+        hamburgerBtn.classList.remove('is-active');
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  // Handle data-switch-tab links (e.g. Agents, Craft in header & mobile nav)
+  document.querySelectorAll('[data-switch-tab]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      const tabTarget = el.getAttribute('data-switch-tab');
+      const tabBtn = document.querySelector(`.tab-btn[data-tab="${tabTarget}"]`);
+      if (tabBtn) {
+        tabBtn.click();
+      }
+    });
+  });
+
+  /* ==========================================================================
+     4b. MEGA MENU DATA & LOGIC
      ========================================================================== */
   const megaMenuData = {
-    product: {
+    platform: {
       col1: {
         title: "Platform Capabilities",
         links: [
           { text: "Hybrid Vector + BM25 RAG", desc: "Enterprise semantic and exact keyword search", target: "#statement" },
           { text: "Autonomous Deep Research", desc: "Multi-step iterative inquiry & web synthesis", target: "#dark-section" },
-          { text: "Craft Sandbox & Build Mode", desc: "Containerized app generation with live preview", target: "#dark-section" }
+          { text: "Containerized Agent Sandbox", desc: "Containerized tool generation with live preview", target: "#dark-section" }
         ]
       },
       col2: {
@@ -77,13 +260,13 @@ document.addEventListener('DOMContentLoaded', () => {
       col3: {
         title: "Security & Governance",
         links: [
-          { text: "Zero-Trust Document ACLs", desc: "Inherit permissions straight from source", target: "#accordion" },
+          { text: "Document-Level Permissions", desc: "Inherit native permissions straight from source", target: "#accordion" },
           { text: "SAML 2.0 & SCIM Sync", desc: "Automated provisioning with Okta & Entra ID", target: "#stats" },
           { text: "Evals Benchmark Harness", desc: "Measure latency, accuracy, and recall", target: "#dark-section" }
         ]
       },
       promo: {
-        title: "ESAA v2.4 Architecture",
+        title: "Enterprise Architecture",
         desc: "Unified AI orchestration designed specifically for regulated enterprise workloads.",
         btn: "Schedule Demo",
         action: "demo"
@@ -93,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
       col1: {
         title: "Industry Solutions",
         links: [
-          { text: "Global Financial Services", desc: "Private on-premise RAG with strict auditing", target: "#stats" },
+          { text: "Financial Services & Banking", desc: "Private on-premise RAG with strict auditing", target: "#stats" },
           { text: "Life Sciences & Pharma", desc: "Literature synthesis & patent document search", target: "#tabs" },
           { text: "High-Tech Manufacturing", desc: "SAP S/4HANA supply chain orchestration", target: "#accordion" }
         ]
@@ -101,22 +284,22 @@ document.addEventListener('DOMContentLoaded', () => {
       col2: {
         title: "Customer Impact",
         links: [
-          { text: "85% Reduction in Search Latency", desc: "Single query across 20+ enterprise wikis", target: "#statement" },
-          { text: "Zero Hallucination Tolerance", desc: "Verified inline citations on every answer", target: "#carousel" },
+          { text: "Sub-Second Search Latency", desc: "Single query across 20+ enterprise wikis", target: "#statement" },
+          { text: "Verifiable Source Citations", desc: "Inline citations on every generated answer", target: "#statement" },
           { text: "Fast Air-Gapped Deployment", desc: "<1GB RAM containerized Lite mode", target: "#stats" }
         ]
       },
       col3: {
-        title: "Security Certifications",
+        title: "Enterprise Governance",
         links: [
-          { text: "SOC2 Type II Report", desc: "Independently audited governance controls", target: "#resources" },
-          { text: "ISO 27001 Certified", desc: "Stringent information security management", target: "#resources" },
-          { text: "GDPR Article 17 Compliant", desc: "Strict deletion and redaction pipelines", target: "#tabs" }
+          { text: "Enterprise Security Overview", desc: "Supports SAML 2.0, OIDC, and SCIM 2.0", target: "#resources" },
+          { text: "Document-Level Permissions", desc: "Strict source ACL mirroring & audit logging", target: "#resources" },
+          { text: "Configurable Data Retention", desc: "Strict enterprise deletion and retention policies", target: "#tabs" }
         ]
       },
       promo: {
-        title: "Global 2000 Case Studies",
-        desc: "Read how Fortune 100 teams deploy digital coworkers with full document-level ACLs.",
+        title: "Enterprise Case Studies",
+        desc: "Read how security-focused teams deploy digital coworkers with full document-level ACLs.",
         btn: "Read Studies",
         action: "demo"
       }
@@ -135,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
         links: [
           { text: "Sovereign Private Cloud", desc: "Deploy within AWS, Azure, GCP, or bare metal", target: "#accordion" },
           { text: "Air-Gapped Kubernetes", desc: "Helm charts with zero external model calls", target: "#stats" },
-          { text: "Multi-Model Gateway", desc: "Route between OpenAI, Bedrock, and Ollama", target: "#carousel" }
+          { text: "Multi-Model Gateway", desc: "Route between OpenAI, Bedrock, and Ollama", target: "#dark-section" }
         ]
       },
       col3: {
@@ -159,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
         links: [
           { text: "Hybrid RAG Architecture Paper", desc: "Deep vector embeddings + BM25 keyword", target: "#resources" },
           { text: "Connector Reference Matrix", desc: "API limits and indexing speeds for 50+ tools", target: "#stats" },
-          { text: "Security Whitepaper", desc: "Document ACL inheritance in detail", target: "#resources" }
+          { text: "Enterprise Security Overview", desc: "Document ACL inheritance in detail", target: "#resources" }
         ]
       },
       col2: {
@@ -174,8 +357,8 @@ document.addEventListener('DOMContentLoaded', () => {
         title: "Community & Events",
         links: [
           { text: "Enterprise AI Summit 2026", desc: "Keynotes on sovereign LLMs and RAG", target: "#resources" },
-          { text: "Release Notes v2.4", desc: "SAP S/4HANA OData and SCIM 2.0 updates", target: "#statement" },
-          { text: "Webinar: Zero-Trust AI", desc: "Implementing document permissions at scale", target: "#resources" }
+          { text: "Product Release Notes", desc: "SAP S/4HANA OData and SCIM 2.0 updates", target: "#statement" },
+          { text: "Technical Briefing: Zero-Trust AI", desc: "Implementing document permissions at scale", target: "#resources" }
         ]
       },
       promo: {
@@ -218,6 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   };
+  megaMenuData.product = megaMenuData.platform;
 
   const navItems = document.querySelectorAll('#desktop-nav-menu .nav-item');
   const megaMenuPanel = document.getElementById('mega-menu-panel');
@@ -229,231 +413,15 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderMegaMenu(key) {
     if (!megaMenuContent) return;
 
-    if (key === 'product') {
-      megaMenuContent.innerHTML = `
-        <div class="product-mega-layout">
-          <!-- Left Column: Platform overview with Luminous Animated Banner -->
-          <div class="product-mega-left">
-            <a href="#hero" class="product-overview-card mega-link" id="product-overview-card">
-              <div class="luminous-banner-wrap">
-                <div class="luminous-mesh-wrap">
-                  <div class="luminous-blob luminous-blob-1"></div>
-                  <div class="luminous-blob luminous-blob-2"></div>
-                  <div class="luminous-blob luminous-blob-3"></div>
-                  <div class="luminous-blob luminous-blob-4"></div>
-                  <div class="luminous-blob luminous-blob-5"></div>
-                </div>
-                <div class="luminous-overlay-glass"></div>
-                <div class="luminous-banner-title" id="product-luminous-title">AI for Enterprise</div>
-              </div>
-              <div class="product-overview-info">
-                <div class="product-overview-title">Platform overview</div>
-                <div class="product-overview-sub">See how ESAA works across your enterprise &rarr;</div>
-              </div>
-            </a>
-
-            <div class="product-built-label">Built for enterprise AI.</div>
-
-            <div class="product-tree-grid">
-              <div class="tree-group">
-                <div class="tree-root-item">
-                  <a href="#statement" class="tree-parent-link mega-link" data-luminous="Enterprise Context">
-                    <span class="tree-parent-icon">✻</span>
-                    <span>ESAA Enterprise Context</span>
-                  </a>
-                  <a href="#stats" class="tree-child-link mega-link" data-luminous="50+ Connectors">Connectors &amp; actions</a>
-                </div>
-
-                <div class="tree-root-item">
-                  <a href="#accordion" class="tree-parent-link mega-link" data-luminous="Enterprise APIs">
-                    <span class="tree-parent-icon">⚙</span>
-                    <span>APIs</span>
-                  </a>
-                  <a href="#accordion" class="tree-child-link mega-link" data-luminous="API Lookbook">API lookbook</a>
-                </div>
-
-                <div class="tree-root-item">
-                  <a href="#dark-section" class="tree-parent-link mega-link" data-luminous="ESAA Protect">
-                    <span class="tree-parent-icon">🛡</span>
-                    <span>ESAA Protect</span>
-                  </a>
-                </div>
-              </div>
-
-              <div class="tree-group">
-                <div class="tree-root-item">
-                  <a href="#statement" class="tree-parent-link mega-link" data-luminous="ESAA Intelligence">
-                    <span class="tree-parent-icon">🌐</span>
-                    <span>ESAA Intelligence</span>
-                  </a>
-                  <a href="#statement" class="tree-child-link mega-link" data-luminous="Auto Routing">Auto routing</a>
-                  <a href="#carousel" class="tree-child-link mega-link" data-luminous="Model Hub">Model hub</a>
-                  <a href="#accordion" class="tree-child-link mega-link" data-luminous="Usage Controls">Usage controls</a>
-                  <a href="#dark-section" class="tree-child-link mega-link" data-luminous="AI Gateway">AI gateway</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Middle & Right Columns + Bottom Banner -->
-          <div class="product-mega-main-area">
-            <div class="product-mega-columns-row">
-              <!-- Middle Column: ESAA Assistant -->
-              <div>
-                <div class="product-col-header">
-                  <div class="product-col-badge">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="3" y="3" width="18" height="18" rx="4"></rect>
-                      <circle cx="12" cy="12" r="3"></circle>
-                      <path d="M12 7v1"></path><path d="M12 16v1"></path>
-                    </svg>
-                  </div>
-                  <div>
-                    <div class="product-col-title">ESAA Assistant</div>
-                    <div class="product-col-sub">Your enterprise AI coworker</div>
-                  </div>
-                </div>
-
-                <ul class="product-feature-list">
-                  <li class="product-feature-item">
-                    <a href="#statement" class="mega-link" data-luminous="Proactive AI">
-                      <svg class="product-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path>
-                      </svg>
-                      <span>Proactive AI</span>
-                    </a>
-                  </li>
-                  <li class="product-feature-item">
-                    <a href="#tabs" class="mega-link" data-luminous="Content Creation">
-                      <svg class="product-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line>
-                      </svg>
-                      <span>Content creation</span>
-                    </a>
-                  </li>
-                  <li class="product-feature-item">
-                    <a href="#tabs" class="mega-link" data-luminous="Multiplayer AI">
-                      <svg class="product-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                      </svg>
-                      <span>Multiplayer</span>
-                    </a>
-                  </li>
-                  <li class="product-feature-item">
-                    <a href="#action-plan" class="mega-link" data-luminous="Work Execution">
-                      <svg class="product-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                      </svg>
-                      <span>Work execution</span>
-                    </a>
-                  </li>
-                  <li class="product-feature-item">
-                    <a href="#dark-section" class="mega-link" data-luminous="Deep Research">
-                      <svg class="product-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line>
-                      </svg>
-                      <span>Data analysis and research</span>
-                    </a>
-                  </li>
-                  <li class="product-feature-item">
-                    <a href="#statement" class="mega-link" data-luminous="Enterprise Search">
-                      <svg class="product-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                      </svg>
-                      <span>Enterprise search</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
-              <!-- Right Column: ESAA Agents -->
-              <div>
-                <div class="product-col-header">
-                  <div class="product-col-badge">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                      <polyline points="2 17 12 22 22 17"></polyline>
-                      <polyline points="2 12 12 17 22 12"></polyline>
-                    </svg>
-                  </div>
-                  <div>
-                    <div class="product-col-title">ESAA Agents</div>
-                    <div class="product-col-sub">Build and manage agents</div>
-                  </div>
-                </div>
-
-                <ul class="product-feature-list">
-                  <li class="product-feature-item">
-                    <a href="#accordion" class="mega-link" data-luminous="Agent Builder">
-                      <svg class="product-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
-                      </svg>
-                      <span>Agent builder</span>
-                    </a>
-                  </li>
-                  <li class="product-feature-item">
-                    <a href="#tabs" class="mega-link" data-luminous="Agent Orchestration">
-                      <svg class="product-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <circle cx="12" cy="12" r="3"></circle><circle cx="6" cy="6" r="2"></circle><circle cx="18" cy="6" r="2"></circle><circle cx="6" cy="18" r="2"></circle><circle cx="18" cy="18" r="2"></circle>
-                      </svg>
-                      <span>Agent orchestration</span>
-                    </a>
-                  </li>
-                  <li class="product-feature-item">
-                    <a href="#accordion" class="mega-link" data-luminous="Agent Governance">
-                      <svg class="product-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                      </svg>
-                      <span>Agent governance</span>
-                    </a>
-                  </li>
-                  <li class="product-feature-item">
-                    <a href="#stats" class="mega-link" data-luminous="Agent Library">
-                      <svg class="product-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                      </svg>
-                      <span>Agent library</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- Bottom Banner -->
-            <a href="#dark-section" class="product-bottom-banner mega-link">
-              <span class="coming-soon-pill">Coming soon</span>
-              <span class="bottom-banner-title">ESAA Transform</span>
-              <span class="bottom-banner-sub">See where AI can make the biggest impact &rarr;</span>
-            </a>
-          </div>
-        </div>
-      `;
-
-      // Interactive hover for product banner
-      const luminousTitle = document.getElementById('product-luminous-title');
-      const defaultTitle = "AI for Enterprise";
-      megaMenuContent.querySelectorAll('[data-luminous]').forEach(item => {
-        item.addEventListener('mouseenter', () => {
-          if (luminousTitle) {
-            luminousTitle.textContent = item.getAttribute('data-luminous');
-          }
-        });
-        item.addEventListener('mouseleave', () => {
-          if (luminousTitle) {
-            luminousTitle.textContent = defaultTitle;
-          }
-        });
-      });
-
+    if (key === 'platform' || key === 'product') {
+      megaMenuContent.innerHTML = renderPlatformDropdown();
     } else if (key === 'solutions') {
-      // Solutions Mega Menu: EXACT Glean layout matching user screenshot 2 (Compact 2-col subgrids)
       megaMenuContent.innerHTML = `
         <div class="solutions-mega-layout">
-          <!-- Column 1: DEPARTMENTS (Split into 2 Columns like Pic 2) -->
+          <!-- Column 1: DEPARTMENTS -->
           <div class="solutions-column">
             <div class="solutions-column-header">Departments</div>
             <div class="solutions-two-col-grid">
-              <!-- Sub-col 1 -->
               <ul class="solutions-nav-list">
                 <li>
                   <a href="#hero" class="solutions-item-link mega-link" data-card="all">
@@ -480,14 +448,6 @@ document.addEventListener('DOMContentLoaded', () => {
                   </a>
                 </li>
                 <li>
-                  <a href="#stats" class="solutions-item-link mega-link" data-card="sales">
-                    <span class="solutions-item-icon">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                    </span>
-                    <span>Sales</span>
-                  </a>
-                </li>
-                <li>
                   <a href="#action-plan" class="solutions-item-link mega-link" data-card="it">
                     <span class="solutions-item-icon">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
@@ -497,7 +457,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 </li>
               </ul>
 
-              <!-- Sub-col 2 -->
               <ul class="solutions-nav-list">
                 <li class="solutions-tree-group">
                   <a href="#resources" class="solutions-item-link mega-link" data-card="marketing">
@@ -506,10 +465,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     </span>
                     <span>Marketing</span>
                   </a>
-                  <ul class="solutions-tree-children">
-                    <li><a href="#resources" class="solutions-sub-link mega-link" data-card="marketing">B2B Marketing</a></li>
-                    <li><a href="#resources" class="solutions-sub-link mega-link" data-card="marketing">B2C Marketing</a></li>
-                  </ul>
                 </li>
                 <li>
                   <a href="#company" class="solutions-item-link mega-link" data-card="people">
@@ -527,32 +482,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span>Finance</span>
                   </a>
                 </li>
-                <li>
-                  <a href="#statement" class="solutions-item-link mega-link" data-card="legal">
-                    <span class="solutions-item-icon">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path><path d="M7 21h10"></path><path d="M12 3v18"></path><path d="M3 7h18"></path></svg>
-                    </span>
-                    <span>Legal</span>
-                  </a>
-                </li>
               </ul>
             </div>
           </div>
 
-          <!-- Column 2: INDUSTRIES (Split into 2 Columns like Pic 2) -->
+          <!-- Column 2: INDUSTRIES -->
           <div class="solutions-column">
             <div class="solutions-column-header">Industries</div>
             <div class="solutions-two-col-grid">
-              <!-- Sub-col 1 -->
               <ul class="solutions-nav-list">
-                <li>
-                  <a href="#stats" class="solutions-item-link mega-link" data-card="retail">
-                    <span class="solutions-item-icon">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                    </span>
-                    <span>Retail</span>
-                  </a>
-                </li>
                 <li>
                   <a href="#tabs" class="solutions-item-link mega-link" data-card="consumer-goods">
                     <span class="solutions-item-icon">
@@ -568,28 +506,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     </span>
                     <span>Industrials</span>
                   </a>
-                  <ul class="solutions-tree-children">
-                    <li><a href="#accordion" class="solutions-sub-link mega-link" data-card="industrials">Energy &amp; Utilities</a></li>
-                    <li><a href="#accordion" class="solutions-sub-link mega-link" data-card="industrials">Manufacturing</a></li>
-                    <li><a href="#accordion" class="solutions-sub-link mega-link" data-card="industrials">Supply Chain</a></li>
-                  </ul>
                 </li>
                 <li class="solutions-tree-group">
-                  <a href="#carousel" class="solutions-item-link mega-link" data-card="professional-services">
+                  <a href="#tabs" class="solutions-item-link mega-link" data-card="professional-services">
                     <span class="solutions-item-icon">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
                     </span>
                     <span>Professional Services</span>
                   </a>
-                  <ul class="solutions-tree-children">
-                    <li><a href="#carousel" class="solutions-sub-link mega-link" data-card="professional-services">Consulting</a></li>
-                    <li><a href="#carousel" class="solutions-sub-link mega-link" data-card="professional-services">Construction</a></li>
-                    <li><a href="#carousel" class="solutions-sub-link mega-link" data-card="professional-services">IT Services</a></li>
-                  </ul>
                 </li>
               </ul>
 
-              <!-- Sub-col 2 -->
               <ul class="solutions-nav-list">
                 <li class="solutions-tree-group">
                   <a href="#stats" class="solutions-item-link mega-link" data-card="financial-services">
@@ -598,12 +525,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     </span>
                     <span>Financial Services</span>
                   </a>
-                  <ul class="solutions-tree-children">
-                    <li><a href="#stats" class="solutions-sub-link mega-link" data-card="financial-services">Banking</a></li>
-                    <li><a href="#stats" class="solutions-sub-link mega-link" data-card="financial-services">PE/VC</a></li>
-                    <li><a href="#stats" class="solutions-sub-link mega-link" data-card="financial-services">Asset management</a></li>
-                    <li><a href="#stats" class="solutions-sub-link mega-link" data-card="financial-services">Insurance</a></li>
-                  </ul>
                 </li>
                 <li>
                   <a href="#statement" class="solutions-item-link mega-link" data-card="government">
@@ -620,23 +541,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     </span>
                     <span>Healthcare</span>
                   </a>
-                  <ul class="solutions-tree-children">
-                    <li><a href="#tabs" class="solutions-sub-link mega-link" data-card="healthcare">Life Sciences</a></li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#resources" class="solutions-item-link mega-link" data-card="education">
-                    <span class="solutions-item-icon">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
-                    </span>
-                    <span>Higher Education</span>
-                  </a>
                 </li>
               </ul>
             </div>
           </div>
 
-          <!-- Column 3: The Featured Animated Luminous Card (Side-by-side Body like Pic 2) -->
+          <!-- Column 3: The Featured Card -->
           <div class="solutions-featured-card">
             <div class="luminous-banner-wrap">
               <div class="luminous-mesh-wrap">
@@ -653,31 +563,30 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="solutions-card-col-left">
                 <div class="solutions-card-heading" id="solutions-card-heading">What's the state of your AI stack for software engineering?</div>
                 <a href="#stats" class="solutions-card-cta mega-link" id="solutions-card-cta">
-                  <span id="solutions-card-btn-text">Take the quiz</span>
+                  <span id="solutions-card-btn-text">Explore solutions</span>
                   <span class="cta-arrow">&rarr;</span>
                 </a>
               </div>
               <div class="solutions-card-col-right">
-                <div class="solutions-card-desc" id="solutions-card-desc">See how your engineering AI stack performs across delivery speed, incident response, and context access. Get your AI Stack Score and next-step recommendations.</div>
+                <div class="solutions-card-desc" id="solutions-card-desc">See how your engineering AI stack performs across delivery speed, incident response, and context access with document-level security.</div>
               </div>
             </div>
           </div>
         </div>
       `;
 
-      // Interactive content mapper for Solutions
       const solutionsData = {
         'engineering': {
           title: "AI for Engineering",
           heading: "What's the state of your AI stack for software engineering?",
-          desc: "See how your engineering AI stack performs across delivery speed, incident response, and context access. Get your AI Stack Score and next-step recommendations.",
-          cta: "Take the quiz",
+          desc: "See how your engineering AI stack performs across delivery speed, incident response, and context access with document-level security.",
+          cta: "Explore solutions",
           link: "#stats"
         },
         'customer-service': {
           title: "AI for Customer Service",
           heading: "Accelerate first-contact resolution with verified enterprise RAG",
-          desc: "Connect ServiceNow, Zendesk, and internal playbooks to resolve client tickets with zero hallucination and complete source auditability.",
+          desc: "Connect ServiceNow, Zendesk, and internal playbooks to resolve client tickets with verified inline citations and complete source auditability.",
           cta: "Explore customer service",
           link: "#accordion"
         },
@@ -718,15 +627,15 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         'legal': {
           title: "AI for Legal & Compliance",
-          heading: "Instant clause comparison & strict GDPR/SOC2 compliance",
-          desc: "Review MSAs, DPAs, and NDAs against standard terms with exact clause citations while maintaining air-gapped zero-retention data privacy.",
+          heading: "Instant clause comparison & strict privacy controls",
+          desc: "Review MSAs, DPAs, and NDAs against standard terms with exact clause citations while maintaining air-gapped data privacy.",
           cta: "Explore legal AI",
           link: "#statement"
         },
         'financial-services': {
           title: "AI for Financial Services",
           heading: "Sovereign on-premise RAG with strict auditing & ACLs",
-          desc: "Deploy air-gapped LLMs with document-level permissions and full SOC2/GDPR compliance for banks, PE/VC, and asset managers.",
+          desc: "Deploy air-gapped LLMs with document-level permissions and audit logging for banks, PE/VC, and asset managers.",
           cta: "Explore financial solutions",
           link: "#stats"
         },
@@ -783,7 +692,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
     } else if (key === 'resources') {
-      // Resources Mega Menu: EXACT Glean layout matching user screenshot
       megaMenuContent.innerHTML = `
         <div class="resources-mega-layout">
           <!-- Left 3 Columns + Bottom Full Width Strip -->
@@ -878,7 +786,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `;
 
-      // Interactive content mapper for Resources
       const resourcesCardData = {
         'default': {
           title: "The Tokenomics<br>of Enterprise AI",
@@ -897,7 +804,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'esaa-go': {
           title: "ESAA:GO 2026<br>Global Summit",
           heading: "Keynotes on Sovereign LLMs & Autonomous Agents",
-          desc: "Join 5,000+ enterprise AI leaders, security officers, and systems architects for our annual virtual summit.",
+          desc: "Join enterprise AI leaders, security officers, and systems architects for our annual virtual summit.",
           cta: "Register for ESAA:GO",
           link: "#resources"
         },
@@ -925,7 +832,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'partners': {
           title: "Global Partner<br>Ecosystem",
           heading: "Deliver Governed AI with Certified SI Partners",
-          desc: "Partner with ESAA to deploy air-gapped on-premise RAG and SAP digital coworkers for Fortune 500 clients.",
+          desc: "Partner with ESAA to deploy air-gapped on-premise RAG and SAP digital coworkers for leading enterprise clients.",
           cta: "Become a partner",
           link: "#stats"
         },
@@ -1018,10 +925,18 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     }
 
-    // Reattach demo trigger
-    attachDemoTriggers();
+    // Attach demo triggers for any buttons inside mega-menu
+    megaMenuContent.querySelectorAll('.demo-trigger-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeMegaMenu();
+        if (typeof openDemoModal === 'function') {
+          openDemoModal();
+        }
+      });
+    });
 
-    // Attach click listener to smooth scroll and close
+    // Smooth scroll and close on link click
     megaMenuContent.querySelectorAll('.mega-link').forEach(link => {
       link.addEventListener('click', (e) => {
         const href = link.getAttribute('href');
@@ -1040,7 +955,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function openMegaMenu(key, itemEl) {
     clearTimeout(megaMenuTimeout);
     currentActiveMenu = key;
-    navItems.forEach(el => el.classList.remove('is-active'));
+    navItems.forEach(el => {
+      el.classList.remove('is-active');
+      el.querySelector('button')?.setAttribute('aria-expanded', 'false');
+    });
     itemEl.classList.add('is-active');
     itemEl.querySelector('button')?.setAttribute('aria-expanded', 'true');
     renderMegaMenu(key);
@@ -1067,17 +985,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     item.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (currentActiveMenu === key) {
-        closeMegaMenu();
-      } else {
-        openMegaMenu(key, item);
+      // On desktop a click must NOT close a menu that hover already opened
+      if (currentActiveMenu === key && megaMenuPanel?.classList.contains('is-open')) {
+        return;
       }
+      openMegaMenu(key, item);
     });
 
     item.addEventListener('mouseleave', () => {
       megaMenuTimeout = setTimeout(() => {
         closeMegaMenu();
-      }, 180);
+      }, 200);
     });
   });
 
@@ -1088,35 +1006,525 @@ document.addEventListener('DOMContentLoaded', () => {
   megaMenuPanel?.addEventListener('mouseleave', () => {
     megaMenuTimeout = setTimeout(() => {
       closeMegaMenu();
-    }, 180);
+    }, 200);
   });
 
   megaMenuOverlay?.addEventListener('click', closeMegaMenu);
 
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (megaMenuPanel?.classList.contains('is-open')) {
+        closeMegaMenu();
+      }
+      if (typeof closeDemoModal === 'function') {
+        closeDemoModal();
+      }
+    }
+  });
+
   /* ==========================================================================
-     5. MOBILE MENU
+     5. HERO PROMPT TYPING EFFECT
      ========================================================================== */
-  const hamburgerBtn = document.getElementById('hamburger-btn');
-  const mobileNavPanel = document.getElementById('mobile-nav-panel');
+  const heroTypingTarget = document.getElementById('hero-typing-target');
+  const heroQueries = [
+    "Which launch blocker is buried in legal edits, release notes, and field notes?",
+    "Show Q3 revenue impact from APAC supply chain delays across SAP & Salesforce",
+    "Draft an incident response plan and sync Jira ticket with ServiceNow",
+    "Synthesize customer feedback from Slack, Zendesk, and Confluence"
+  ];
 
-  if (hamburgerBtn && mobileNavPanel) {
-    hamburgerBtn.addEventListener('click', () => {
-      const isOpen = mobileNavPanel.classList.toggle('is-open');
-      hamburgerBtn.classList.toggle('is-active', isOpen);
-      hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  // Interactive connector chips click in hero
+  const heroChips = document.querySelectorAll('.hero-search-card .chip');
+  heroChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const src = chip.getAttribute('data-source');
+      heroChips.forEach(c => c.style.borderColor = 'rgba(0, 0, 0, 0.05)');
+      chip.style.borderColor = '#2a52ff';
+      chip.style.backgroundColor = '#edf1ff';
+      if (heroTypingTarget) {
+        heroTypingTarget.textContent = `Search all ${src} docs and tickets for latest product updates...`;
+      }
     });
+  });
 
-    mobileNavPanel.querySelectorAll('.mobile-nav-link').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileNavPanel.classList.remove('is-open');
-        hamburgerBtn.classList.remove('is-active');
-        hamburgerBtn.setAttribute('aria-expanded', 'false');
+  let queryIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  let typingDelay = 42;
+
+  function typeHeroQuery() {
+    if (!heroTypingTarget) return;
+    const currentQuery = heroQueries[queryIndex];
+
+    if (prefersReducedMotion) {
+      heroTypingTarget.textContent = currentQuery;
+      return;
+    }
+
+    if (isDeleting) {
+      heroTypingTarget.textContent = currentQuery.substring(0, charIndex - 1);
+      charIndex--;
+      typingDelay = 20;
+    } else {
+      heroTypingTarget.textContent = currentQuery.substring(0, charIndex + 1);
+      charIndex++;
+      typingDelay = 45;
+    }
+
+    if (!isDeleting && charIndex === currentQuery.length) {
+      typingDelay = 3200;
+      isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      queryIndex = (queryIndex + 1) % heroQueries.length;
+      typingDelay = 400;
+    }
+
+    setTimeout(typeHeroQuery, typingDelay);
+  }
+  typeHeroQuery();
+
+  /* ==========================================================================
+     6. STATS & HERO COUNTERS ANIMATION (SCROLLED INTO VIEW ONCE)
+     ========================================================================== */
+  const statsElements = document.querySelectorAll('.stat-num-val, .hatched-number');
+
+  function animateCountUp(element) {
+    const target = parseFloat(element.getAttribute('data-target') || element.getAttribute('data-count') || '0');
+    const isDecimal = element.getAttribute('data-decimal') === 'true';
+    const suffix = element.getAttribute('data-suffix') || '';
+    const duration = prefersReducedMotion ? 0 : 1600;
+    const startTime = performance.now();
+
+    function updateNumber(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const easeProgress = 1 - Math.pow(1 - progress, 3);
+      const currentVal = target * easeProgress;
+
+      if (isDecimal) {
+        element.textContent = currentVal.toFixed(1) + suffix;
+      } else {
+        element.textContent = Math.floor(currentVal) + suffix;
+      }
+
+      if (progress < 1) {
+        requestAnimationFrame(updateNumber);
+      } else {
+        element.textContent = (isDecimal ? target.toFixed(1) : target) + suffix;
+      }
+    }
+
+    requestAnimationFrame(updateNumber);
+  }
+
+  const statObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCountUp(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.4 });
+
+  statsElements.forEach(el => statObserver.observe(el));
+
+  /* ==========================================================================
+     7. TABS SECTION & CRAFT SANDBOX
+     ========================================================================== */
+  const tabsData = {
+    knowledge: {
+      badge: "Pillar 1 & 2",
+      headline: "Unified Enterprise Knowledge & Agentic RAG",
+      bullets: [
+        { title: "Hybrid Dense + Sparse Indexing", desc: "Combines vector embeddings with BM25 keyword matching for exact part numbers, SKUs, and jargon." },
+        { title: "Cross-Encoder Re-Ranking", desc: "Dynamically scores candidate passages so LLMs receive the most accurate semantic context." },
+        { title: "Document Sets & Inline Citations", desc: "Group knowledge by department; every generated answer links directly back to verified source files." }
+      ],
+      promptTag: "Live RAG Query",
+      promptText: "Locate the latest enterprise compliance policy across Confluence and Google Drive, then highlight data retention obligations.",
+      gradient: "linear-gradient(135deg, rgba(15, 23, 42, 0.45), rgba(10, 16, 32, 0.78)), url('tab-knowledge.png') center/cover no-repeat"
+    },
+    agents: {
+      badge: "Pillar 3",
+      headline: "Specialized Agents, Personas & Guardrails",
+      bullets: [
+        { title: "Scoped Permissions & Roles", desc: "Assign custom tools, system prompts, and strict document visibility to specific agent personas." },
+        { title: "Global vs Department Sharing", desc: "Publish agents company-wide or restrict access to vetted engineering or executive groups." },
+        { title: "Starter Guidance", desc: "Equip non-technical staff with one-click contextual prompt buttons for repeatable accuracy." }
+      ],
+      promptTag: "Agent Persona",
+      promptText: "Act as Senior IT Helpdesk Specialist. Validate the user's Okta session and inspect active VPN gateways.",
+      gradient: "linear-gradient(135deg, rgba(15, 23, 42, 0.45), rgba(10, 16, 32, 0.78)), url('tab-agents.png') center/cover no-repeat"
+    },
+    "deep-research": {
+      badge: "Pillar 4",
+      headline: "Autonomous Multi-Step Deep Research",
+      bullets: [
+        { title: "Iterative Sub-Query Decomposition", desc: "Breaks intricate enterprise queries into multi-step investigative hypotheses automatically." },
+        { title: "Cross-Corroboration", desc: "Simultaneously queries internal documentation and live web search engines to confirm facts." },
+        { title: "Publication-Grade Deliverables", desc: "Produces structured analytical executive dossiers with comparative metrics and bibliography." }
+      ],
+      promptTag: "Deep Research Mode",
+      promptText: "Perform full competitive breakdown between Q3 regional supplier quotes and identify price drift anomalies.",
+      gradient: "linear-gradient(135deg, rgba(15, 23, 42, 0.42), rgba(15, 23, 42, 0.8)), url('autonomous-deep-research.jpg') center/cover no-repeat"
+    },
+    actions: {
+      badge: "Pillar 5",
+      headline: "Enterprise Extensibility & Live Actions",
+      bullets: [
+        { title: "SAP S/4HANA & ServiceNow Tools", desc: "Create sales orders, query OData tables, and resolve IT incident tickets straight from chat." },
+        { title: "Model Context Protocol (MCP)", desc: "Plug into local or remote MCP servers for instantaneous integration with enterprise tools." },
+        { title: "Isolated Python Sandbox", desc: "Safely execute mathematical routines, parse raw CSV dumps, and generate dynamic visual plots." }
+      ],
+      promptTag: "Live Tool Execution",
+      promptText: "Create a High-Priority incident in ServiceNow for server cluster 'eu-west-04' and notify on-call in #devops-alerts.",
+      gradient: "linear-gradient(135deg, rgba(15, 23, 42, 0.4), rgba(10, 16, 32, 0.75)), url('tab-actions.png') center/cover no-repeat"
+    },
+    craft: {
+      badge: "Pillar 6",
+      headline: "Craft / Build Mode (Agentic Sandbox)",
+      bullets: [
+        { title: "Isolated Container Environment", desc: "A development environment where AI agents write, test, and render interactive tools, web apps, and scripts in isolated containers with live preview." },
+        { title: "Interactive Live Preview", desc: "Instantly render live web apps, custom dashboards, and interactive mini-tools directly within the chat workspace." },
+        { title: "Tool & Code Generation", desc: "Agents generate purpose-built scripts, calculators, and API interfaces on the fly to solve ad-hoc enterprise problems." }
+      ],
+      promptTag: "Craft Build Prompt",
+      promptText: "Build a real-time SAP order tracking dashboard with search, status filters, and export to CSV in an isolated preview container.",
+      gradient: "linear-gradient(135deg, rgba(15, 23, 42, 0.45), rgba(10, 16, 32, 0.8)), url('tab-workflows.png') center/cover no-repeat"
+    },
+    security: {
+      badge: "Pillar 7",
+      headline: "Zero-Trust Security, SCIM & ACL Mirroring",
+      bullets: [
+        { title: "Document-Level Permissions", desc: "Mirror original access rights from Google Drive, Confluence, and Slack so users only see what they own." },
+        { title: "Identity & SCIM 2.0 Provisioning", desc: "Native SAML 2.0, Okta, and Microsoft Entra ID integration with automatic offboarding." },
+        { title: "PII Masking & Evals CLI", desc: "Intercept sensitive prompts in flight and benchmark model adherence against compliance tests." }
+      ],
+      promptTag: "Security Governance",
+      promptText: "Audit query: Verify that Employee #4092 cannot access executive compensation folders during salary review.",
+      gradient: "linear-gradient(135deg, rgba(15, 23, 42, 0.45), rgba(10, 16, 32, 0.8)), url('tab-security.png') center/cover no-repeat"
+    }
+  };
+
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const tabIndicator = document.getElementById('tab-indicator');
+  const tabBadge = document.getElementById('tab-badge');
+  const tabHeadline = document.getElementById('tab-headline');
+  const tabBullets = document.getElementById('tab-bullets');
+  const tabGradientPanel = document.getElementById('tab-gradient-panel');
+  const tabPromptTag = document.getElementById('tab-prompt-tag');
+  const tabPromptText = document.getElementById('tab-prompt-text');
+  let activeTabKey = 'knowledge';
+  let tabTypeTimeout = null;
+
+  function updateTabIndicator(activeBtn) {
+    if (!tabIndicator || !activeBtn) return;
+    const parentRect = activeBtn.parentElement.parentElement.getBoundingClientRect();
+    const btnRect = activeBtn.getBoundingClientRect();
+    tabIndicator.style.left = `${btnRect.left - parentRect.left}px`;
+    tabIndicator.style.width = `${btnRect.width}px`;
+  }
+
+  function typeTabPrompt(text) {
+    if (!tabPromptText) return;
+    clearTimeout(tabTypeTimeout);
+
+    if (prefersReducedMotion) {
+      tabPromptText.textContent = `"${text}"`;
+      return;
+    }
+
+    tabPromptText.textContent = '"';
+    let idx = 0;
+
+    function step() {
+      if (idx < text.length) {
+        tabPromptText.textContent += text.charAt(idx);
+        idx++;
+        tabTypeTimeout = setTimeout(step, 18);
+      } else {
+        tabPromptText.textContent += '"';
+      }
+    }
+    step();
+  }
+
+  function activateTab(tabKey, btn) {
+    const data = tabsData[tabKey];
+    if (!data) return;
+    activeTabKey = tabKey;
+
+    tabButtons.forEach(b => b.classList.remove('is-active'));
+    btn.classList.add('is-active');
+    updateTabIndicator(btn);
+
+    if (tabBadge) tabBadge.textContent = data.badge;
+    if (tabHeadline) tabHeadline.textContent = data.headline;
+    if (tabBullets) {
+      tabBullets.innerHTML = data.bullets.map(b => `
+        <li class="tab-bullet-item">
+          <div class="tab-bullet-title">${b.title}</div>
+          <div class="tab-bullet-desc">${b.desc}</div>
+        </li>
+      `).join('');
+    }
+    if (tabGradientPanel) tabGradientPanel.style.background = data.gradient;
+    if (tabPromptTag) tabPromptTag.textContent = data.promptTag;
+
+    typeTabPrompt(data.promptText);
+  }
+
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.getAttribute('data-tab');
+      activateTab(key, btn);
+    });
+  });
+
+  const initialTab = document.querySelector('.tab-btn.is-active');
+  if (initialTab) {
+    setTimeout(() => updateTabIndicator(initialTab), 100);
+  }
+  window.addEventListener('resize', () => {
+    const cur = document.querySelector('.tab-btn.is-active');
+    if (cur) updateTabIndicator(cur);
+  });
+
+  /* ==========================================================================
+     8. CONNECTOR CATALOG (50+ CONNECTORS SEARCH & FILTER)
+     ========================================================================== */
+  const connectorCatalog = [
+    // ERP / Business
+    { name: "SAP S/4HANA", cat: "erp", desc: "Live ERP sales orders, inventory, and finance records." },
+    { name: "ServiceNow", cat: "erp", desc: "Incident management, CMDB tables, and IT service catalog." },
+    { name: "Salesforce", cat: "erp", desc: "CRM accounts, opportunities, leads, and customer cases." },
+    { name: "HubSpot", cat: "erp", desc: "Inbound marketing contacts, pipeline deals, and support tickets." },
+    { name: "Zendesk", cat: "erp", desc: "Customer support tickets, macros, and help center articles." },
+    { name: "Freshdesk", cat: "erp", desc: "Multi-channel customer service tickets and SLA trackers." },
+    { name: "Gong", cat: "erp", desc: "Sales call recordings, customer interaction transcripts, and deal intelligence." },
+    { name: "Highspot", cat: "erp", desc: "Sales enablement collateral, pitch decks, and buyer engagement metrics." },
+    { name: "Loopio", cat: "erp", desc: "RFP automation, proposal response libraries, and security questionnaires." },
+
+    // Storage
+    { name: "Google Drive", cat: "storage", desc: "Docs, Sheets, Slides, and shared drives with user ACL mirroring." },
+    { name: "SharePoint", cat: "storage", desc: "Enterprise intranet libraries, team sites, and document repositories." },
+    { name: "OneDrive", cat: "storage", desc: "Personal enterprise cloud storage and office document synchronization." },
+    { name: "Box", cat: "storage", desc: "Secure enterprise file sharing, metadata attributes, and collaboration folders." },
+    { name: "Dropbox", cat: "storage", desc: "Team folders, cloud file sync, and document version history." },
+    { name: "Egnyte", cat: "storage", desc: "Hybrid cloud content governance, compliance archives, and file servers." },
+    { name: "Amazon S3", cat: "storage", desc: "Cloud object storage buckets, unstructured raw data lakes, and archives." },
+    { name: "Cloudflare R2", cat: "storage", desc: "Zero-egress-fee distributed object storage for media and document assets." },
+    { name: "Google Cloud Storage", cat: "storage", desc: "Unified GCP bucket object storage for analytical files and logs." },
+    { name: "Oracle OCI", cat: "storage", desc: "High-performance cloud storage volumes and database archives." },
+    { name: "Local Files", cat: "storage", desc: "PDF, DOCX, CSV, Excel, TXT, and audio uploads in container sandbox." },
+
+    // Communication
+    { name: "Slack", cat: "communication", desc: "Public/private channels, direct messages, and real-time thread indexing." },
+    { name: "Microsoft Teams", cat: "communication", desc: "Organization channels, chat histories, and shared meeting transcripts." },
+    { name: "Discord", cat: "communication", desc: "Community server channels, developer forums, and technical chats." },
+    { name: "Zulip", cat: "communication", desc: "Topic-threaded team messaging, engineering streams, and organizational announcements." },
+    { name: "Gmail", cat: "communication", desc: "Corporate email threads, attachments, and customer communication histories." },
+    { name: "IMAP", cat: "communication", desc: "Standard mail server protocol for on-premise exchange and secure mailboxes." },
+    { name: "Fireflies.ai", cat: "communication", desc: "Automated voice meeting notes, action items, and conversation summaries." },
+    { name: "Discourse", cat: "communication", desc: "Enterprise community knowledge forums, Q&A boards, and discussions." },
+    { name: "XenForo", cat: "communication", desc: "Forum discussions, community threads, and specialized member archives." },
+
+    // Knowledge
+    { name: "Confluence", cat: "knowledge", desc: "Engineering spaces, product requirement PRDs, and organizational wikis." },
+    { name: "Notion", cat: "knowledge", desc: "Department workspaces, databases, project roadmaps, and guidelines." },
+    { name: "BookStack", cat: "knowledge", desc: "Hierarchical structured documentation organized into books, chapters, and pages." },
+    { name: "Outline", cat: "knowledge", desc: "Fast markdown-based collaborative knowledge base for development teams." },
+    { name: "Guru", cat: "knowledge", desc: "Verified cards, contextual knowledge delivery, and browser extensions." },
+    { name: "Slab", cat: "knowledge", desc: "Modern team knowledge wiki with real-time editing and unified search." },
+    { name: "Coda", cat: "knowledge", desc: "Interactive documents, workflow tables, and team coordination docs." },
+    { name: "Document360", cat: "knowledge", desc: "Customer-facing and internal technical knowledge base documentation." },
+    { name: "Axero", cat: "knowledge", desc: "Social intranet, internal company portals, and corporate communication wikis." },
+    { name: "Lumapps", cat: "knowledge", desc: "Employee experience platform, digital intranet, and internal news." },
+    { name: "Drupal Wiki", cat: "knowledge", desc: "Enterprise collaborative wiki solution with workflow approvals." },
+    { name: "MediaWiki / Wikipedia", cat: "knowledge", desc: "Open wiki reference libraries, internal encyclopedias, and glossaries." },
+
+    // Project Management
+    { name: "Jira", cat: "pm", desc: "Sprint boards, issue tracking, bug reports, and epic roadmaps." },
+    { name: "Linear", cat: "pm", desc: "Fast issue tracking, engineering cycles, and product initiatives." },
+    { name: "Asana", cat: "pm", desc: "Cross-team projects, milestone tracking, and task dependencies." },
+    { name: "ClickUp", cat: "pm", desc: "Unified task management, time tracking, and customizable sprint docs." },
+    { name: "Productboard", cat: "pm", desc: "Customer feature requests, product strategy roadmaps, and prioritization." },
+    { name: "TestRail", cat: "pm", desc: "QA test management, test run execution, and defect tracking." },
+
+    // Code
+    { name: "GitHub", cat: "code", desc: "Repositories, pull requests, commit diffs, issues, and code search." },
+    { name: "GitLab", cat: "code", desc: "Source code management, CI/CD pipeline logs, and merge requests." },
+    { name: "Bitbucket", cat: "code", desc: "Enterprise Git repository hosting, pull requests, and Jira integrations." },
+
+    // Custom
+    { name: "Ingestion API", cat: "custom", desc: "REST endpoints to push custom enterprise documents and metadata." },
+    { name: "Web Crawler", cat: "custom", desc: "Automated crawling of public or internal corporate web portals." }
+  ];
+
+  const connectorGrid = document.getElementById('connector-grid');
+  if (connectorGrid) {
+    const connectorSearchInput = document.getElementById('connector-search-input');
+    const catPills = document.querySelectorAll('#connector-category-filters .cat-pill');
+    let currentConnectorCat = 'all';
+
+    function renderConnectors() {
+      if (!connectorGrid) return;
+      const query = connectorSearchInput?.value.trim().toLowerCase() || '';
+
+      const filtered = connectorCatalog.filter(item => {
+        const matchCat = (currentConnectorCat === 'all' || item.cat === currentConnectorCat);
+        const matchQuery = !query || item.name.toLowerCase().includes(query) || item.desc.toLowerCase().includes(query);
+        return matchCat && matchQuery;
+      });
+
+      if (filtered.length === 0) {
+        connectorGrid.innerHTML = `
+          <div style="grid-column: 1 / -1; padding: 32px; text-align: center; color: var(--muted); font-size: 14.5px;">
+            No connectors found matching your query.
+          </div>
+        `;
+        return;
+      }
+
+      connectorGrid.innerHTML = filtered.map(item => `
+        <div class="connector-card">
+          <div class="conn-top">
+            <span class="conn-name">${item.name}</span>
+            <span class="conn-cat-tag">${item.cat}</span>
+          </div>
+          <p class="conn-desc">${item.desc}</p>
+        </div>
+      `).join('');
+    }
+
+    catPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        catPills.forEach(p => p.classList.remove('is-active'));
+        pill.classList.add('is-active');
+        currentConnectorCat = pill.getAttribute('data-cat') || 'all';
+        renderConnectors();
       });
     });
+
+    connectorSearchInput?.addEventListener('input', renderConnectors);
+    renderConnectors();
   }
 
   /* ==========================================================================
-     6. SEARCH MODAL & LIVE FILTERING
+     9. ACCORDION (8 PILLARS)
+     ========================================================================== */
+  const accordionItems = document.querySelectorAll('.accordion-item');
+
+  accordionItems.forEach(item => {
+    const trigger = item.querySelector('.accordion-trigger');
+    const content = item.querySelector('.accordion-content');
+
+    trigger?.addEventListener('click', () => {
+      const isOpen = item.classList.contains('is-open');
+
+      accordionItems.forEach(other => {
+        other.classList.remove('is-open');
+        other.querySelector('.accordion-trigger')?.setAttribute('aria-expanded', 'false');
+        const otherContent = other.querySelector('.accordion-content');
+        if (otherContent) otherContent.style.maxHeight = '0';
+      });
+
+      if (!isOpen) {
+        item.classList.add('is-open');
+        trigger.setAttribute('aria-expanded', 'true');
+        if (content) content.style.maxHeight = `${content.scrollHeight + 30}px`;
+      }
+    });
+  });
+
+
+
+  /* ==========================================================================
+     11. DARK SECTION: ROW HOVER & THUMBNAIL
+     ========================================================================== */
+  const darkRows = document.querySelectorAll('.dark-row-item');
+  const cursorThumbnail = document.getElementById('cursor-thumbnail');
+
+  darkRows.forEach(row => {
+    row.addEventListener('mouseenter', () => {
+      const thumbGrad = row.getAttribute('data-thumb');
+      if (cursorThumbnail && thumbGrad) {
+        if (thumbGrad.startsWith('url(')) {
+          cursorThumbnail.style.background = 'none';
+          cursorThumbnail.style.backgroundImage = thumbGrad;
+          cursorThumbnail.style.backgroundSize = 'cover';
+        } else {
+          cursorThumbnail.style.backgroundImage = 'none';
+          cursorThumbnail.style.background = thumbGrad;
+        }
+        cursorThumbnail.style.opacity = '1';
+        cursorThumbnail.style.transform = 'translate(-50%, -50%) scale(1)';
+      }
+    });
+
+    row.addEventListener('mousemove', (e) => {
+      if (cursorThumbnail) {
+        cursorThumbnail.style.left = `${e.clientX}px`;
+        cursorThumbnail.style.top = `${e.clientY}px`;
+      }
+    });
+
+    row.addEventListener('mouseleave', () => {
+      if (cursorThumbnail) {
+        cursorThumbnail.style.opacity = '0';
+        cursorThumbnail.style.transform = 'translate(-50%, -50%) scale(0.85)';
+      }
+    });
+  });
+
+  /* ==========================================================================
+     12. ACTION PLAN CHECKLIST CARD INTERACTIVE ANIMATION
+     ========================================================================== */
+  const planTriggerCard = document.getElementById('plan-trigger-card');
+  const checkItems = document.querySelectorAll('.checklist-item');
+  const planProgressBar = document.getElementById('plan-progress-bar');
+  const planCounter = document.getElementById('plan-counter');
+  const planStatusLabel = document.getElementById('plan-status-label');
+  let planCompleted = false;
+
+  planTriggerCard?.addEventListener('click', () => {
+    if (planCompleted) return;
+    executePlanSimulation();
+  });
+
+  function executePlanSimulation() {
+    planCompleted = true;
+    let completed = 0;
+    if (planStatusLabel) {
+      planStatusLabel.textContent = 'Executing...';
+      planStatusLabel.style.color = '#2a52ff';
+    }
+
+    const interval = prefersReducedMotion ? 100 : 700;
+    checkItems.forEach((item, index) => {
+      setTimeout(() => {
+        item?.classList.add('is-done');
+        completed++;
+        const percent = (completed / checkItems.length) * 100;
+        if (planProgressBar) planProgressBar.style.width = `${percent}%`;
+        if (planCounter) planCounter.textContent = `${completed} of ${checkItems.length} completed`;
+
+        if (completed === checkItems.length) {
+          if (planStatusLabel) {
+            planStatusLabel.textContent = 'All steps verified';
+            planStatusLabel.style.color = '#1cb561';
+            planStatusLabel.style.fontWeight = '600';
+          }
+        }
+      }, (index + 1) * interval);
+    });
+  }
+
+
+  /* ==========================================================================
+     14. SEARCH MODAL (⌘K / Ctrl+K)
      ========================================================================== */
   const searchModal = document.getElementById('search-modal');
   const openSearchBtn = document.getElementById('open-search-btn');
@@ -1126,17 +1534,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchResultsContainer = document.getElementById('search-results-container');
 
   const siteTopics = [
-    { title: "Hybrid RAG", badge: "Architecture", target: "#statement" },
-    { title: "50+ connectors", badge: "Integrations", target: "#stats" },
-    { title: "Deep Research", badge: "Capabilities", target: "#tabs" },
-    { title: "Custom agents", badge: "Personas", target: "#accordion" },
-    { title: "SAP and ServiceNow actions", badge: "Workflows", target: "#accordion" },
-    { title: "Security and SSO", badge: "Governance", target: "#accordion" },
-    { title: "Capabilities tabs", badge: "Platform", target: "#tabs" },
-    { title: "Platform numbers", badge: "Metrics", target: "#stats" },
-    { title: "Challenges", badge: "Solutions", target: "#carousel" },
-    { title: "Pillars", badge: "Catalog", target: "#accordion" },
-    { title: "Get a demo", badge: "Action", target: "demo" }
+    { title: "Platform Overview", badge: "Hero", target: "#hero" },
+    { title: "Enterprise Search & Hybrid RAG", badge: "Search", target: "#statement" },
+    { title: "50+ Enterprise Connectors", badge: "Connectors", target: "#connectors" },
+    { title: "Live Dashboards Preview", badge: "Analytics", target: "#analytics" },
+    { title: "Supported AI Models & Gateways", badge: "Models", target: "#models" },
+    { title: "Actions & Tools (SAP, ServiceNow, Python)", badge: "Actions", target: "#actions" },
+    { title: "8 Pillars of Enterprise AI", badge: "Pillars", target: "#accordion" },
+    { title: "Sovereign AI & Frontier Evals", badge: "Governance", target: "#dark-section" },
+    { title: "Autonomous Deep Research", badge: "Research", target: "#dark-section" },
+    { title: "Craft / Build Mode (Agentic Sandbox)", badge: "Craft", target: "#tabs" },
+    { title: "SAP S/4HANA Sales Order Actions", badge: "Actions", target: "#actions" },
+    { title: "ServiceNow Incident Resolution", badge: "Actions", target: "#actions" },
+    { title: "Model Context Protocol (MCP)", badge: "Actions", target: "#actions" },
+    { title: "Document-Level ACL Mirroring & Governance", badge: "Governance", target: "#statement" },
+    { title: "Schedule an Enterprise Demo", badge: "Demo", target: "demo" }
   ];
 
   function renderSearchResults(query = '') {
@@ -1149,7 +1561,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (filtered.length === 0) {
       searchResultsContainer.innerHTML = `
         <li style="padding: 20px; text-align: center; color: var(--muted); font-size: 14px;">
-          No matching topics found for "${query}"
+          No matching platform topics found for "${query}"
         </li>
       `;
       return;
@@ -1162,7 +1574,6 @@ document.addEventListener('DOMContentLoaded', () => {
       </li>
     `).join('');
 
-    // Attach click events
     searchResultsContainer.querySelectorAll('.search-result-item').forEach(el => {
       el.addEventListener('click', () => {
         selectSearchResult(el.getAttribute('data-target'));
@@ -1216,13 +1627,11 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (e.key === 'Enter') {
       const firstItem = searchResultsContainer?.querySelector('.search-result-item');
       if (firstItem) {
-        const target = firstItem.getAttribute('data-target');
-        selectSearchResult(target);
+        selectSearchResult(firstItem.getAttribute('data-target'));
       }
     }
   });
 
-  // Global Ctrl/Cmd + K shortcut
   window.addEventListener('keydown', (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
       e.preventDefault();
@@ -1235,85 +1644,181 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ==========================================================================
-     7. GET A DEMO MODAL & SIGN IN MODAL
+     15. "GET A DEMO" MODAL (VALIDATION & ENDPOINT SUBMISSION)
      ========================================================================== */
   const demoModal = document.getElementById('demo-modal');
   const demoModalClose = document.getElementById('demo-modal-close');
   const demoForm = document.getElementById('demo-form');
   const demoFormContainer = document.getElementById('demo-form-container');
   const demoSuccessScreen = document.getElementById('demo-success-screen');
+  const demoSubmitBtn = document.getElementById('demo-submit-btn');
+
+  const demoNameInput = document.getElementById('demo-name');
+  const demoEmailInput = document.getElementById('demo-email');
+  const demoCompanyInput = document.getElementById('demo-company');
+  const demoNameError = document.getElementById('demo-name-error');
+  const demoEmailError = document.getElementById('demo-email-error');
+  const demoCompanyError = document.getElementById('demo-company-error');
+  const demoGeneralError = document.getElementById('demo-general-error');
 
   function openDemoModal() {
     if (!demoModal) return;
     if (demoFormContainer) demoFormContainer.style.display = 'block';
     if (demoSuccessScreen) demoSuccessScreen.style.display = 'none';
+    clearDemoErrors();
     if (demoForm) demoForm.reset();
+    if (demoSubmitBtn) {
+      demoSubmitBtn.disabled = false;
+      demoSubmitBtn.textContent = 'Schedule Enterprise Demo';
+    }
     demoModal.classList.add('is-open');
-    setTimeout(() => document.getElementById('demo-name')?.focus(), 80);
+    setTimeout(() => demoNameInput?.focus(), 80);
   }
 
   function closeDemoModal() {
     demoModal?.classList.remove('is-open');
   }
 
-  function attachDemoTriggers() {
-    document.querySelectorAll('.demo-trigger-btn').forEach(btn => {
-      btn.onclick = (e) => {
-        e.preventDefault();
-        openDemoModal();
-      };
+  function clearDemoErrors() {
+    [demoNameError, demoEmailError, demoCompanyError, demoGeneralError].forEach(el => {
+      if (el) {
+        el.textContent = '';
+        el.classList.remove('is-visible');
+      }
+    });
+    [demoNameInput, demoEmailInput, demoCompanyInput].forEach(el => {
+      el?.classList.remove('is-invalid');
     });
   }
-  attachDemoTriggers();
+
+  document.querySelectorAll('.demo-trigger-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openDemoModal();
+    });
+  });
 
   demoModalClose?.addEventListener('click', closeDemoModal);
   demoModal?.addEventListener('click', (e) => {
     if (e.target === demoModal) closeDemoModal();
   });
 
-  demoForm?.addEventListener('submit', (e) => {
+  demoForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const name = document.getElementById('demo-name')?.value.trim();
-    const email = document.getElementById('demo-email')?.value.trim();
-    const company = document.getElementById('demo-company')?.value.trim();
+    clearDemoErrors();
 
-    // Validation
+    const name = demoNameInput?.value.trim() || '';
+    const email = demoEmailInput?.value.trim() || '';
+    const company = demoCompanyInput?.value.trim() || '';
+
+    let hasError = false;
+
     if (!name || name.length < 2) {
-      showToast('Please enter your full name.', 'error');
-      return;
+      if (demoNameError) {
+        demoNameError.textContent = 'Full name is required (min 2 characters).';
+        demoNameError.classList.add('is-visible');
+      }
+      demoNameInput?.classList.add('is-invalid');
+      hasError = true;
     }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email || !emailRegex.test(email)) {
-      showToast('Please enter a valid work email address.', 'error');
-      return;
-    }
-    if (!company) {
-      showToast('Please enter your company name.', 'error');
-      return;
+      if (demoEmailError) {
+        demoEmailError.textContent = 'A valid corporate email address is required.';
+        demoEmailError.classList.add('is-visible');
+      }
+      demoEmailInput?.classList.add('is-invalid');
+      hasError = true;
     }
 
-    // Success Screen
-    if (demoFormContainer) demoFormContainer.style.display = 'none';
-    if (demoSuccessScreen) demoSuccessScreen.style.display = 'block';
-    showToast('Demo request scheduled successfully!', 'success');
+    if (!company || company.length < 2) {
+      if (demoCompanyError) {
+        demoCompanyError.textContent = 'Company name is required.';
+        demoCompanyError.classList.add('is-visible');
+      }
+      demoCompanyInput?.classList.add('is-invalid');
+      hasError = true;
+    }
 
-    // Auto-close after 3.5s
-    setTimeout(() => {
-      closeDemoModal();
-    }, 3500);
+    if (hasError) return;
+
+    // Disable button while sending
+    if (demoSubmitBtn) {
+      demoSubmitBtn.disabled = true;
+      demoSubmitBtn.textContent = 'Sending request...';
+    }
+
+    try {
+      const endpoint = import.meta.env.VITE_FORM_ENDPOINT;
+      if (endpoint && endpoint.trim()) {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            company,
+            submittedAt: new Date().toISOString()
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`Submission failed with status: ${response.status}`);
+        }
+      } else {
+        // Fallback simulated async submission in local dev
+        await new Promise(resolve => setTimeout(resolve, 600));
+      }
+
+      // Success
+      if (demoFormContainer) demoFormContainer.style.display = 'none';
+      if (demoSuccessScreen) demoSuccessScreen.style.display = 'block';
+      showToast('Demo request received! Our team will get in touch.', 'success');
+
+      setTimeout(() => {
+        closeDemoModal();
+      }, 3500);
+
+    } catch (err) {
+      if (demoGeneralError) {
+        demoGeneralError.textContent = 'Unable to submit your request at this moment. Please try again or contact support.';
+        demoGeneralError.classList.add('is-visible');
+      }
+      showToast('Submission error. Please try again.', 'error');
+      if (demoSubmitBtn) {
+        demoSubmitBtn.disabled = false;
+        demoSubmitBtn.textContent = 'Schedule Enterprise Demo';
+      }
+    }
   });
 
-  // Sign In Modal
+  /* ==========================================================================
+     16. SIGN IN / SSO MODAL (REQUEST ACCESS & SSO NOTICE - NO FAKE LOGIN)
+     ========================================================================== */
   const signinModal = document.getElementById('signin-modal');
   const signinBtn = document.getElementById('sign-in-btn');
   const mobileSigninBtn = document.getElementById('mobile-sign-in-btn');
   const signinModalClose = document.getElementById('signin-modal-close');
   const signinForm = document.getElementById('signin-form');
+  const signinEmailInput = document.getElementById('signin-email');
+  const signinEmailError = document.getElementById('signin-email-error');
+  const ssoSigninBtn = document.getElementById('sso-signin-btn');
+  const ssoNotice = document.getElementById('sso-notice');
 
   function openSignInModal() {
     signinModal?.classList.add('is-open');
     signinForm?.reset();
-    setTimeout(() => document.getElementById('signin-email')?.focus(), 80);
+    if (signinEmailError) {
+      signinEmailError.textContent = '';
+      signinEmailError.classList.remove('is-visible');
+    }
+    signinEmailInput?.classList.remove('is-invalid');
+    if (ssoNotice) ssoNotice.style.display = 'none';
+    setTimeout(() => signinEmailInput?.focus(), 80);
   }
 
   function closeSignInModal() {
@@ -1331,593 +1836,200 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target === signinModal) closeSignInModal();
   });
 
+  ssoSigninBtn?.addEventListener('click', () => {
+    if (ssoNotice) {
+      ssoNotice.style.display = ssoNotice.style.display === 'none' ? 'block' : 'none';
+    }
+  });
+
   signinForm?.addEventListener('submit', (e) => {
     e.preventDefault();
-    const email = document.getElementById('signin-email')?.value.trim();
-    const password = document.getElementById('signin-password')?.value;
-
+    const email = signinEmailInput?.value.trim() || '';
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (!email || !emailRegex.test(email)) {
-      showToast('Please enter a valid corporate email.', 'error');
-      return;
-    }
-    if (!password || password.length < 6) {
-      showToast('Password must be at least 6 characters.', 'error');
+      if (signinEmailError) {
+        signinEmailError.textContent = 'Please enter a valid corporate work email.';
+        signinEmailError.classList.add('is-visible');
+      }
+      signinEmailInput?.classList.add('is-invalid');
       return;
     }
 
     closeSignInModal();
-    showToast(`Signed in as ${email}`, 'success');
+    showToast(`Access request received for ${email}. Our team will get in touch.`, 'success');
   });
 
   /* ==========================================================================
-     8. HERO PROMPT TYPING EFFECT (CYCLING 3 QUERIES)
+     17. "SEE IN ACTION" MODAL (ILLUSTRATIVE EXAMPLE WITH CITATIONS)
      ========================================================================== */
-  const heroTypingTarget = document.getElementById('hero-typing-target');
-  const heroQueries = [
-    "Which launch blocker is buried in legal edits, release notes, and field notes?",
-    "Show Q3 revenue impact from APAC supply chain delays across SAP & Salesforce",
-    "Draft an incident response plan and sync Jira ticket with ServiceNow",
-    "Synthesize customer feedback from Slack, Zendesk, and Confluence"
-  ];
+  const actionExampleModal = document.getElementById('action-example-modal');
+  const actionModalClose = document.getElementById('action-modal-close');
+  const actionModalDoneBtn = document.getElementById('action-modal-done-btn');
+  const openActionExampleBtn = document.getElementById('open-action-example-btn');
+  const actionModalTitle = document.getElementById('action-modal-title');
+  const actionModalPrompt = document.getElementById('action-modal-prompt');
+  const actionModalAnswer = document.getElementById('action-modal-answer');
+  const actionModalCitations = document.getElementById('action-modal-citations');
 
-  // Interactive connector chips click
-  const heroChips = document.querySelectorAll('.hero-search-card .chip');
-  heroChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      const src = chip.getAttribute('data-source');
-      heroChips.forEach(c => c.style.borderColor = 'rgba(0, 0, 0, 0.05)');
-      chip.style.borderColor = '#2a52ff';
-      chip.style.backgroundColor = '#edf1ff';
-      if (heroTypingTarget) {
-        heroTypingTarget.textContent = `Search all ${src} docs and tickets for latest product updates...`;
-      }
-    });
-  });
-
-  let queryIndex = 0;
-  let charIndex = 0;
-  let isDeleting = false;
-  let typingDelay = 42;
-
-  function typeHeroQuery() {
-    if (!heroTypingTarget) return;
-    const currentQuery = heroQueries[queryIndex];
-
-    if (prefersReducedMotion) {
-      heroTypingTarget.textContent = currentQuery;
-      return;
-    }
-
-    if (isDeleting) {
-      heroTypingTarget.textContent = currentQuery.substring(0, charIndex - 1);
-      charIndex--;
-      typingDelay = 20;
-    } else {
-      heroTypingTarget.textContent = currentQuery.substring(0, charIndex + 1);
-      charIndex++;
-      typingDelay = 45;
-    }
-
-    if (!isDeleting && charIndex === currentQuery.length) {
-      typingDelay = 3200; // Pause at end of sentence
-      isDeleting = true;
-    } else if (isDeleting && charIndex === 0) {
-      isDeleting = false;
-      queryIndex = (queryIndex + 1) % heroQueries.length;
-      typingDelay = 400; // Pause before new word
-    }
-
-    setTimeout(typeHeroQuery, typingDelay);
-  }
-  typeHeroQuery();
-
-  /* ==========================================================================
-     9. STATS COUNT-UP (60% VISIBLE INTERSECTION OBSERVER)
-     ========================================================================== */
-  const statsElements = document.querySelectorAll('.stat-num-val, .hatched-number');
-
-  function animateCountUp(element) {
-    const target = parseFloat(element.getAttribute('data-target') || element.getAttribute('data-count'));
-    const isDecimal = element.getAttribute('data-decimal') === 'true';
-    const duration = prefersReducedMotion ? 0 : 1600;
-    const startTime = performance.now();
-
-    function updateNumber(currentTime) {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      // Ease out cubic
-      const easeProgress = 1 - Math.pow(1 - progress, 3);
-      const currentVal = target * easeProgress;
-
-      if (isDecimal) {
-        element.textContent = currentVal.toFixed(1);
-      } else {
-        element.textContent = Math.floor(currentVal);
-      }
-
-      if (progress < 1) {
-        requestAnimationFrame(updateNumber);
-      } else {
-        element.textContent = isDecimal ? target.toFixed(1) : target;
-      }
-    }
-
-    requestAnimationFrame(updateNumber);
-  }
-
-  const statObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        animateCountUp(entry.target);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.6 });
-
-  statsElements.forEach(el => statObserver.observe(el));
-
-  /* ==========================================================================
-     10. TABS & TYPING PROMPT ON TAB CHANGE
-     ========================================================================== */
-  const tabsData = {
+  const actionExamples = {
     knowledge: {
-      badge: "Pillar 1 & 2",
-      headline: "Unified Enterprise Knowledge & Agentic RAG",
-      bullets: [
-        { title: "Hybrid Dense + Sparse Indexing", desc: "Combines vector embeddings with BM25 keyword matching for exact part numbers, SKUs, and jargon." },
-        { title: "Cross-Encoder Re-Ranking", desc: "Dynamically scores candidate passages so LLMs receive the most accurate semantic context." },
-        { title: "Document Sets & Inline Citations", desc: "Group knowledge by department; every generated answer links directly back to verified source files." }
-      ],
-      promptTag: "Live RAG Query",
-      promptText: "Locate the latest GDPR compliance policy across Confluence and Google Drive, then highlight Article 17 obligations.",
-      gradient: "linear-gradient(135deg, rgba(15, 23, 42, 0.45), rgba(10, 16, 32, 0.78)), url('tab-knowledge.png') center/cover no-repeat"
+      title: "Hybrid RAG & Verified Source Citations",
+      prompt: "Locate the latest enterprise compliance policy across Confluence and Google Drive, then highlight data retention obligations.",
+      answer: "Based on the Enterprise Data Retention Standard v3.2, customer records must be retained for 7 years from transaction completion, while temporary operational telemetry must be redacted after 90 days.",
+      citations: "Sources cited: [Confluence: Legal/Policy-2026-v3] • [Google Drive: Legal-Retention-Schedule.pdf (p. 14)]"
     },
     agents: {
-      badge: "Pillar 3",
-      headline: "Specialized Agents, Personas & Guardrails",
-      bullets: [
-        { title: "Scoped Permissions & Roles", desc: "Assign custom tools, system prompts, and strict document visibility to specific agent personas." },
-        { title: "Global vs Department Sharing", desc: "Publish agents company-wide or restrict access to vetted engineering or executive groups." },
-        { title: "Starter Guidance", desc: "Equip non-technical staff with one-click contextual prompt buttons for repeatable accuracy." }
-      ],
-      promptTag: "Agent Persona",
-      promptText: "Act as Senior IT Helpdesk Specialist. Validate the user's Okta session and inspect active VPN gateways.",
-      gradient: "linear-gradient(135deg, rgba(15, 23, 42, 0.45), rgba(10, 16, 32, 0.78)), url('tab-agents.png') center/cover no-repeat"
+      title: "Specialized IT Agent Execution",
+      prompt: "Act as Senior IT Helpdesk Specialist. Validate the user's Okta session and inspect active VPN gateways.",
+      answer: "Okta session verified for user alex@enterprise.com (MFA active). VPN Gateway eu-west-02 is operational at 42% capacity with zero packet loss.",
+      citations: "Sources cited: [Okta System Log API: Event #9281] • [Network/Gateway-Telemetry-v2]"
     },
     "deep-research": {
-      badge: "Pillar 4",
-      headline: "Autonomous Multi-Step Deep Research",
-      bullets: [
-        { title: "Iterative Sub-Query Decomposition", desc: "Breaks intricate enterprise queries into multi-step investigative hypotheses automatically." },
-        { title: "Cross-Corroboration", desc: "Simultaneously queries internal documentation and live web search engines to confirm facts." },
-        { title: "Publication-Grade Deliverables", desc: "Produces structured analytical executive dossiers with comparative metrics and bibliography." }
-      ],
-      promptTag: "Deep Research Mode",
-      promptText: "Perform full competitive breakdown between Q3 regional supplier quotes and identify price drift anomalies.",
-      gradient: "linear-gradient(135deg, rgba(15, 23, 42, 0.42), rgba(15, 23, 42, 0.8)), url('autonomous-deep-research.jpg') center/cover no-repeat"
+      title: "Autonomous Deep Research Synthesis",
+      prompt: "Perform full competitive breakdown between Q3 regional supplier quotes and identify price drift anomalies.",
+      answer: "Identified a 6.4% price drift anomaly across APAC vendor quotes compared to European baselines. Freight surcharges account for 4.1% of the deviation.",
+      citations: "Sources cited: [SAP: S/4HANA Vendor Invoice Database] • [Procurement/Q3-Suppliers-Digest.xlsx]"
     },
     actions: {
-      badge: "Pillar 5",
-      headline: "Enterprise Extensibility & Live Actions",
-      bullets: [
-        { title: "SAP S/4HANA & ServiceNow Tools", desc: "Create sales orders, query OData tables, and resolve IT incident tickets straight from chat." },
-        { title: "Model Context Protocol (MCP)", desc: "Plug into local or remote MCP servers for instantaneous integration with enterprise tools." },
-        { title: "Isolated Python Sandbox", desc: "Safely execute mathematical routines, parse raw CSV dumps, and generate dynamic visual plots." }
-      ],
-      promptTag: "Live Tool Execution",
-      promptText: "Create a High-Priority incident in ServiceNow for server cluster 'eu-west-04' and notify on-call in #devops-alerts.",
-      gradient: "linear-gradient(135deg, rgba(15, 23, 42, 0.4), rgba(10, 16, 32, 0.75)), url('tab-actions.png') center/cover no-repeat"
+      title: "ServiceNow & SAP Live Action Execution",
+      prompt: "Create a High-Priority incident in ServiceNow for server cluster 'eu-west-04' and notify on-call in #devops-alerts.",
+      answer: "Created incident INC0094182 with Priority 2 (High). Assigned to DevOps Infrastructure group. Broadcast notification dispatched to #devops-alerts.",
+      citations: "Sources cited: [ServiceNow REST API: INC0094182] • [Slack Webhook: #devops-alerts]"
     },
-    workflows: {
-      badge: "Pillar 6",
-      headline: "Autonomous Workflow Orchestration & Multi-Agent Mesh",
-      bullets: [
-        { title: "Autonomous Planning & Execution", desc: "Agents decompose complex cross-platform business workflows into ordered sub-tasks." },
-        { title: "Live Enterprise Tool Invocation", desc: "Directly trigger SAP orders, ServiceNow tickets, and Slack alerts with strict authorization." },
-        { title: "Human-in-the-Loop Approvals", desc: "Built-in review gates for high-impact actions like ledger updates and permission changes." }
-      ],
-      promptTag: "Orchestration Prompt",
-      promptText: "Initiate cross-system employee onboarding: generate Okta credentials, provision GitHub access, and notify manager.",
-      gradient: "linear-gradient(135deg, rgba(15, 23, 42, 0.45), rgba(10, 16, 32, 0.8)), url('tab-workflows.png') center/cover no-repeat"
+    craft: {
+      title: "Craft Sandbox: Containerized Tool Generation",
+      prompt: "Build a real-time SAP order tracking dashboard with search, status filters, and export to CSV in an isolated preview container.",
+      answer: "Generated interactive React dashboard component in isolated container sandbox with live preview. Filters enabled for Open, Shipped, and In Review orders with instant CSV download.",
+      citations: "Sources cited: [Craft Sandbox: Container #c7a91f] • [SAP OData API: SalesOrderSet]"
     },
     security: {
-      badge: "Pillar 7",
-      headline: "Zero-Trust Security, SCIM & ACL Mirroring",
-      bullets: [
-        { title: "Document-Level Permissions", desc: "Mirror original access rights from Google Drive, Confluence, and Slack so users only see what they own." },
-        { title: "Identity & SCIM 2.0 Provisioning", desc: "Native SAML 2.0, Okta, and Microsoft Entra ID integration with automatic offboarding." },
-        { title: "PII Masking & Evals CLI", desc: "Intercept sensitive prompts in flight and benchmark model adherence against compliance tests." }
-      ],
-      promptTag: "Security Governance",
-      promptText: "Audit query: Verify that Employee #4092 cannot access executive compensation folders during salary review.",
-      gradient: "linear-gradient(135deg, rgba(15, 23, 42, 0.45), rgba(10, 16, 32, 0.8)), url('tab-security.png') center/cover no-repeat"
+      title: "Zero-Trust Document ACL Verification",
+      prompt: "Audit query: Verify that Employee #4092 cannot access executive compensation folders during salary review.",
+      answer: "Permission check passed. Employee #4092 has Basic User role with no access permissions to restricted Google Drive folder 'Executive Compensation 2026'. ACL mirroring verified.",
+      citations: "Sources cited: [Drive ACL Mirroring Sync: Audit ID #5519] • [SCIM 2.0 Role Directory]"
     }
   };
 
-  const tabButtons = document.querySelectorAll('.tab-btn');
-  const tabIndicator = document.getElementById('tab-indicator');
-  const tabBadge = document.getElementById('tab-badge');
-  const tabHeadline = document.getElementById('tab-headline');
-  const tabBullets = document.getElementById('tab-bullets');
-  const tabGradientPanel = document.getElementById('tab-gradient-panel');
-  const tabPromptTag = document.getElementById('tab-prompt-tag');
-  const tabPromptText = document.getElementById('tab-prompt-text');
+  function openActionExampleModal() {
+    if (!actionExampleModal) return;
+    const example = actionExamples[activeTabKey] || actionExamples.knowledge;
 
-  let tabTypeTimeout = null;
+    if (actionModalTitle) actionModalTitle.textContent = example.title;
+    if (actionModalPrompt) actionModalPrompt.textContent = `"${example.prompt}"`;
+    if (actionModalAnswer) actionModalAnswer.textContent = example.answer;
+    if (actionModalCitations) actionModalCitations.innerHTML = `<strong>Sources cited:</strong> ${example.citations.replace('Sources cited: ', '')}`;
 
-  function updateTabIndicator(activeBtn) {
-    if (!tabIndicator || !activeBtn) return;
-    const parentRect = activeBtn.parentElement.parentElement.getBoundingClientRect();
-    const btnRect = activeBtn.getBoundingClientRect();
-    tabIndicator.style.left = `${btnRect.left - parentRect.left}px`;
-    tabIndicator.style.width = `${btnRect.width}px`;
+    actionExampleModal.classList.add('is-open');
   }
 
-  function typeTabPrompt(text) {
-    if (!tabPromptText) return;
-    clearTimeout(tabTypeTimeout);
-
-    if (prefersReducedMotion) {
-      tabPromptText.textContent = `"${text}"`;
-      return;
-    }
-
-    tabPromptText.textContent = '"';
-    let idx = 0;
-
-    function step() {
-      if (idx < text.length) {
-        tabPromptText.textContent += text.charAt(idx);
-        idx++;
-        tabTypeTimeout = setTimeout(step, 18);
-      } else {
-        tabPromptText.textContent += '"';
-      }
-    }
-    step();
+  function closeActionExampleModal() {
+    actionExampleModal?.classList.remove('is-open');
   }
 
-  function activateTab(tabKey, btn) {
-    const data = tabsData[tabKey];
-    if (!data) return;
-
-    tabButtons.forEach(b => b.classList.remove('is-active'));
-    btn.classList.add('is-active');
-    updateTabIndicator(btn);
-
-    if (tabBadge) tabBadge.textContent = data.badge;
-    if (tabHeadline) tabHeadline.textContent = data.headline;
-    if (tabBullets) {
-      tabBullets.innerHTML = data.bullets.map(b => `
-        <li class="tab-bullet-item">
-          <div class="tab-bullet-title">${b.title}</div>
-          <div class="tab-bullet-desc">${b.desc}</div>
-        </li>
-      `).join('');
-    }
-    if (tabGradientPanel) tabGradientPanel.style.background = data.gradient;
-    if (tabPromptTag) tabPromptTag.textContent = data.promptTag;
-
-    typeTabPrompt(data.promptText);
-  }
-
-  tabButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const key = btn.getAttribute('data-tab');
-      activateTab(key, btn);
-    });
-  });
-
-  // Set initial indicator
-  const initialTab = document.querySelector('.tab-btn.is-active');
-  if (initialTab) {
-    setTimeout(() => updateTabIndicator(initialTab), 100);
-  }
-  window.addEventListener('resize', () => {
-    const cur = document.querySelector('.tab-btn.is-active');
-    if (cur) updateTabIndicator(cur);
+  openActionExampleBtn?.addEventListener('click', openActionExampleModal);
+  actionModalClose?.addEventListener('click', closeActionExampleModal);
+  actionModalDoneBtn?.addEventListener('click', closeActionExampleModal);
+  actionExampleModal?.addEventListener('click', (e) => {
+    if (e.target === actionExampleModal) closeActionExampleModal();
   });
 
   /* ==========================================================================
-     11. ACCORDION (8 PILLARS)
+     18. "SEE INTERACTIVE WORKFLOW" MODAL (ANIMATED STEP-BY-STEP)
      ========================================================================== */
-  const accordionItems = document.querySelectorAll('.accordion-item');
+  const workflowModal = document.getElementById('workflow-modal');
+  const workflowModalClose = document.getElementById('workflow-modal-close');
+  const openWorkflowModalBtn = document.getElementById('open-workflow-modal-btn');
+  const wfPlayBtn = document.getElementById('wf-play-btn');
+  const wfReplayBtn = document.getElementById('wf-replay-btn');
+  const wfSummaryText = document.getElementById('wf-summary-text');
+  let wfAnimationTimer = null;
 
-  accordionItems.forEach(item => {
-    const trigger = item.querySelector('.accordion-trigger');
-    const content = item.querySelector('.accordion-content');
+  function openWorkflowModal() {
+    if (!workflowModal) return;
+    workflowModal.classList.add('is-open');
+    resetWorkflowAnimation();
+    setTimeout(playWorkflowAnimation, 400);
+  }
 
-    trigger?.addEventListener('click', () => {
-      const isOpen = item.classList.contains('is-open');
+  function closeWorkflowModal() {
+    workflowModal?.classList.remove('is-open');
+    clearTimeout(wfAnimationTimer);
+  }
 
-      // Close all others (one open at a time)
-      accordionItems.forEach(other => {
-        other.classList.remove('is-open');
-        other.querySelector('.accordion-trigger')?.setAttribute('aria-expanded', 'false');
-        const otherContent = other.querySelector('.accordion-content');
-        if (otherContent) otherContent.style.maxHeight = '0';
-      });
+  function resetWorkflowAnimation() {
+    clearTimeout(wfAnimationTimer);
+    for (let i = 1; i <= 3; i++) {
+      const node = document.getElementById(`wf-node-${i}`);
+      const status = document.getElementById(`wf-status-${i}`);
+      node?.classList.remove('is-active', 'is-complete');
+      if (status) status.textContent = 'Standby';
+    }
+    if (wfSummaryText) wfSummaryText.textContent = 'Ready to execute';
+  }
 
-      if (!isOpen) {
-        item.classList.add('is-open');
-        trigger.setAttribute('aria-expanded', 'true');
-        if (content) content.style.maxHeight = `${content.scrollHeight + 30}px`;
-      }
-    });
+  function playWorkflowAnimation() {
+    resetWorkflowAnimation();
+    if (wfSummaryText) wfSummaryText.textContent = 'Step 1 of 3: Fetching SAP ledger...';
+
+    const node1 = document.getElementById('wf-node-1');
+    const status1 = document.getElementById('wf-status-1');
+    node1?.classList.add('is-active');
+    if (status1) status1.textContent = 'Fetching...';
+
+    wfAnimationTimer = setTimeout(() => {
+      node1?.classList.remove('is-active');
+      node1?.classList.add('is-complete');
+      if (status1) status1.textContent = 'Fetched (Q3 Ledger)';
+
+      const node2 = document.getElementById('wf-node-2');
+      const status2 = document.getElementById('wf-status-2');
+      node2?.classList.add('is-active');
+      if (status2) status2.textContent = 'Verifying...';
+      if (wfSummaryText) wfSummaryText.textContent = 'Step 2 of 3: Verifying policy doc anomalies...';
+
+      wfAnimationTimer = setTimeout(() => {
+        node2?.classList.remove('is-active');
+        node2?.classList.add('is-complete');
+        if (status2) status2.textContent = 'Verified (1 Discrepancy)';
+
+        const node3 = document.getElementById('wf-node-3');
+        const status3 = document.getElementById('wf-status-3');
+        node3?.classList.add('is-active');
+        if (status3) status3.textContent = 'Pushing...';
+        if (wfSummaryText) wfSummaryText.textContent = 'Step 3 of 3: Pushing remediation to ServiceNow & Slack...';
+
+        wfAnimationTimer = setTimeout(() => {
+          node3?.classList.remove('is-active');
+          node3?.classList.add('is-complete');
+          if (status3) status3.textContent = 'Pushed & Notified';
+          if (wfSummaryText) wfSummaryText.textContent = 'Completed: Incident resolved and audited.';
+        }, 900);
+      }, 900);
+    }, 900);
+  }
+
+  openWorkflowModalBtn?.addEventListener('click', openWorkflowModal);
+  workflowModalClose?.addEventListener('click', closeWorkflowModal);
+  workflowModal?.addEventListener('click', (e) => {
+    if (e.target === workflowModal) closeWorkflowModal();
+  });
+  wfPlayBtn?.addEventListener('click', playWorkflowAnimation);
+  wfReplayBtn?.addEventListener('click', playWorkflowAnimation);
+
+  // Global Escape Key Closes All Modals
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeSearchModal();
+      closeDemoModal();
+      closeSignInModal();
+      closeActionExampleModal();
+      closeWorkflowModal();
+    }
   });
 
   /* ==========================================================================
-     12. CAROUSEL (5 CHALLENGES, AUTO-ADVANCE 3.5S, 2ND PIC EXPAND ROTATE)
-     ========================================================================== */
-  const carouselCards = document.querySelectorAll('.carousel-card');
-  const prevBtn = document.getElementById('carousel-prev-btn');
-  const nextBtn = document.getElementById('carousel-next-btn');
-  const progressBar = document.getElementById('carousel-progress-bar');
-  const carouselStage = document.getElementById('carousel-stage');
-  const ROTATE_INTERVAL = 3500; // 3.5 seconds auto-advance rotation
-  let currentCarouselIndex = 0;
-  let carouselTimer = null;
-
-  function resetProgressBar() {
-    if (!progressBar) return;
-    progressBar.style.transition = 'none';
-    progressBar.style.width = '0%';
-    void progressBar.offsetWidth; // Force layout flush for smooth restart
-    if (!prefersReducedMotion) {
-      progressBar.style.transition = `width ${ROTATE_INTERVAL}ms linear`;
-      progressBar.style.width = '100%';
-    }
-  }
-
-  function setCarouselCard(index) {
-    if (!carouselCards.length) return;
-    currentCarouselIndex = (index + carouselCards.length) % carouselCards.length;
-    carouselCards.forEach((card, idx) => {
-      const isActive = idx === currentCarouselIndex;
-      card.classList.toggle('is-active', isActive);
-      card.setAttribute('aria-expanded', isActive ? 'true' : 'false');
-    });
-    resetProgressBar();
-  }
-
-  function startCarouselTimer() {
-    stopCarouselTimer();
-    if (prefersReducedMotion) return;
-    resetProgressBar();
-    carouselTimer = setInterval(() => {
-      setCarouselCard(currentCarouselIndex + 1);
-    }, ROTATE_INTERVAL);
-  }
-
-  function stopCarouselTimer() {
-    if (carouselTimer) {
-      clearInterval(carouselTimer);
-      carouselTimer = null;
-    }
-    if (progressBar) {
-      const computedWidth = window.getComputedStyle(progressBar).width;
-      progressBar.style.transition = 'none';
-      progressBar.style.width = computedWidth;
-    }
-  }
-
-  carouselCards.forEach(card => {
-    card.addEventListener('click', () => {
-      const idx = parseInt(card.getAttribute('data-index') || '0', 10);
-      setCarouselCard(idx);
-      startCarouselTimer();
-    });
-  });
-
-  prevBtn?.addEventListener('click', () => {
-    setCarouselCard(currentCarouselIndex - 1);
-    startCarouselTimer();
-  });
-
-  nextBtn?.addEventListener('click', () => {
-    setCarouselCard(currentCarouselIndex + 1);
-    startCarouselTimer();
-  });
-
-  carouselStage?.addEventListener('mouseenter', stopCarouselTimer);
-  carouselStage?.addEventListener('mouseleave', startCarouselTimer);
-
-  // Pause rotation when tab is hidden, resume when tab is active
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      stopCarouselTimer();
-    } else {
-      startCarouselTimer();
-    }
-  });
-
-  startCarouselTimer();
-
-  /* ==========================================================================
-     13. DARK SECTION: ROW HOVER & CURSOR-FOLLOWING GRADIENT THUMBNAIL
-     ========================================================================== */
-  const darkRows = document.querySelectorAll('.dark-row-item');
-  const cursorThumbnail = document.getElementById('cursor-thumbnail');
-
-  darkRows.forEach(row => {
-    row.addEventListener('mouseenter', (e) => {
-      const thumbGrad = row.getAttribute('data-thumb');
-      if (cursorThumbnail && thumbGrad) {
-        if (thumbGrad.startsWith('url(')) {
-          cursorThumbnail.style.background = 'none';
-          cursorThumbnail.style.backgroundImage = thumbGrad;
-          cursorThumbnail.style.backgroundSize = 'cover';
-          cursorThumbnail.style.backgroundPosition = 'center';
-        } else {
-          cursorThumbnail.style.backgroundImage = 'none';
-          cursorThumbnail.style.background = thumbGrad;
-        }
-        cursorThumbnail.classList.add('is-visible');
-      }
-    });
-
-    row.addEventListener('mousemove', (e) => {
-      if (cursorThumbnail) {
-        cursorThumbnail.style.left = `${e.clientX + 30}px`;
-        cursorThumbnail.style.top = `${e.clientY - 20}px`;
-      }
-    });
-
-    row.addEventListener('mouseleave', () => {
-      cursorThumbnail?.classList.remove('is-visible');
-    });
-  });
-
-  /* ==========================================================================
-     14. FROM KNOWLEDGE TO ACTION: CHECKLIST & PROGRESS BAR
-     ========================================================================== */
-  const planCard = document.getElementById('plan-trigger-card');
-  const planProgressBar = document.getElementById('plan-progress-bar');
-  const planCounter = document.getElementById('plan-counter');
-  const planStatusLabel = document.getElementById('plan-status-label');
-  const checkItems = [
-    document.getElementById('check-item-1'),
-    document.getElementById('check-item-2'),
-    document.getElementById('check-item-3')
-  ];
-  let planAnimated = false;
-
-  const planObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !planAnimated) {
-        planAnimated = true;
-        runPlanAnimation();
-      }
-    });
-  }, { threshold: 0.4 });
-
-  if (planCard) planObserver.observe(planCard);
-
-  function runPlanAnimation() {
-    if (planStatusLabel) planStatusLabel.textContent = 'Executing...';
-    let completed = 0;
-
-    const interval = prefersReducedMotion ? 100 : 700;
-
-    checkItems.forEach((item, index) => {
-      setTimeout(() => {
-        item?.classList.add('is-done');
-        completed++;
-        const percent = (completed / checkItems.length) * 100;
-        if (planProgressBar) planProgressBar.style.width = `${percent}%`;
-        if (planCounter) planCounter.textContent = `${completed} of ${checkItems.length} completed`;
-
-        if (completed === checkItems.length) {
-          if (planStatusLabel) {
-            planStatusLabel.textContent = 'All steps verified';
-            planStatusLabel.style.color = '#1cb561';
-            planStatusLabel.style.fontWeight = '600';
-          }
-        }
-      }, (index + 1) * interval);
-    });
-  }
-
-  /* ==========================================================================
-     15. FIXED LEFT RAIL (HIDDEN ON HERO, VISIBLE ON REMAINING SECTIONS)
-     ========================================================================== */
-  const fixedRail = document.getElementById('fixed-rail');
-  const railItems = document.querySelectorAll('.rail-item');
-  const heroSection = document.getElementById('hero');
-
-  // Hide rail on Hero section, show smoothly on remaining sections
-  function updateRailVisibility() {
-    if (!fixedRail) return;
-    if (!heroSection) {
-      fixedRail.classList.add('is-visible');
-      return;
-    }
-    const heroRect = heroSection.getBoundingClientRect();
-    // If bottom of hero is within 140px of top viewport, user is still in hero section
-    const isInHero = heroRect.bottom > 140;
-    if (isInHero) {
-      fixedRail.classList.remove('is-visible');
-      fixedRail.classList.remove('is-expanded');
-    } else {
-      fixedRail.classList.add('is-visible');
-    }
-  }
-
-  window.addEventListener('scroll', updateRailVisibility, { passive: true });
-  window.addEventListener('resize', updateRailVisibility, { passive: true });
-  updateRailVisibility();
-
-  // Toggle expand on touch/click
-  if (fixedRail) {
-    fixedRail.addEventListener('click', (e) => {
-      if (!fixedRail.classList.contains('is-expanded')) {
-        fixedRail.classList.add('is-expanded');
-      }
-    });
-
-    fixedRail.addEventListener('touchstart', () => {
-      fixedRail.classList.add('is-expanded');
-    }, { passive: true });
-
-    // Close when clicking/touching outside
-    document.addEventListener('click', (e) => {
-      if (!fixedRail.contains(e.target)) {
-        fixedRail.classList.remove('is-expanded');
-      }
-    });
-
-    document.addEventListener('touchstart', (e) => {
-      if (!fixedRail.contains(e.target)) {
-        fixedRail.classList.remove('is-expanded');
-      }
-    }, { passive: true });
-  }
-
-  // Smooth scroll and active state on item click
-  railItems.forEach(item => {
-    item.addEventListener('click', (e) => {
-      const targetId = item.getAttribute('data-target');
-      if (targetId) {
-        const targetEl = document.getElementById(targetId);
-        if (targetEl) {
-          e.preventDefault();
-          railItems.forEach(r => r.classList.remove('is-active'));
-          item.classList.add('is-active');
-          targetEl.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
-          setTimeout(() => {
-            fixedRail?.classList.remove('is-expanded');
-          }, 800);
-        }
-      }
-    });
-  });
-
-  // Track sections while scrolling
-  const railSections = [
-    document.getElementById('statement'),
-    document.getElementById('split-feature'),
-    document.getElementById('dark-section'),
-    document.getElementById('stats'),
-    document.getElementById('carousel'),
-    document.getElementById('tabs')
-  ].filter(Boolean);
-
-  const railObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id;
-        railItems.forEach(btn => {
-          btn.classList.toggle('is-active', btn.getAttribute('data-target') === id);
-        });
-      }
-    });
-  }, { threshold: 0.3 });
-
-  railSections.forEach(sec => railObserver.observe(sec));
-
-  /* ==========================================================================
-     16. CHAT WIDGET (BOTTOM-RIGHT) & KEYWORD TABLE
+     19. ESA CHAT ASSISTANT (RESTRICTED ONLY TO PART 3 KNOWLEDGE)
      ========================================================================== */
   const chatGreetingBubble = document.getElementById('chat-greeting-bubble');
   const chatBubbleClose = document.getElementById('chat-bubble-close');
@@ -1928,6 +2040,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const chatForm = document.getElementById('chat-form');
   const chatInput = document.getElementById('chat-input');
   const chatTypingIndicator = document.getElementById('chat-typing-indicator');
+  const chatChips = document.querySelectorAll('.chat-chip-btn');
 
   chatBubbleClose?.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -1946,83 +2059,241 @@ document.addEventListener('DOMContentLoaded', () => {
     chatPanel?.classList.remove('is-open');
   });
 
-  // Keyword lookup table
-  const esaKnowledgeTable = [
+  // Strict Knowledge Base extracted strictly from Part 3:
+  const part3Knowledge = [
     {
-      keywords: ['connector', 'connectors', 'sap', 'servicenow', 'jira', 'confluence', 'drive', 'slack', 'github', 'salesforce'],
-      reply: "ESAA connects directly to 50+ enterprise sources including SAP S/4HANA, ServiceNow, Salesforce, Jira, Google Drive, and Slack with continuous incremental indexing, webhooks, and federated live search."
+      keywords: ['connector', 'connectors', 'integrate', 'sources', 'catalog', 'integrations'],
+      answer: "ESAA supports 50+ connectors across 7 categories: ERP/Business (SAP S/4HANA, ServiceNow, Salesforce, HubSpot, Zendesk, Freshdesk, Gong, Highspot, Loopio), Storage (Google Drive, SharePoint, OneDrive, Box, Dropbox, Egnyte, Amazon S3, Cloudflare R2, Google Cloud Storage, Oracle OCI, local files), Communication (Slack, Teams, Discord, Zulip, Gmail, IMAP, Fireflies.ai, Discourse, XenForo), Knowledge (Confluence, Notion, BookStack, Outline, Guru, Slab, Coda, Document360, Axero, Lumapps, Drupal Wiki, MediaWiki/Wikipedia), Project Management (Jira, Linear, Asana, ClickUp, Productboard, TestRail), Code (GitHub, GitLab, Bitbucket), and Custom (Ingestion API, Web crawler)."
     },
     {
-      keywords: ['security', 'sso', 'acl', 'saml', 'scim', 'permission', 'permissions', 'rbac'],
-      reply: "Security is built into our core architecture. ESAA mirrors document-level ACLs directly from your identity provider (SAML 2.0, Okta, Microsoft Entra ID), ensuring users only receive answers generated from documents they have explicit clearance to view."
+      keywords: ['architecture', 'layer', 'layers', 'fastapi', 'celery', 'redis', 'postgres', 'opensearch', 'vespa', 'minio'],
+      answer: "ESAA's architecture consists of 5 layers: 1) Frontend: Next.js web app, chat & agent workspace, analytics dashboard, Craft, admin panel; 2) Application/API: FastAPI backend, Auth & RBAC (OAuth2, SAML, OIDC, SCIM), agent & RAG orchestration, tool engine (SAP, ServiceNow, Python, Sheets); 3) Async workers: Celery task workers, Redis cache & broker; 4) Data & indexing: PostgreSQL, OpenSearch/Vespa (hybrid BM25 + vector), MinIO object store; 5) Integrations: SAP S/4HANA, ServiceNow, cloud storage, Slack/Teams/Confluence/Jira, and LLMs."
     },
     {
-      keywords: ['agent', 'agents', 'persona', 'personas', 'custom'],
-      reply: "Our Specialized Agents support custom persona instructions, temperature controls, scoped document collections, and tool permissions (e.g., an IT Agent with ServiceNow execution rights)."
+      keywords: ['security', 'secure', 'role', 'roles', 'admin', 'curator', 'basic user', 'acl', 'audit', 'pii', 'budget', 'rate limit'],
+      answer: "ESAA provides three role tiers: Admin (full management, connectors, invites, API keys), Curator (document sets and agents for groups), and Basic User (search, chat, personas, uploads). Security controls include document ACL sync, tamper-proof audit logging, in-flight PII masking, token budgets per user/group, and sliding-window rate limiting."
     },
     {
-      keywords: ['research', 'deep research', 'synthesis', 'report'],
-      reply: "Autonomous Deep Research breaks complex questions into multi-step investigative hypotheses, cross-references internal records with external web engines, and outputs structured publication-grade executive reports."
+      keywords: ['model', 'models', 'llm', 'llms', 'openai', 'claude', 'gemini', 'bedrock', 'azure', 'ollama', 'vllm', 'embedding', 'rerank'],
+      answer: "Supported models include: LLMs: OpenAI (GPT-4o, GPT-4o-mini, o1, o3-mini), Anthropic Claude, Google Gemini, Azure OpenAI, AWS Bedrock; Local LLMs: Ollama, LiteLLM Proxy, vLLM, LocalAI; Embeddings: Voyage AI, Cohere, OpenAI, Hugging Face; Rerankers: Cohere, Mixedbread, BAAI BGE."
     },
     {
-      keywords: ['deployment', 'deploy', 'kubernetes', 'docker', 'cloud', 'aws', 'gcp', 'azure', 'lite'],
-      reply: "ESAA is fully model- and infrastructure-agnostic. Deploy on self-hosted Kubernetes, private clouds (AWS, GCP, Azure), air-gapped Docker, or our ultra-lightweight Lite mode under 1GB RAM."
+      keywords: ['deploy', 'deployment', 'hosting', 'kubernetes', 'docker', 'aws', 'gcp', 'azure', 'on-premise', 'private cloud', 'lite', 'standard'],
+      answer: "ESAA offers Standard vs Lite deployment: Standard provides full enterprise RAG, while Lite is a lightweight chat UI running under 1GB RAM. Hosting options include Kubernetes (Helm/Terraform), Docker Compose, AWS, GCP, Azure, and private on-premise cloud."
     },
     {
-      keywords: ['model', 'models', 'openai', 'claude', 'gemini', 'bedrock', 'ollama', 'vllm'],
-      reply: "You avoid vendor lock-in completely. ESAA supports OpenAI, Anthropic Claude, Google Gemini, AWS Bedrock, Azure OpenAI, and self-hosted private models via Ollama and vLLM."
+      keywords: ['action', 'actions', 'tool', 'tools', 'sap', 'servicenow', 'sheets', 'python', 'mcp', 'openapi', 'voice', 'image', 'web search'],
+      answer: "Supported live actions include SAP (create sales orders, partner lookups, OData read/update), ServiceNow (create/update/resolve incidents, KB lookup), Google Sheets & chart engine (load, clean, aggregate, Altair chart), isolated Python sandbox, Model Context Protocol (MCP), OpenAPI import, live web search (Google PSE, Serper, Brave, SearXNG, Exa, Firecrawl), voice STT/TTS, and image generation."
     },
     {
-      keywords: ['demo', 'contact', 'schedule', 'price', 'pricing', 'trial'],
-      reply: "You can schedule a tailored architectural walkthrough by clicking any 'Get a demo' button on this page, or let me know and I'll open the request form for you!"
+      keywords: ['dashboard', 'dashboards', 'analytics', 'overview', 'itsm', 'ingestion'],
+      answer: "ESAA includes 4 live dashboard views: Platform Overview (cluster health, chunk counts, storage, connector health), SAP Operational (sales order status, net values, channels, partners), ServiceNow ITSM (incidents by state/priority, KB health), and File Ingestion (formats PDF/DOCX/CSV/TXT, processing time, storage load)."
+    },
+    {
+      keywords: ['craft', 'sandbox', 'build mode'],
+      answer: "Craft / Build Mode (Agentic Sandbox) is a development environment where AI agents write, test, and render interactive tools, web apps, and scripts in isolated containers with live preview."
+    },
+    {
+      keywords: ['demo', 'schedule', 'contact', 'access', 'request access'],
+      answer: "You can request access or schedule a tailored walkthrough with our enterprise architecture team by clicking any 'Get a demo' button on this page."
     }
   ];
+
+  function getEsaReply(userInput) {
+    const clean = userInput.toLowerCase();
+    for (const item of part3Knowledge) {
+      if (item.keywords.some(k => clean.includes(k))) {
+        return item.answer;
+      }
+    }
+    return "I don't have that information. Please request a demo.";
+  }
 
   function appendChatMessage(text, sender = 'esa') {
     if (!chatMessages) return;
     const msgDiv = document.createElement('div');
     msgDiv.className = `chat-msg ${sender}`;
     msgDiv.textContent = text;
-    // Insert before typing indicator
     chatMessages.insertBefore(msgDiv, chatTypingIndicator);
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
-  chatForm?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const query = chatInput?.value.trim();
+  function handleUserChatSubmission(query) {
     if (!query) return;
-
-    // Append user message
     appendChatMessage(query, 'user');
-    chatInput.value = '';
+    if (chatInput) chatInput.value = '';
 
-    // Show typing indicator
     if (chatTypingIndicator) {
       chatTypingIndicator.style.display = 'inline-flex';
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    // Determine reply from keyword table
-    const lowerQ = query.toLowerCase();
-    let matchedReply = "ESAA turns foundational LLMs into secure, context-aware digital coworkers and autonomous agents connected to your enterprise systems. Could you clarify if you're interested in our connectors, security, or live demo?";
+    const reply = getEsaReply(query);
 
-    for (const entry of esaKnowledgeTable) {
-      if (entry.keywords.some(k => lowerQ.includes(k))) {
-        matchedReply = entry.reply;
-        break;
+    setTimeout(() => {
+      if (chatTypingIndicator) chatTypingIndicator.style.display = 'none';
+      appendChatMessage(reply, 'esa');
+    }, 450);
+  }
+
+  chatForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const query = chatInput?.value.trim() || '';
+    handleUserChatSubmission(query);
+  });
+
+  chatChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const q = chip.textContent?.trim() || '';
+      handleUserChatSubmission(q);
+    });
+  });
+
+  /* ==========================================================================
+     18. CLIENT-SIDE ROUTER FOR PLATFORM PAGES
+     ========================================================================== */
+  const homeView = document.getElementById('home-view');
+  const platformPageView = document.getElementById('platform-page-view');
+
+  function updateMetaDescription(text) {
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.name = 'description';
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute('content', text);
+  }
+
+  function handleRoute(path) {
+    const cleanPath = (path || '/').split('?')[0].split('#')[0];
+    
+    // Always close mega menu on navigation
+    closeMegaMenu();
+
+    if (cleanPath === '/platform/overview') {
+      if (homeView) homeView.style.display = 'none';
+      if (platformPageView) {
+        platformPageView.style.display = 'block';
+        platformPageView.innerHTML = renderPlatformOverviewPage();
+      }
+      document.title = "Platform Overview — ESAA Enterprise AI Platform";
+      updateMetaDescription("ESAA is a unified, enterprise-grade AI platform that transforms foundational LLMs into secure, context-aware digital coworkers and autonomous agents connected to your core business systems.");
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      return;
+    }
+
+    if (cleanPath.startsWith('/platform/')) {
+      const slug = cleanPath.replace(/^\/platform\//, '').replace(/\/$/, '');
+      const item = getPlatformItemBySlug(slug);
+
+      if (item) {
+        if (homeView) homeView.style.display = 'none';
+        if (platformPageView) {
+          platformPageView.style.display = 'block';
+          platformPageView.innerHTML = renderPlatformDetailPage(item);
+
+          // Attach smooth scroll for TOC buttons without changing URL hash
+          platformPageView.querySelectorAll('.sidebar-toc-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.preventDefault();
+              const targetId = btn.getAttribute('data-scroll-to');
+              const targetEl = document.getElementById(targetId);
+              if (targetEl) {
+                targetEl.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+                platformPageView.querySelectorAll('.sidebar-toc-btn').forEach(b => b.classList.remove('is-active'));
+                btn.classList.add('is-active');
+              }
+            });
+          });
+        }
+        document.title = `${item.title} — ESAA Platform`;
+        updateMetaDescription(item.lead);
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        return;
+      } else {
+        navigateTo('/platform/overview');
+        return;
       }
     }
 
-    // If user asked to open demo
-    if (lowerQ.includes('demo') || lowerQ.includes('schedule')) {
-      setTimeout(() => openDemoModal(), 800);
+    // Default / Home
+    if (homeView) homeView.style.display = 'block';
+    if (platformPageView) {
+      platformPageView.style.display = 'none';
+      platformPageView.innerHTML = '';
     }
+    document.title = "ESAA — Governed Enterprise AI Platform & Autonomous Execution";
+    updateMetaDescription("ESAA turns foundational LLMs into secure, context-aware digital coworkers and autonomous agents connected to SAP, ServiceNow, Salesforce, Jira, Google Drive and communication channels.");
+    
+    if (window.location.hash) {
+      const target = document.querySelector(window.location.hash);
+      if (target) {
+        setTimeout(() => target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' }), 50);
+      }
+    }
+  }
 
-    // Reply after 500ms
-    setTimeout(() => {
-      if (chatTypingIndicator) chatTypingIndicator.style.display = 'none';
-      appendChatMessage(matchedReply, 'esa');
-    }, 500);
+  function navigateTo(path) {
+    if (window.location.pathname !== path) {
+      window.history.pushState(null, '', path);
+    }
+    handleRoute(path);
+  }
+
+  window.addEventListener('popstate', () => {
+    handleRoute(window.location.pathname);
   });
-});
+
+  // Global link interception for SPA routes
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a');
+    if (!link) return;
+    const href = link.getAttribute('href');
+    if (!href) return;
+
+    if (href.startsWith('/platform') || href === '/') {
+      e.preventDefault();
+      closeMegaMenu();
+      if (mobileNavPanel?.classList.contains('is-open')) {
+        mobileNavPanel.classList.remove('is-open');
+        hamburgerBtn?.classList.remove('is-active');
+        hamburgerBtn?.setAttribute('aria-expanded', 'false');
+      }
+      navigateTo(href);
+    }
+  });
+
+  // Mobile Platform Accordion Trigger
+  const mobilePlatformTrigger = document.getElementById('mobile-platform-trigger');
+  const mobilePlatformContent = document.getElementById('mobile-platform-content');
+  if (mobilePlatformTrigger && mobilePlatformContent) {
+    mobilePlatformTrigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const isHidden = mobilePlatformContent.style.display === 'none';
+      mobilePlatformContent.style.display = isHidden ? 'block' : 'none';
+      mobilePlatformTrigger.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+      mobilePlatformTrigger.classList.toggle('is-open', isHidden);
+    });
+  }
+
+  // Delegated handler for any .demo-trigger-btn
+  document.addEventListener('click', (e) => {
+    const demoBtn = e.target.closest('.demo-trigger-btn');
+    if (demoBtn) {
+      e.preventDefault();
+      closeMegaMenu();
+      openDemoModal();
+    }
+  });
+
+  // Execute initial routing on page load
+  handleRoute(window.location.pathname);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}

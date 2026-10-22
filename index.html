@@ -3,130 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ESAA — Enterprise AI Platform</title>
+  <title>ESAA — Governed Enterprise AI Platform &amp; Autonomous Execution</title>
   <meta name="description" content="ESAA turns foundational LLMs into secure, context-aware digital coworkers and autonomous agents connected to SAP, ServiceNow, Salesforce, Jira, Google Drive and communication channels.">
   <meta name="color-scheme" content="light">
-  <link rel="stylesheet" href="styles.css?v=13">
+  <link rel="icon" type="image/png" href="esaa-logo-dark.png">
+  <meta property="og:title" content="ESAA — Governed Enterprise AI Platform &amp; Autonomous Execution">
+  <meta property="og:description" content="Unified Hybrid RAG, 50+ enterprise connectors, SAP &amp; ServiceNow live actions, and private cloud deployment.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="esaa-logo-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ESAA — Enterprise AI Platform">
+  <meta name="twitter:description" content="Governed LLM infrastructure, 50+ connectors, and live enterprise tool execution.">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/src/platform.css">
 </head>
 <body>
 
-  <!-- Fixed Left Rail -->
-  <!-- Fixed Left Rail with Expandable Touch/Hover Menu -->
-  <aside class="fixed-left-rail" id="fixed-rail" aria-label="Section navigation">
-    <a href="#statement" class="rail-item is-active" data-target="statement" aria-label="Problem Statement">
-      <div class="rail-icon-box">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 8V5a1 1 0 0 1 1-1h3"></path>
-          <path d="M16 4h3a1 1 0 0 1 1 1v3"></path>
-          <path d="M20 16v3a1 1 0 0 1-1 1h-3"></path>
-          <path d="M8 20H5a1 1 0 0 1-1-1v-3"></path>
-          <line x1="12" y1="9" x2="12" y2="13"></line>
-          <circle cx="12" cy="16" r="0.8" fill="currentColor"></circle>
-        </svg>
-      </div>
-      <span class="rail-label">Problem Statement</span>
-    </a>
 
-    <a href="#split-feature" class="rail-item" data-target="split-feature" aria-label="Solution">
-      <div class="rail-icon-box">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 18h6"></path>
-          <path d="M10 22h4"></path>
-          <path d="M12 2a7 7 0 0 0-7 7c0 2.5 1.5 4.5 3 6h8c1.5-1.5 3-3.5 3-6a7 7 0 0 0-7-7z"></path>
-        </svg>
-      </div>
-      <span class="rail-label">Solution</span>
-    </a>
 
-    <a href="#dark-section" class="rail-item" data-target="dark-section" aria-label="Security">
-      <div class="rail-icon-box">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-          <rect x="10" y="12" width="4" height="4" rx="1"></rect>
-          <path d="M11 12v-1.5a1 1 0 0 1 2 0V12"></path>
-        </svg>
-      </div>
-      <span class="rail-label">Security</span>
-    </a>
-
-    <a href="#stats" class="rail-item" data-target="stats" aria-label="Statistics">
-      <div class="rail-icon-box">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
-          <line x1="6" y1="20" x2="6" y2="16"></line>
-          <line x1="10" y1="20" x2="10" y2="13"></line>
-          <line x1="14" y1="20" x2="14" y2="17"></line>
-          <line x1="18" y1="20" x2="18" y2="11"></line>
-        </svg>
-      </div>
-      <span class="rail-label">Statistics</span>
-    </a>
-
-    <a href="#carousel" class="rail-item" data-target="carousel" aria-label="Customers">
-      <div class="rail-icon-box">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="5" width="20" height="14" rx="3"></rect>
-          <circle cx="8" cy="12" r="2.5"></circle>
-          <line x1="15" y1="9" x2="15" y2="15"></line>
-          <line x1="18" y1="9" x2="18" y2="15"></line>
-        </svg>
-      </div>
-      <span class="rail-label">Customers</span>
-    </a>
-
-    <a href="#tabs" class="rail-item" data-target="tabs" aria-label="Platform">
-      <div class="rail-icon-box">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-          <polyline points="2 12 12 17 22 12"></polyline>
-          <polyline points="2 17 12 22 22 17"></polyline>
-        </svg>
-      </div>
-      <span class="rail-label">Platform</span>
-    </a>
-  </aside>
-
-  <!-- 1. Announcement Bar -->
-  <header class="announcement-bar" id="announcement-bar">
-    <div class="announcement-content">
-      <span><strong>New Release:</strong> ESAA Enterprise v2.4 with SAP S/4HANA &amp; ServiceNow live actions is now available.</span>
-      <a href="#pillars" class="announcement-link">Read release notes &rarr;</a>
-    </div>
-    <button class="announcement-close" id="announcement-close" aria-label="Close announcement">&times;</button>
-  </header>
 
   <!-- 2. Sticky Header -->
   <div class="sticky-header" id="sticky-header">
     <div class="container header-container">
       <div class="nav-left">
-        <a href="#hero" class="logo-brand" aria-label="ESAA Home">
+        <a href="/" class="logo-brand" aria-label="ESAA Home">
           <img src="esaa-logo-light.png" alt="ESAA" class="brand-logo-img">
         </a>
         <nav class="nav-menu-wrapper" aria-label="Main menu">
           <ul class="nav-menu" id="desktop-nav-menu">
-            <li class="nav-item" data-menu="product">
-              <button class="nav-link" aria-expanded="false">
-                Product <span class="nav-caret"></span>
+            <li class="nav-item" data-menu="platform">
+              <button class="nav-link" aria-expanded="false" aria-haspopup="true">
+                Platform <svg class="nav-caret" width="8" height="6" viewBox="0 0 8 6" fill="currentColor" aria-hidden="true"><path d="M0 1L4 5L8 1H0Z"/></svg>
               </button>
             </li>
             <li class="nav-item" data-menu="customers">
-              <button class="nav-link" aria-expanded="false">
-                Customers <span class="nav-caret"></span>
+              <button class="nav-link" aria-expanded="false" aria-haspopup="true">
+                Customers <svg class="nav-caret" width="8" height="6" viewBox="0 0 8 6" fill="currentColor" aria-hidden="true"><path d="M0 1L4 5L8 1H0Z"/></svg>
               </button>
             </li>
             <li class="nav-item" data-menu="solutions">
-              <button class="nav-link" aria-expanded="false">
-                Solutions <span class="nav-caret"></span>
+              <button class="nav-link" aria-expanded="false" aria-haspopup="true">
+                Solutions <svg class="nav-caret" width="8" height="6" viewBox="0 0 8 6" fill="currentColor" aria-hidden="true"><path d="M0 1L4 5L8 1H0Z"/></svg>
               </button>
             </li>
             <li class="nav-item" data-menu="resources">
-              <button class="nav-link" aria-expanded="false">
-                Resources <span class="nav-caret"></span>
+              <button class="nav-link" aria-expanded="false" aria-haspopup="true">
+                Resources <svg class="nav-caret" width="8" height="6" viewBox="0 0 8 6" fill="currentColor" aria-hidden="true"><path d="M0 1L4 5L8 1H0Z"/></svg>
               </button>
             </li>
             <li class="nav-item" data-menu="company">
-              <button class="nav-link" aria-expanded="false">
-                Company <span class="nav-caret"></span>
+              <button class="nav-link" aria-expanded="false" aria-haspopup="true">
+                Company <svg class="nav-caret" width="8" height="6" viewBox="0 0 8 6" fill="currentColor" aria-hidden="true"><path d="M0 1L4 5L8 1H0Z"/></svg>
               </button>
             </li>
           </ul>
@@ -149,24 +76,56 @@
       </div>
     </div>
 
-    <!-- Mega Menu Panel & Backdrop -->
+    <!-- Mega Menu Dropdown Panel & Backdrop -->
     <div class="mega-menu-overlay" id="mega-menu-overlay"></div>
     <div class="mega-menu-panel" id="mega-menu-panel">
-      <div class="container mega-menu-inner" id="mega-menu-content">
-        <!-- Injected via JavaScript based on hovered menu item -->
-      </div>
+      <div class="container mega-menu-inner" id="mega-menu-content"></div>
     </div>
 
     <!-- Mobile Stacked Navigation -->
     <div class="mobile-nav-panel" id="mobile-nav-panel">
       <ul class="mobile-nav-links">
-        <li><a href="#hero" class="mobile-nav-link">Product Overview</a></li>
-        <li><a href="#statement" class="mobile-nav-link">Architecture &amp; Rules</a></li>
-        <li><a href="#stats" class="mobile-nav-link">Platform Numbers</a></li>
-        <li><a href="#tabs" class="mobile-nav-link">Capabilities</a></li>
-        <li><a href="#accordion" class="mobile-nav-link">8 Pillars</a></li>
-        <li><a href="#carousel" class="mobile-nav-link">Challenges &amp; Solutions</a></li>
-        <li><a href="#resources" class="mobile-nav-link">Resources</a></li>
+        <li class="mobile-accordion-item" id="mobile-platform-accordion">
+          <button class="mobile-nav-link mobile-accordion-trigger" id="mobile-platform-trigger" aria-expanded="false">
+            <span>Platform</span>
+            <svg class="nav-caret" width="8" height="6" viewBox="0 0 8 6" fill="currentColor" aria-hidden="true"><path d="M0 1L4 5L8 1H0Z"/></svg>
+          </button>
+          <div class="mobile-accordion-content" id="mobile-platform-content" style="display: none;">
+            <ul class="mobile-sublinks">
+              <li><a href="/platform/overview" class="mobile-sublink" style="font-weight: 600; color: var(--pf-accent);">Platform Overview &rarr;</a></li>
+              <li class="mobile-subhead">Enterprise Context</li>
+              <li><a href="/platform/50-enterprise-connectors" class="mobile-sublink">50+ Enterprise Connectors</a></li>
+              <li><a href="/platform/document-level-acls" class="mobile-sublink">Document-Level ACLs</a></li>
+              <li class="mobile-subhead">Intelligence &amp; Control</li>
+              <li><a href="/platform/model-agnostic-gateway" class="mobile-sublink">Model-Agnostic Gateway</a></li>
+              <li><a href="/platform/observability-evals" class="mobile-sublink">Observability &amp; Evals</a></li>
+              <li class="mobile-subhead">Deployment</li>
+              <li><a href="/platform/deployment-options" class="mobile-sublink">Deployment Options</a></li>
+              <li class="mobile-subhead">ESAA Assistant</li>
+              <li><a href="/platform/hybrid-vector-bm25-rag" class="mobile-sublink">Hybrid Vector + BM25 RAG</a></li>
+              <li><a href="/platform/verifiable-source-citations" class="mobile-sublink">Verifiable Source Citations</a></li>
+              <li><a href="/platform/slack-discord-bots" class="mobile-sublink">Slack &amp; Discord Bots</a></li>
+              <li><a href="/platform/document-canvas-artifacts" class="mobile-sublink">Document Canvas &amp; Artifacts</a></li>
+              <li><a href="/platform/instant-file-ingestion" class="mobile-sublink">Instant File Ingestion</a></li>
+              <li class="mobile-subhead">ESAA Agents</li>
+              <li><a href="/platform/custom-persona-builder" class="mobile-sublink">Custom Persona Builder</a></li>
+              <li><a href="/platform/autonomous-deep-research" class="mobile-sublink">Autonomous Deep Research</a></li>
+              <li><a href="/platform/multi-step-tool-reasoning" class="mobile-sublink">Multi-Step Tool Reasoning</a></li>
+              <li><a href="/platform/agent-governance-rbac" class="mobile-sublink">Agent Governance &amp; RBAC</a></li>
+              <li><a href="/platform/pre-built-agent-library" class="mobile-sublink">Pre-Built Agent Library</a></li>
+              <li class="mobile-subhead">Actions &amp; Tools</li>
+              <li><a href="/platform/sap-s4hana-actions" class="mobile-sublink">SAP S/4HANA Actions</a></li>
+              <li><a href="/platform/servicenow-incident-triage" class="mobile-sublink">ServiceNow Incident Triage</a></li>
+              <li><a href="/platform/model-context-protocol-mcp" class="mobile-sublink">Model Context Protocol (MCP)</a></li>
+              <li><a href="/platform/openapi-rest-tool-importer" class="mobile-sublink">OpenAPI / REST Tool Importer</a></li>
+              <li><a href="/platform/sandboxed-python-execution" class="mobile-sublink">Sandboxed Python Execution</a></li>
+            </ul>
+          </div>
+        </li>
+        <li><a href="#dark-section" class="mobile-nav-link">Customers &amp; Case Studies</a></li>
+        <li><a href="#actions" class="mobile-nav-link">Solutions &amp; Connectors</a></li>
+        <li><a href="#resources" class="mobile-nav-link">Resources &amp; Security</a></li>
+        <li><a href="#footer" class="mobile-nav-link">Company</a></li>
       </ul>
       <div class="mobile-nav-actions">
         <button class="btn btn-outline" id="mobile-search-btn">Search Topics</button>
@@ -176,7 +135,7 @@
     </div>
   </div>
 
-  <main>
+  <main id="home-view">
     <!-- 3. Hero Section (Wide Layout) -->
     <section class="hero-section" id="hero">
       <div class="container hero-header-container">
@@ -185,7 +144,10 @@
             <span class="hero-pill-badge">Enterprise AI</span>
             <span>Governed LLM Infrastructure</span>
           </div>
-          <h1 class="hero-title">One AI platform to put work at enterprise scale.</h1>
+          <h1 class="hero-title">
+            <span class="hero-title-line">Build Beyond the Limits of Traditional AI.</span>
+            <span class="hero-title-line">Unlock a New Operating Model for Work.</span>
+          </h1>
           <p class="hero-subtext">
             ESAA turns foundational LLMs into secure, context-aware digital coworkers and autonomous agents connected to SAP, ServiceNow, Salesforce, Jira, Google Drive and communication channels, with cited, permission-aware answers inside a governed security boundary.
           </p>
@@ -200,9 +162,9 @@
       <div class="hero-wide-container">
         <div class="hero-visual-wrapper">
           <div class="hero-gradient-stage">
-            <img src="glean-hero-bg.webp" class="hero-bg-media" alt="ESAA Enterprise Work AI" />
+            <img src="esaa-hero-bg.webp" class="hero-bg-media" alt="ESAA Enterprise Work AI" />
             
-            <!-- Glass Outer Frame (Glean style) -->
+            <!-- Glass Outer Frame -->
             <div class="hero-glass-frame">
               <div class="hero-search-card">
                 <!-- Search input pill with + icon, typing prompt, and action buttons -->
@@ -256,9 +218,9 @@
                     <img src="icons/salesforce.svg" width="16" height="16" alt="Salesforce" class="chip-icon" />
                     <span>Salesforce</span>
                   </div>
-                  <button class="chip-more-btn" aria-label="More connectors" title="50+ enterprise connectors">
+                  <a href="#connectors" class="chip-more-btn" aria-label="More connectors" title="50+ enterprise connectors">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2.2"></circle><circle cx="12" cy="12" r="2.2"></circle><circle cx="19" cy="12" r="2.2"></circle></svg>
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>
@@ -270,43 +232,300 @@
     <!-- 4. Logo Marquee Strip -->
     <section class="logo-strip-section" aria-label="Connected integrations marquee">
       <div class="logo-strip-label">
-        50+ Connectors
+        <span class="logo-strip-label-dot" aria-hidden="true"></span>
+        <span>50+ Connectors</span>
       </div>
       <div class="marquee-container">
         <div class="marquee-track">
-          <span class="marquee-item">SAP S/4HANA</span><span class="marquee-dot"></span>
-          <span class="marquee-item">ServiceNow</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Salesforce</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Jira Software</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Confluence</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Google Drive</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Slack</span><span class="marquee-dot"></span>
-          <span class="marquee-item">GitHub Enterprise</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Microsoft Teams</span><span class="marquee-dot"></span>
-          <span class="marquee-item">SharePoint</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Notion</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Zendesk</span><span class="marquee-dot"></span>
-          <span class="marquee-item">GitLab</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Asana</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Linear</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Workday</span><span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #0FAAFF;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M0 6.064v11.872h12.13L24 6.064zm3.264 2.208h.005c.863.001 1.915.245 2.676.633l-.82 1.43c-.835-.404-1.255-.442-1.73-.467-.708-.038-1.064.215-1.069.488-.007.332.669.633 1.305.838.964.306 2.19.715 2.377 1.9L7.77 8.437h2.046l2.064 5.576-.007-5.575h2.37c2.257 0 3.318.764 3.318 2.519 0 1.575-1.09 2.514-2.936 2.514h-.763l-.01 2.094-3.588-.003-.25-.908c-.37.122-.787.189-1.23.189-.456 0-.885-.071-1.263-.2l-.358.919-2 .006.09-.462c-.029.025-.057.05-.087.074-.535.43-1.208.629-2.037.644l-.213.002a5.075 5.075 0 0 1-2.581-.675l.73-1.448c.79.467 1.286.572 1.956.558.347-.007.598-.07.761-.239a.557.557 0 0 0 .156-.369c.007-.376-.53-.553-1.185-.756-.531-.164-1.135-.389-1.606-.735-.559-.41-.825-.924-.812-1.65a1.99 1.99 0 0 1 .566-1.377c.519-.537 1.357-.863 2.363-.863zm10.597 1.67v1.904h.521c.694 0 1.247-.23 1.248-.964 0-.709-.554-.94-1.248-.94zm-5.087.767l-.748 2.362c.223.085.481.133.757.133.268 0 .52-.047.742-.126l-.736-2.37z" />
+              </svg>
+            </span>
+            <span class="marquee-name">SAP S/4HANA</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #00b574;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm3.8 14.8a5.5 5.5 0 0 1-7.6 0l-.8.8a6.6 6.6 0 0 0 9.2 0zm0-3.6a2.9 2.9 0 0 1-4 0l-.8.8a4 4 0 0 0 5.6 0zm-1.8-3.2a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+              </svg>
+            </span>
+            <span class="marquee-name">ServiceNow</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #00A1E0;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M10.01 5.37a4.98 4.98 0 0 1 4.54 2.92 4.4 4.4 0 0 1 3.55 1.5 4.38 4.38 0 0 1 .9 2.71c0 2.43-1.97 4.4-4.4 4.4H6.84c-2.3 0-4.16-1.86-4.16-4.16 0-2.12 1.58-3.86 3.65-4.12a5.53 5.53 0 0 1 3.68-3.25z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Salesforce</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #0052CC;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M11.571 11.513H0a5.218 5.218 0 0 0 5.232 5.215h2.13v2.057A5.215 5.215 0 0 0 12.575 24V12.518a1.005 1.005 0 0 0-1.005-1.005zm5.723-5.756H5.736a5.215 5.215 0 0 0 5.215 5.214h2.129v2.058a5.218 5.218 0 0 0 5.215 5.214V6.758a1.001 1.001 0 0 0-1.001-1.001zM23.013 0H11.455a5.215 5.215 0 0 0 5.215 5.215h2.129v2.057A5.215 5.215 0 0 0 24 12.483V1.005A1.001 1.001 0 0 0 23.013 0Z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Jira Software</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #0052CC;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M.87 18.257c-.248.382-.53.875-.763 1.245a.764.764 0 0 0 .255 1.04l4.965 3.054a.764.764 0 0 0 1.058-.26c.199-.332.454-.763.733-1.221 1.967-3.247 3.945-2.853 7.508-1.146l4.957 2.337a.764.764 0 0 0 1.028-.382l2.364-5.346a.764.764 0 0 0-.382-1 599.851 599.851 0 0 1-4.965-2.361C10.911 10.97 5.224 11.185.87 18.257zM23.131 5.743c.249-.405.531-.875.764-1.25a.764.764 0 0 0-.256-1.034L18.675.404a.764.764 0 0 0-1.058.26c-.195.335-.451.763-.734 1.225-1.966 3.246-3.945 2.85-7.508 1.146L4.437.694a.764.764 0 0 0-1.027.382L1.046 6.422a.764.764 0 0 0 .382 1c1.039.49 3.105 1.467 4.965 2.361 6.698 3.246 12.392 3.029 16.738-4.04z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Confluence</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #4285F4;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M12.01 1.485c-2.082 0-3.754.02-3.743.047.01.02 1.708 3.001 3.774 6.62l3.76 6.574h3.76c2.081 0 3.753-.02 3.742-.047-.005-.02-1.708-3.001-3.775-6.62l-3.76-6.574zm-4.76 1.73a789.828 789.861 0 0 0-3.63 6.319L0 15.868l1.89 3.298 1.885 3.297 3.62-6.335 3.618-6.33-1.88-3.287C8.1 4.704 7.255 3.22 7.25 3.214zm2.259 12.653-.203.348c-.114.198-.96 1.672-1.88 3.287a423.93 423.948 0 0 1-1.698 2.97c-.01.026 3.24.042 7.222.042h7.244l1.796-3.157c.992-1.734 1.85-3.23 1.906-3.323l.104-.167h-7.249z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Google Drive</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #E01E5A;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M12.924 1.228c-.584-.01-1.251 0-1.485.027-2.46.282-4.138 1.3-4.753 2.891-.218.552-.274 1.002-.243 1.772.048 1.21.419 2.004 1.262 2.742 1.225 1.06 2.98 1.508 5.998 1.508 2.737 0 3.71.413 3.916 1.675.313 1.867-1.57 3.07-4.414 2.827-1.878-.16-3.496-.912-4.223-1.967a7.772 7.772 0 01-.355-.62c-.382-.76-.64-.978-1.176-.978-.43.005-.732.165-.918.494l-.133.24v4.03l.137.296c.165.344.4.546.744.63.35.09.794-.036 1.42-.402l.5-.29.826.185c1.82.403 2.75.523 4.065.523 1.103.005 1.548-.046 2.455-.285 1.124-.297 1.974-.785 2.717-1.57.8-.844 1.15-1.853 1.097-3.147-.069-1.628-.695-2.698-2-3.414-.96-.525-2.292-.79-4.377-.88-2.042-.086-2.794-.155-3.515-.32-.51-.12-.785-.25-1.076-.515-.653-.589-.59-1.755.136-2.482.642-.637 1.511-.928 2.774-.928 1.432.005 2.393.27 3.412.955.185.127.721.62 1.193 1.092.886.902 1.135 1.082 1.506 1.082.244 0 .59-.163.732-.344.26-.329.303-.63.303-2.2 0-1.66-.043-1.91-.377-2.282-.387-.425-.848-.42-1.75.031l-.59.297-.63-.17c-1.496-.392-2.038-.477-3.178-.504zM0 13.775v9h24v-1H1v-8z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Slack</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #181717;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+              </svg>
+            </span>
+            <span class="marquee-name">GitHub Enterprise</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #6264A7;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M19.5 7.5a2 2 0 1 0-2-2 2 2 0 0 0 2 2zm1.5 1.5h-3a1.5 1.5 0 0 0-1.5 1.5v3.25a3.75 3.75 0 0 0 6 0V10.5a1.5 1.5 0 0 0-1.5-1.5zm-8-3a2.5 2.5 0 1 0-2.5-2.5 2.5 2.5 0 0 0 2.5 2.5zm2 2h-4A2 2 0 0 0 9 10v6a4 4 0 0 0 8 0v-6a2 2 0 0 0-2-2zM7.5 7a1.75 1.75 0 1 0-1.75-1.75A1.75 1.75 0 0 0 7.5 7zm1.5 1.5H6A1.5 1.5 0 0 0 4.5 10v3a3.5 3.5 0 0 0 5 0v-3A1.5 1.5 0 0 0 9 8.5z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Microsoft Teams</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #038387;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M12.5 3a4.5 4.5 0 1 0 4.5 4.5A4.5 4.5 0 0 0 12.5 3zm4 5a3.5 3.5 0 1 0 3.5 3.5A3.5 3.5 0 0 0 16.5 8zm-8 1a5 5 0 1 0 5 5 5 5 0 0 0-5-5zm-5 4a3 3 0 1 0 3 3 3 3 0 0 0-3-3z" />
+              </svg>
+            </span>
+            <span class="marquee-name">SharePoint</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #000000;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.981-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.841-.046.935-.56.935-1.167V6.354c0-.606-.233-.933-.748-.887l-15.177.887c-.56.047-.747.327-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952L12.21 19s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.746l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.139c-.093-.514.28-.887.747-.933zM1.936 1.035l13.31-.98c1.634-.14 2.055-.047 3.082.7l4.249 2.986c.7.513.934.653.934 1.213v16.378c0 1.026-.373 1.634-1.68 1.726l-15.458.934c-.98.047-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.447-1.632z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Notion</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #03363D;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M12.914 2.904V16.29L24 2.905H12.914zM0 2.906C0 5.966 2.483 8.45 5.543 8.45s5.542-2.484 5.543-5.544H0zm11.086 4.807L0 21.096h11.086V7.713zm7.37 7.84c-3.063 0-5.542 2.48-5.542 5.543H24c0-3.06-2.48-5.543-5.543-5.543z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Zendesk</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #FC6D26;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="m23.6004 9.5927-.0337-.0862L20.3.9814a.851.851 0 0 0-.3362-.405.8748.8748 0 0 0-.9997.0539.8748.8748 0 0 0-.29.4399l-2.2055 6.748H7.5375l-2.2057-6.748a.8573.8573 0 0 0-.29-.4412.8748.8748 0 0 0-.9997-.0537.8585.8585 0 0 0-.3362.4049L.4332 9.5015l-.0325.0862a6.0657 6.0657 0 0 0 2.0119 7.0105l.0113.0087.03.0213 4.976 3.7264 2.462 1.8633 1.4995 1.1321a1.0085 1.0085 0 0 0 1.2197 0l1.4995-1.1321 2.4619-1.8633 5.006-3.7489.0125-.01a6.0682 6.0682 0 0 0 2.0094-7.003z" />
+              </svg>
+            </span>
+            <span class="marquee-name">GitLab</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #F06A6A;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M18.78 12.653c-2.882 0-5.22 2.336-5.22 5.22s2.338 5.22 5.22 5.22 5.22-2.34 5.22-5.22-2.336-5.22-5.22-5.22zm-13.56 0c-2.88 0-5.22 2.337-5.22 5.22s2.338 5.22 5.22 5.22 5.22-2.338 5.22-5.22-2.336-5.22-5.22-5.22zm12-6.525c0 2.883-2.337 5.22-5.22 5.22-2.882 0-5.22-2.337-5.22-5.22 0-2.88 2.338-5.22 5.22-5.22 2.883 0 5.22 2.34 5.22 5.22z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Asana</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #5E6AD2;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M2.886 4.18A11.982 11.982 0 0 1 11.99 0C18.624 0 24 5.376 24 12.009c0 3.64-1.62 6.903-4.18 9.105L2.887 4.18ZM1.817 5.626l16.556 16.556c-.524.33-1.075.62-1.65.866L.951 7.277c.247-.575.537-1.126.866-1.65ZM.322 9.163l14.515 14.515c-.71.172-1.443.282-2.195.322L0 11.358a12 12 0 0 1 .322-2.195Zm-.17 4.862 9.823 9.824a12.02 12.02 0 0 1-9.824-9.824Z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Linear</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #FF7A59;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M18.164 7.93V5.084a2.198 2.198 0 001.267-1.978v-.067A2.2 2.2 0 0017.238.845h-.067a2.2 2.2 0 00-2.193 2.193v.067a2.196 2.196 0 001.252 1.973l.013.006v2.852a6.22 6.22 0 00-2.969 1.31l.012-.01-7.828-6.095A2.497 2.497 0 104.3 4.656l-.012.006 7.697 5.991a6.176 6.176 0 00-1.038 3.446c0 1.343.425 2.588 1.147 3.607l-.013-.02-2.342 2.343a1.968 1.968 0 00-.58-.095h-.002a2.033 2.033 0 102.033 2.033 1.978 1.978 0 00-.1-.595l.005.014 2.317-2.317a6.247 6.247 0 104.782-11.134l-.036-.005zm-.964 9.378a3.206 3.206 0 113.215-3.207v.002a3.206 3.206 0 01-3.207 3.207z" />
+              </svg>
+            </span>
+            <span class="marquee-name">HubSpot</span>
+          </span>
+          <span class="marquee-dot"></span>
           <!-- Duplicate for seamless loop -->
-          <span class="marquee-item">SAP S/4HANA</span><span class="marquee-dot"></span>
-          <span class="marquee-item">ServiceNow</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Salesforce</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Jira Software</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Confluence</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Google Drive</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Slack</span><span class="marquee-dot"></span>
-          <span class="marquee-item">GitHub Enterprise</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Microsoft Teams</span><span class="marquee-dot"></span>
-          <span class="marquee-item">SharePoint</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Notion</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Zendesk</span><span class="marquee-dot"></span>
-          <span class="marquee-item">GitLab</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Asana</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Linear</span><span class="marquee-dot"></span>
-          <span class="marquee-item">Workday</span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #0FAAFF;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M0 6.064v11.872h12.13L24 6.064zm3.264 2.208h.005c.863.001 1.915.245 2.676.633l-.82 1.43c-.835-.404-1.255-.442-1.73-.467-.708-.038-1.064.215-1.069.488-.007.332.669.633 1.305.838.964.306 2.19.715 2.377 1.9L7.77 8.437h2.046l2.064 5.576-.007-5.575h2.37c2.257 0 3.318.764 3.318 2.519 0 1.575-1.09 2.514-2.936 2.514h-.763l-.01 2.094-3.588-.003-.25-.908c-.37.122-.787.189-1.23.189-.456 0-.885-.071-1.263-.2l-.358.919-2 .006.09-.462c-.029.025-.057.05-.087.074-.535.43-1.208.629-2.037.644l-.213.002a5.075 5.075 0 0 1-2.581-.675l.73-1.448c.79.467 1.286.572 1.956.558.347-.007.598-.07.761-.239a.557.557 0 0 0 .156-.369c.007-.376-.53-.553-1.185-.756-.531-.164-1.135-.389-1.606-.735-.559-.41-.825-.924-.812-1.65a1.99 1.99 0 0 1 .566-1.377c.519-.537 1.357-.863 2.363-.863zm10.597 1.67v1.904h.521c.694 0 1.247-.23 1.248-.964 0-.709-.554-.94-1.248-.94zm-5.087.767l-.748 2.362c.223.085.481.133.757.133.268 0 .52-.047.742-.126l-.736-2.37z" />
+              </svg>
+            </span>
+            <span class="marquee-name">SAP S/4HANA</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #00b574;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm3.8 14.8a5.5 5.5 0 0 1-7.6 0l-.8.8a6.6 6.6 0 0 0 9.2 0zm0-3.6a2.9 2.9 0 0 1-4 0l-.8.8a4 4 0 0 0 5.6 0zm-1.8-3.2a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+              </svg>
+            </span>
+            <span class="marquee-name">ServiceNow</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #00A1E0;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M10.01 5.37a4.98 4.98 0 0 1 4.54 2.92 4.4 4.4 0 0 1 3.55 1.5 4.38 4.38 0 0 1 .9 2.71c0 2.43-1.97 4.4-4.4 4.4H6.84c-2.3 0-4.16-1.86-4.16-4.16 0-2.12 1.58-3.86 3.65-4.12a5.53 5.53 0 0 1 3.68-3.25z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Salesforce</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #0052CC;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M11.571 11.513H0a5.218 5.218 0 0 0 5.232 5.215h2.13v2.057A5.215 5.215 0 0 0 12.575 24V12.518a1.005 1.005 0 0 0-1.005-1.005zm5.723-5.756H5.736a5.215 5.215 0 0 0 5.215 5.214h2.129v2.058a5.218 5.218 0 0 0 5.215 5.214V6.758a1.001 1.001 0 0 0-1.001-1.001zM23.013 0H11.455a5.215 5.215 0 0 0 5.215 5.215h2.129v2.057A5.215 5.215 0 0 0 24 12.483V1.005A1.001 1.001 0 0 0 23.013 0Z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Jira Software</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #0052CC;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M.87 18.257c-.248.382-.53.875-.763 1.245a.764.764 0 0 0 .255 1.04l4.965 3.054a.764.764 0 0 0 1.058-.26c.199-.332.454-.763.733-1.221 1.967-3.247 3.945-2.853 7.508-1.146l4.957 2.337a.764.764 0 0 0 1.028-.382l2.364-5.346a.764.764 0 0 0-.382-1 599.851 599.851 0 0 1-4.965-2.361C10.911 10.97 5.224 11.185.87 18.257zM23.131 5.743c.249-.405.531-.875.764-1.25a.764.764 0 0 0-.256-1.034L18.675.404a.764.764 0 0 0-1.058.26c-.195.335-.451.763-.734 1.225-1.966 3.246-3.945 2.85-7.508 1.146L4.437.694a.764.764 0 0 0-1.027.382L1.046 6.422a.764.764 0 0 0 .382 1c1.039.49 3.105 1.467 4.965 2.361 6.698 3.246 12.392 3.029 16.738-4.04z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Confluence</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #4285F4;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M12.01 1.485c-2.082 0-3.754.02-3.743.047.01.02 1.708 3.001 3.774 6.62l3.76 6.574h3.76c2.081 0 3.753-.02 3.742-.047-.005-.02-1.708-3.001-3.775-6.62l-3.76-6.574zm-4.76 1.73a789.828 789.861 0 0 0-3.63 6.319L0 15.868l1.89 3.298 1.885 3.297 3.62-6.335 3.618-6.33-1.88-3.287C8.1 4.704 7.255 3.22 7.25 3.214zm2.259 12.653-.203.348c-.114.198-.96 1.672-1.88 3.287a423.93 423.948 0 0 1-1.698 2.97c-.01.026 3.24.042 7.222.042h7.244l1.796-3.157c.992-1.734 1.85-3.23 1.906-3.323l.104-.167h-7.249z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Google Drive</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #E01E5A;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M12.924 1.228c-.584-.01-1.251 0-1.485.027-2.46.282-4.138 1.3-4.753 2.891-.218.552-.274 1.002-.243 1.772.048 1.21.419 2.004 1.262 2.742 1.225 1.06 2.98 1.508 5.998 1.508 2.737 0 3.71.413 3.916 1.675.313 1.867-1.57 3.07-4.414 2.827-1.878-.16-3.496-.912-4.223-1.967a7.772 7.772 0 01-.355-.62c-.382-.76-.64-.978-1.176-.978-.43.005-.732.165-.918.494l-.133.24v4.03l.137.296c.165.344.4.546.744.63.35.09.794-.036 1.42-.402l.5-.29.826.185c1.82.403 2.75.523 4.065.523 1.103.005 1.548-.046 2.455-.285 1.124-.297 1.974-.785 2.717-1.57.8-.844 1.15-1.853 1.097-3.147-.069-1.628-.695-2.698-2-3.414-.96-.525-2.292-.79-4.377-.88-2.042-.086-2.794-.155-3.515-.32-.51-.12-.785-.25-1.076-.515-.653-.589-.59-1.755.136-2.482.642-.637 1.511-.928 2.774-.928 1.432.005 2.393.27 3.412.955.185.127.721.62 1.193 1.092.886.902 1.135 1.082 1.506 1.082.244 0 .59-.163.732-.344.26-.329.303-.63.303-2.2 0-1.66-.043-1.91-.377-2.282-.387-.425-.848-.42-1.75.031l-.59.297-.63-.17c-1.496-.392-2.038-.477-3.178-.504zM0 13.775v9h24v-1H1v-8z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Slack</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #181717;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+              </svg>
+            </span>
+            <span class="marquee-name">GitHub Enterprise</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #6264A7;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M19.5 7.5a2 2 0 1 0-2-2 2 2 0 0 0 2 2zm1.5 1.5h-3a1.5 1.5 0 0 0-1.5 1.5v3.25a3.75 3.75 0 0 0 6 0V10.5a1.5 1.5 0 0 0-1.5-1.5zm-8-3a2.5 2.5 0 1 0-2.5-2.5 2.5 2.5 0 0 0 2.5 2.5zm2 2h-4A2 2 0 0 0 9 10v6a4 4 0 0 0 8 0v-6a2 2 0 0 0-2-2zM7.5 7a1.75 1.75 0 1 0-1.75-1.75A1.75 1.75 0 0 0 7.5 7zm1.5 1.5H6A1.5 1.5 0 0 0 4.5 10v3a3.5 3.5 0 0 0 5 0v-3A1.5 1.5 0 0 0 9 8.5z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Microsoft Teams</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #038387;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M12.5 3a4.5 4.5 0 1 0 4.5 4.5A4.5 4.5 0 0 0 12.5 3zm4 5a3.5 3.5 0 1 0 3.5 3.5A3.5 3.5 0 0 0 16.5 8zm-8 1a5 5 0 1 0 5 5 5 5 0 0 0-5-5zm-5 4a3 3 0 1 0 3 3 3 3 0 0 0-3-3z" />
+              </svg>
+            </span>
+            <span class="marquee-name">SharePoint</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #000000;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.981-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.841-.046.935-.56.935-1.167V6.354c0-.606-.233-.933-.748-.887l-15.177.887c-.56.047-.747.327-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952L12.21 19s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.746l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.139c-.093-.514.28-.887.747-.933zM1.936 1.035l13.31-.98c1.634-.14 2.055-.047 3.082.7l4.249 2.986c.7.513.934.653.934 1.213v16.378c0 1.026-.373 1.634-1.68 1.726l-15.458.934c-.98.047-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.447-1.632z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Notion</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #03363D;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M12.914 2.904V16.29L24 2.905H12.914zM0 2.906C0 5.966 2.483 8.45 5.543 8.45s5.542-2.484 5.543-5.544H0zm11.086 4.807L0 21.096h11.086V7.713zm7.37 7.84c-3.063 0-5.542 2.48-5.542 5.543H24c0-3.06-2.48-5.543-5.543-5.543z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Zendesk</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #FC6D26;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="m23.6004 9.5927-.0337-.0862L20.3.9814a.851.851 0 0 0-.3362-.405.8748.8748 0 0 0-.9997.0539.8748.8748 0 0 0-.29.4399l-2.2055 6.748H7.5375l-2.2057-6.748a.8573.8573 0 0 0-.29-.4412.8748.8748 0 0 0-.9997-.0537.8585.8585 0 0 0-.3362.4049L.4332 9.5015l-.0325.0862a6.0657 6.0657 0 0 0 2.0119 7.0105l.0113.0087.03.0213 4.976 3.7264 2.462 1.8633 1.4995 1.1321a1.0085 1.0085 0 0 0 1.2197 0l1.4995-1.1321 2.4619-1.8633 5.006-3.7489.0125-.01a6.0682 6.0682 0 0 0 2.0094-7.003z" />
+              </svg>
+            </span>
+            <span class="marquee-name">GitLab</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #F06A6A;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M18.78 12.653c-2.882 0-5.22 2.336-5.22 5.22s2.338 5.22 5.22 5.22 5.22-2.34 5.22-5.22-2.336-5.22-5.22-5.22zm-13.56 0c-2.88 0-5.22 2.337-5.22 5.22s2.338 5.22 5.22 5.22 5.22-2.338 5.22-5.22-2.336-5.22-5.22-5.22zm12-6.525c0 2.883-2.337 5.22-5.22 5.22-2.882 0-5.22-2.337-5.22-5.22 0-2.88 2.338-5.22 5.22-5.22 2.883 0 5.22 2.34 5.22 5.22z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Asana</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #5E6AD2;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M2.886 4.18A11.982 11.982 0 0 1 11.99 0C18.624 0 24 5.376 24 12.009c0 3.64-1.62 6.903-4.18 9.105L2.887 4.18ZM1.817 5.626l16.556 16.556c-.524.33-1.075.62-1.65.866L.951 7.277c.247-.575.537-1.126.866-1.65ZM.322 9.163l14.515 14.515c-.71.172-1.443.282-2.195.322L0 11.358a12 12 0 0 1 .322-2.195Zm-.17 4.862 9.823 9.824a12.02 12.02 0 0 1-9.824-9.824Z" />
+              </svg>
+            </span>
+            <span class="marquee-name">Linear</span>
+          </span>
+          <span class="marquee-dot"></span>
+          <span class="marquee-item">
+            <span class="marquee-icon-wrap" style="color: #FF7A59;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M18.164 7.93V5.084a2.198 2.198 0 001.267-1.978v-.067A2.2 2.2 0 0017.238.845h-.067a2.2 2.2 0 00-2.193 2.193v.067a2.196 2.196 0 001.252 1.973l.013.006v2.852a6.22 6.22 0 00-2.969 1.31l.012-.01-7.828-6.095A2.497 2.497 0 104.3 4.656l-.012.006 7.697 5.991a6.176 6.176 0 00-1.038 3.446c0 1.343.425 2.588 1.147 3.607l-.013-.02-2.342 2.343a1.968 1.968 0 00-.58-.095h-.002a2.033 2.033 0 102.033 2.033 1.978 1.978 0 00-.1-.595l.005.014 2.317-2.317a6.247 6.247 0 104.782-11.134l-.036-.005zm-.964 9.378a3.206 3.206 0 113.215-3.207v.002a3.206 3.206 0 01-3.207 3.207z" />
+              </svg>
+            </span>
+            <span class="marquee-name">HubSpot</span>
+          </span>
+          <span class="marquee-dot"></span>
         </div>
       </div>
     </section>
@@ -315,15 +534,15 @@
     <section class="promo-banner-section">
       <div class="container">
         <div class="promo-gradient-box">
-          <div class="promo-watermark">esaa</div>
+          <div class="promo-watermark">ESAA</div>
           <span class="promo-badge">Autonomous Execution</span>
           <h2 class="promo-headline">Enterprise intelligence without boundaries.</h2>
           <p class="promo-subtext">
-            Unite your knowledge base, internal APIs, and autonomous reasoning into one unified workflow engine trusted by Global 2000 leaders.
+            Unite your knowledge base, internal APIs, and autonomous reasoning into one unified workflow engine trusted by enterprise organizations.
           </p>
           <div class="promo-actions">
             <button class="btn btn-white demo-trigger-btn">Schedule a demo</button>
-            <a href="#tabs" class="btn btn-outline" style="border-color: rgba(255,255,255,0.4); color: #fff; background: rgba(0,0,0,0.2);">Explore connectors &rarr;</a>
+            <a href="#connectors-animated-card" class="btn btn-outline" style="border-color: rgba(255,255,255,0.4); color: #fff; background: rgba(0,0,0,0.2);">Explore 50+ connectors &rarr;</a>
           </div>
         </div>
       </div>
@@ -336,10 +555,18 @@
           <h2 class="statement-headline">
             Knowledge is scattered. Answers are unreliable. ESAA is built for enterprise scale.
           </h2>
-          <div class="hatched-stat-box">
-            <div class="hatched-number" data-count="50">0</div>
-            <div class="hatched-label">Connectors Unified</div>
-            <div class="hatched-sub">Across cloud storage, ERP &amp; communication</div>
+          <div class="connectors-card" id="connectors-animated-card">
+            <div class="connectors-anim-area" id="connectors-anim-area" role="img" aria-label="Animation of more than 50 enterprise connectors syncing: SAP, ServiceNow, Salesforce, Google Drive, Slack, Jira, and more.">
+              <span class="connectors-synced-badge" id="connectors-synced-badge">0 SYNCED</span>
+              <div class="connectors-pile-stage" id="connectors-pile-stage"></div>
+            </div>
+            <div class="connectors-card-content">
+              <h3 class="connectors-card-title">50+ Connectors</h3>
+              <p class="connectors-card-desc">
+                Connect ERP, cloud storage, chat, wikis, code, and CRM tools. Content is indexed continuously and respects each source's permissions.
+              </p>
+              <a href="javascript:void(0)" class="connectors-card-link demo-trigger-btn">Explore all connectors &rarr;</a>
+            </div>
           </div>
         </div>
 
@@ -479,6 +706,64 @@
       </div>
     </section>
 
+    <!-- Security & Governance Section -->
+    <section class="security-section" id="security">
+      <div class="container">
+        <div class="security-grid">
+          <!-- Left Column (30%) -->
+          <div class="security-left-col">
+            <span class="sec-kicker">ENTERPRISE READY</span>
+            <h2 class="sec-heading">Security &amp; Governance</h2>
+            <p class="sec-subtext">Built for teams that cannot compromise on data control.</p>
+          </div>
+
+          <!-- Right Column (70%): ONE card -->
+          <div class="security-card">
+            <!-- a) Tab list (45% width) -->
+            <div class="security-tab-list-col" role="tablist" aria-label="Security and Governance tabs" aria-orientation="vertical">
+              <div class="sec-tab-indicator" aria-hidden="true"></div>
+              
+              <button class="sec-tab-btn is-active" id="sec-tab-0" role="tab" aria-selected="true" aria-controls="sec-panel-governance" tabindex="0">
+                <span class="sec-tab-title">Secure Deployment</span>
+                <span class="sec-tab-icon" aria-hidden="true">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
+                </span>
+              </button>
+
+              <button class="sec-tab-btn" id="sec-tab-1" role="tab" aria-selected="false" aria-controls="sec-panel-governance" tabindex="-1">
+                <span class="sec-tab-title">Identity &amp; Access</span>
+                <span class="sec-tab-icon" aria-hidden="true">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+                </span>
+              </button>
+
+              <button class="sec-tab-btn" id="sec-tab-2" role="tab" aria-selected="false" aria-controls="sec-panel-governance" tabindex="-1">
+                <span class="sec-tab-title">Generative AI Safety</span>
+                <span class="sec-tab-icon" aria-hidden="true">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.48 12H2"/></svg>
+                </span>
+              </button>
+
+              <button class="sec-tab-btn" id="sec-tab-3" role="tab" aria-selected="false" aria-controls="sec-panel-governance" tabindex="-1">
+                <span class="sec-tab-title">Granular Permissions</span>
+                <span class="sec-tab-icon" aria-hidden="true">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </span>
+              </button>
+            </div>
+
+            <!-- b) Detail panel (55% width) -->
+            <div class="security-detail-panel" id="sec-panel-governance" role="tabpanel" aria-labelledby="sec-tab-0" tabindex="0">
+              <div class="sec-visual-container" id="sec-visual-stage" aria-hidden="true"></div>
+              <div class="sec-desc-container">
+                <p class="sec-desc-text" id="sec-desc-text">Deploy on Kubernetes or Docker in your own AWS, Azure, or GCP account. Run on-premise or fully air-gapped with a local model, and use Lite Mode (under 1GB RAM) for edge sites.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- 9. Tabs Section (Capabilities) -->
     <section class="tabs-section" id="tabs">
       <div class="container">
@@ -488,7 +773,7 @@
             <li><button class="tab-btn" data-tab="agents">Agents</button></li>
             <li><button class="tab-btn" data-tab="deep-research">Deep Research</button></li>
             <li><button class="tab-btn" data-tab="actions">Actions</button></li>
-            <li><button class="tab-btn" data-tab="workflows">Workflows</button></li>
+            <li><button class="tab-btn" data-tab="craft">Craft</button></li>
             <li><button class="tab-btn" data-tab="security">Security</button></li>
           </ul>
           <div class="tab-active-indicator" id="tab-indicator"></div>
@@ -516,17 +801,208 @@
               </ul>
             </div>
             <div style="margin-top: 32px;">
-              <button class="btn btn-sm btn-black demo-trigger-btn">See in action &rarr;</button>
+              <button class="btn btn-sm btn-black" id="open-action-example-btn">See in action &rarr;</button>
             </div>
           </div>
 
           <!-- Right Floating Prompt Card with Dynamic Gradient -->
           <div class="tab-right-gradient-panel" id="tab-gradient-panel" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.45), rgba(10, 16, 32, 0.78)), url('tab-knowledge.png') center/cover no-repeat;">
             <div class="tab-floating-prompt">
-              <span class="floating-prompt-pill" id="tab-prompt-tag">Live Query</span>
+              <span class="floating-prompt-pill" id="tab-prompt-tag">Live RAG Query</span>
               <div class="floating-prompt-text" id="tab-prompt-text">
-                "Locate the latest GDPR compliance policy across Confluence and Google Drive, then highlight Article 17 obligations."
+                "Locate the latest enterprise compliance policy across Confluence and Google Drive, then highlight data retention obligations."
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- NEW SECTION C: Live Dashboards (id="analytics") -->
+    <section class="analytics-section" id="analytics">
+      <div class="container">
+        <div class="section-heading-center">
+          <div class="badge-preview-pill">Dashboard preview</div>
+          <h2 class="headline-lg">Live Enterprise Dashboards</h2>
+          <p class="section-subtext">Unified observability, SAP sales operations, IT service desk resolution metrics, and ingestion throughput.</p>
+        </div>
+
+        <div class="dashboards-grid">
+          <!-- Card 1: Platform Overview -->
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <span class="dash-card-tag">Platform Overview</span>
+              <span class="dash-status-dot status-healthy">Healthy</span>
+            </div>
+            <h3 class="dash-card-title">Cluster &amp; Index Health</h3>
+            <p class="dash-card-desc">Production cluster health, storage load, and continuous connector status.</p>
+            <div class="dash-metrics-list">
+              <div class="dash-metric-row">
+                <span class="dash-metric-label">Cluster Uptime</span>
+                <span class="dash-metric-value">99.98%</span>
+              </div>
+              <div class="dash-metric-row">
+                <span class="dash-metric-label">Indexed Chunks</span>
+                <span class="dash-metric-value">2.4M</span>
+              </div>
+              <div class="dash-metric-row">
+                <span class="dash-metric-label">Total Storage</span>
+                <span class="dash-metric-value">1.8 TB</span>
+              </div>
+              <div class="dash-metric-row">
+                <span class="dash-metric-label">Connector Health</span>
+                <span class="dash-metric-value">52 / 52 Active</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: SAP Operational -->
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <span class="dash-card-tag">SAP Operational</span>
+              <span class="dash-status-dot status-active">Live Sync</span>
+            </div>
+            <h3 class="dash-card-title">S/4HANA Sales Orders</h3>
+            <p class="dash-card-desc">Real-time order statuses, net value execution, and fulfillment channels.</p>
+            <div class="dash-metrics-list">
+              <div class="dash-metric-row">
+                <span class="dash-metric-label">Order Status</span>
+                <span class="dash-metric-value">98.2% Auto-Processed</span>
+              </div>
+              <div class="dash-metric-row">
+                <span class="dash-metric-label">Net Values Tracked</span>
+                <span class="dash-metric-value">$14.2M</span>
+              </div>
+              <div class="dash-metric-row">
+                <span class="dash-metric-label">Active Channels</span>
+                <span class="dash-metric-value">Direct &amp; EDI</span>
+              </div>
+              <div class="dash-metric-row">
+                <span class="dash-metric-label">Partner Accounts</span>
+                <span class="dash-metric-value">412 Verified</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: ServiceNow ITSM -->
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <span class="dash-card-tag">ServiceNow ITSM</span>
+              <span class="dash-status-dot status-active">Resolving</span>
+            </div>
+            <h3 class="dash-card-title">Incident Triage &amp; KB Health</h3>
+            <p class="dash-card-desc">State breakdown by priority, knowledge article coverage, and AI ticket resolutions.</p>
+            <div class="dash-metrics-list">
+              <div class="dash-metric-row">
+                <span class="dash-metric-label">P1 / P2 Incidents</span>
+                <span class="dash-metric-value">0 Open (P1) &bull; 4 (P2)</span>
+              </div>
+              <div class="dash-metric-row">
+                <span class="dash-metric-label">P3 Incidents</span>
+                <span class="dash-metric-value">28 In Progress</span>
+              </div>
+              <div class="dash-metric-row">
+                <span class="dash-metric-label">KB Article Health</span>
+                <span class="dash-metric-value">98.4% Accuracy</span>
+              </div>
+              <div class="dash-metric-row">
+                <span class="dash-metric-label">Resolved via AI</span>
+                <span class="dash-metric-value">1,420 Tickets</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: File Ingestion -->
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <span class="dash-card-tag">File Ingestion</span>
+              <span class="dash-status-dot status-healthy">Processing</span>
+            </div>
+            <h3 class="dash-card-title">Document Parsing Engine</h3>
+            <p class="dash-card-desc">Throughput across enterprise formats, parsing latency, and storage volume.</p>
+            <div class="dash-metrics-list">
+              <div class="dash-metric-row">
+                <span class="dash-metric-label">Supported Formats</span>
+                <span class="dash-metric-value">PDF &bull; DOCX &bull; CSV &bull; TXT</span>
+              </div>
+              <div class="dash-metric-row">
+                <span class="dash-metric-label">Avg Processing Time</span>
+                <span class="dash-metric-value">180ms / doc</span>
+              </div>
+              <div class="dash-metric-row">
+                <span class="dash-metric-label">Daily Ingest Volume</span>
+                <span class="dash-metric-value">240 GB / day</span>
+              </div>
+              <div class="dash-metric-row">
+                <span class="dash-metric-label">Storage Load</span>
+                <span class="dash-metric-value">Normal (34% cap)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW SECTION D: Models (id="models") -->
+    <section class="models-section" id="models">
+      <div class="container">
+        <div class="section-heading-center">
+          <span class="label-xs text-muted">Model Independence</span>
+          <h2 class="headline-lg">Supported AI Models &amp; Encoders</h2>
+          <p class="section-subtext">Zero vendor lock-in. Route seamlessly across leading commercial APIs, private self-hosted engines, high-performance embeddings, and rerankers.</p>
+        </div>
+
+        <div class="models-grid">
+          <!-- 1. Commercial LLMs -->
+          <div class="model-tier-card">
+            <div class="model-tier-badge">Frontier LLMs</div>
+            <h3 class="model-tier-title">Commercial Providers</h3>
+            <p class="model-tier-desc">Direct native integrations with leading commercial model gateways.</p>
+            <div class="model-chips-list">
+              <span class="model-chip">OpenAI (GPT-4o, GPT-4o-mini, o1, o3-mini)</span>
+              <span class="model-chip">Anthropic Claude</span>
+              <span class="model-chip">Google Gemini</span>
+              <span class="model-chip">Azure OpenAI</span>
+              <span class="model-chip">AWS Bedrock</span>
+            </div>
+          </div>
+
+          <!-- 2. Local LLMs -->
+          <div class="model-tier-card">
+            <div class="model-tier-badge">Air-Gapped &amp; Private</div>
+            <h3 class="model-tier-title">Local &amp; Self-Hosted</h3>
+            <p class="model-tier-desc">Run on sovereign private infrastructure with zero external data egress.</p>
+            <div class="model-chips-list">
+              <span class="model-chip">Ollama</span>
+              <span class="model-chip">LiteLLM Proxy</span>
+              <span class="model-chip">vLLM</span>
+              <span class="model-chip">LocalAI</span>
+            </div>
+          </div>
+
+          <!-- 3. Embeddings -->
+          <div class="model-tier-card">
+            <div class="model-tier-badge">Semantic Indexing</div>
+            <h3 class="model-tier-title">Embedding Models</h3>
+            <p class="model-tier-desc">High-precision vectorization for multi-language enterprise documents.</p>
+            <div class="model-chips-list">
+              <span class="model-chip">Voyage AI</span>
+              <span class="model-chip">Cohere Embed</span>
+              <span class="model-chip">OpenAI text-embedding</span>
+              <span class="model-chip">Hugging Face Transformers</span>
+            </div>
+          </div>
+
+          <!-- 4. Rerankers -->
+          <div class="model-tier-card">
+            <div class="model-tier-badge">Context Precision</div>
+            <h3 class="model-tier-title">Cross-Encoder Rerankers</h3>
+            <p class="model-tier-desc">Second-stage scoring to ensure top passages are passed into model context.</p>
+            <div class="model-chips-list">
+              <span class="model-chip">Cohere Rerank</span>
+              <span class="model-chip">Mixedbread</span>
+              <span class="model-chip">BAAI BGE</span>
             </div>
           </div>
         </div>
@@ -651,23 +1127,23 @@
             </div>
           </div>
 
-          <!-- Pillar 6 -->
+          <!-- Pillar 6 (UPDATED) -->
           <div class="accordion-item">
             <button class="accordion-trigger" aria-expanded="false">
               <div class="accordion-trigger-left">
                 <span class="accordion-num">06</span>
-                <span class="accordion-item-title">Autonomous Workflow Orchestration</span>
+                <span class="accordion-item-title">Craft / Build Mode (Agentic Sandbox)</span>
               </div>
               <div class="accordion-circle-icon"><span>+</span></div>
             </button>
             <div class="accordion-content">
               <div class="accordion-body-inner">
-                Multi-agent orchestration mesh where AI coworkers formulate plans, call enterprise APIs (SAP, ServiceNow, Jira), and execute complex cross-platform workflows with human-in-the-loop oversight.
+                A development environment where AI agents write, test, and render interactive tools, web apps, and scripts in isolated containers with live preview.
                 <div class="pillar-tags-row">
-                  <span class="pillar-tag">Multi-Agent Mesh</span>
-                  <span class="pillar-tag">API Tool Calling</span>
-                  <span class="pillar-tag">Human-in-the-Loop</span>
-                  <span class="pillar-tag">Autonomous Execution</span>
+                  <span class="pillar-tag">Agentic Sandbox</span>
+                  <span class="pillar-tag">Live Preview</span>
+                  <span class="pillar-tag">Isolated Containers</span>
+                  <span class="pillar-tag">Interactive Tools</span>
                 </div>
               </div>
             </div>
@@ -695,7 +1171,7 @@
             </div>
           </div>
 
-          <!-- Pillar 8 -->
+          <!-- Pillar 8 (UPDATED) -->
           <div class="accordion-item">
             <button class="accordion-trigger" aria-expanded="false">
               <div class="accordion-trigger-left">
@@ -706,7 +1182,7 @@
             </button>
             <div class="accordion-content">
               <div class="accordion-body-inner">
-                Slack and Discord bots, complete white-labeling (custom branding, domain, color themes), deployment on Kubernetes/Docker/AWS/GCP/Azure, and Lite mode under 1GB RAM.
+                Slack and Discord bots, complete white-labeling (custom product name, logo, color themes, favicon, welcome screens), deployment on Kubernetes/Docker/AWS/GCP/Azure, and Lite mode under 1GB RAM.
                 <div class="pillar-tags-row">
                   <span class="pillar-tag">Slack &amp; Discord Bots</span>
                   <span class="pillar-tag">White-labeling</span>
@@ -720,100 +1196,249 @@
       </div>
     </section>
 
-    <!-- 11. Carousel: 5 Challenges -->
-    <section class="carousel-section" id="carousel">
+
+    <!-- Actions Section: Animated Carousel (id="actions") -->
+    <section class="actions-section" id="actions">
       <div class="container">
-        <div class="carousel-header">
-          <div>
-            <span class="label-xs text-muted">Enterprise Value Matrix</span>
-            <h2 class="headline" style="font-size: 38px; margin-top: 6px;">Trusted answers for every challenge.</h2>
+        <!-- Header -->
+        <div class="actions-header-row">
+          <div class="actions-header-left">
+            <span class="actions-eyebrow">EXECUTION ENGINE</span>
+            <h2 class="actions-title">Enterprise Actions &amp; Tools</h2>
+            <p class="actions-subtext">Move beyond passive conversation. ESAA executes deterministic write and update operations straight into critical operational software.</p>
           </div>
-          <div class="carousel-controls">
-            <button class="carousel-btn" id="carousel-prev-btn" aria-label="Previous slide">&larr;</button>
-            <button class="carousel-btn" id="carousel-next-btn" aria-label="Next slide">&rarr;</button>
-          </div>
-        </div>
-
-        <div class="carousel-stage" id="carousel-stage">
-          <!-- Card 1: Autonomous Deep Research (User Image) -->
-          <div class="carousel-card is-active" data-index="0">
-            <div>
-              <div class="carousel-card-num">01 / DEEP RESEARCH</div>
-              <h3 class="carousel-card-title">Autonomous Deep Research</h3>
-              <p class="carousel-challenge-desc">Synthesizes petabytes of siloed documents, frontier models, and multi-step reasoning.</p>
-            </div>
-            <div class="carousel-detail-block">
-              <div class="carousel-solution-title">Platform Solution</div>
-              <div class="carousel-solution-text">Autonomous Multi-Step Synthesis</div>
-              <div class="carousel-benefit-text">Explores complex hypotheses across internal knowledge graphs and live web verification.</div>
-            </div>
-          </div>
-
-          <!-- Card 2: Hallucinations (User Image) -->
-          <div class="carousel-card" data-index="1">
-            <div>
-              <div class="carousel-card-num">02 / TRUST</div>
-              <h3 class="carousel-card-title">Hallucinations</h3>
-              <p class="carousel-challenge-desc">Untruthful outputs and ungrounded fabrications.</p>
-            </div>
-            <div class="carousel-detail-block">
-              <div class="carousel-solution-title">Platform Solution</div>
-              <div class="carousel-solution-text">Agentic RAG with Real-Time Citations</div>
-              <div class="carousel-benefit-text">Every answer links back directly to the source document with exact citations.</div>
-            </div>
-          </div>
-
-          <!-- Card 3: Data Leaks (User Image) -->
-          <div class="carousel-card" data-index="2">
-            <div>
-              <div class="carousel-card-num">03 / COMPLIANCE</div>
-              <h3 class="carousel-card-title">Data Leaks</h3>
-              <p class="carousel-challenge-desc">Sensitive information exposed across user tiers.</p>
-            </div>
-            <div class="carousel-detail-block">
-              <div class="carousel-solution-title">Platform Solution</div>
-              <div class="carousel-solution-text">Document-Level ACLs &amp; SSO Mirroring</div>
-              <div class="carousel-benefit-text">Users can only see answers derived from documents they are authorized to access.</div>
-            </div>
-          </div>
-
-          <!-- Card 4: Vendor Lock-in (User Image) -->
-          <div class="carousel-card" data-index="3">
-            <div>
-              <div class="carousel-card-num">04 / SOVEREIGNTY</div>
-              <h3 class="carousel-card-title">Vendor Lock-in</h3>
-              <p class="carousel-challenge-desc">Dependence on a single commercial model provider.</p>
-            </div>
-            <div class="carousel-detail-block">
-              <div class="carousel-solution-title">Platform Solution</div>
-              <div class="carousel-solution-text">Model &amp; Infrastructure Agnostic</div>
-              <div class="carousel-benefit-text">Swap between OpenAI, Claude, Gemini, Bedrock, Azure, or local Ollama/vLLM anytime.</div>
-            </div>
-          </div>
-
-          <!-- Card 5: Static AI (User Image) -->
-          <div class="carousel-card" data-index="4">
-            <div>
-              <div class="carousel-card-num">05 / EXECUTION</div>
-              <h3 class="carousel-card-title">Static AI</h3>
-              <p class="carousel-challenge-desc">Passive conversational bots unable to trigger work.</p>
-            </div>
-            <div class="carousel-detail-block">
-              <div class="carousel-solution-title">Platform Solution</div>
-              <div class="carousel-solution-text">Built-in Actions, SAP, ServiceNow &amp; MCP</div>
-              <div class="carousel-benefit-text">Agents trigger workflows, create sales orders, log tickets, and run code.</div>
+          <div class="actions-controls" aria-label="Carousel navigation">
+            <span class="actions-counter" id="actions-counter" aria-live="polite">01 / 08</span>
+            <div class="actions-btn-group">
+              <button class="actions-nav-btn actions-prev-btn" id="actions-prev-btn" aria-label="Previous cards" disabled>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <button class="actions-nav-btn actions-next-btn" id="actions-next-btn" aria-label="Next cards">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- Rotate Progress Track -->
-        <div class="carousel-progress-track" aria-hidden="true">
-          <div class="carousel-progress-bar" id="carousel-progress-bar"></div>
+        <!-- Carousel Track -->
+        <div class="actions-carousel-wrapper">
+          <div class="actions-carousel-track" id="actions-carousel-track" role="region" aria-label="Enterprise Actions Carousel" tabindex="0">
+            
+            <!-- Card 1: SAP S/4HANA -->
+            <div class="action-card has-custom-image" role="group" tabindex="0" aria-label="SAP S/4HANA" style="--card-color: #1677FF;">
+              <div class="action-card-topbar"></div>
+              <div class="action-card-art">
+                <img src="/action-sap.jpg" alt="SAP S/4HANA Live Action Engine" class="action-card-bg-img" loading="lazy">
+                <div class="action-card-img-scrim"></div>
+                <div class="action-card-dots"></div>
+                <span class="action-floating-chip chip-1">Sales orders</span>
+                <span class="action-floating-chip chip-2">Partner lookup</span>
+                <span class="action-floating-chip chip-3">OData</span>
+              </div>
+              <div class="action-card-tag">ERP &bull; LIVE</div>
+              <div class="action-card-overlay"></div>
+              <div class="action-card-content">
+                <h3 class="action-card-title">SAP S/4HANA</h3>
+                <p class="action-card-desc">Create sales orders, perform partner and vendor lookups, and execute live OData read/update operations.</p>
+                <div class="action-card-footer">
+                  <div class="action-card-footer-left">
+                    <span class="action-card-dot" style="background-color: #1677FF;"></span>
+                    <span class="action-card-footer-label">OData v4 Read/Write</span>
+                  </div>
+                  <a href="#accordion" class="action-card-arrow-link" aria-label="SAP S/4HANA details">&rarr;</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: ServiceNow ITSM -->
+            <div class="action-card has-custom-image" role="group" tabindex="0" aria-label="ServiceNow ITSM" style="--card-color: #22A06B;">
+              <div class="action-card-topbar"></div>
+              <div class="action-card-art">
+                <img src="/action-servicenow.jpg" alt="ServiceNow ITSM Incident Management" class="action-card-bg-img action-card-img-servicenow" loading="lazy">
+                <div class="action-card-img-scrim"></div>
+                <div class="action-card-dots"></div>
+                <span class="action-floating-chip chip-1">Incidents</span>
+                <span class="action-floating-chip chip-2">CMDB</span>
+                <span class="action-floating-chip chip-3">Knowledge base</span>
+              </div>
+              <div class="action-card-tag">ITSM &bull; INCIDENTS</div>
+              <div class="action-card-overlay"></div>
+              <div class="action-card-content">
+                <h3 class="action-card-title">ServiceNow ITSM</h3>
+                <p class="action-card-desc">Create, update, and resolve incident records, query CMDB configuration items, and perform knowledge base lookups.</p>
+                <div class="action-card-footer">
+                  <div class="action-card-footer-left">
+                    <span class="action-card-dot" style="background-color: #22A06B;"></span>
+                    <span class="action-card-footer-label">CMDB &amp; Ticket Sync</span>
+                  </div>
+                  <a href="#accordion" class="action-card-arrow-link" aria-label="ServiceNow ITSM details">&rarr;</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Google Sheets & Charts -->
+            <div class="action-card has-custom-image" role="group" tabindex="0" aria-label="Google Sheets & Charts" style="--card-color: #14B8A6;">
+              <div class="action-card-topbar"></div>
+              <div class="action-card-art">
+                <img src="/action-sheets.png" alt="Google Sheets & Charts Data Engine" class="action-card-bg-img" loading="lazy">
+                <div class="action-card-img-scrim"></div>
+                <div class="action-card-dots"></div>
+                <span class="action-floating-chip chip-1">Clean schema</span>
+                <span class="action-floating-chip chip-2">Aggregates</span>
+                <span class="action-floating-chip chip-3">Charts</span>
+              </div>
+              <div class="action-card-tag">BI &bull; ANALYTICS</div>
+              <div class="action-card-overlay"></div>
+              <div class="action-card-content">
+                <h3 class="action-card-title">Google Sheets &amp; Charts</h3>
+                <p class="action-card-desc">Load tabular data, clean schemas, calculate aggregate metrics, and generate interactive Altair visualizations.</p>
+                <div class="action-card-footer">
+                  <div class="action-card-footer-left">
+                    <span class="action-card-dot" style="background-color: #14B8A6;"></span>
+                    <span class="action-card-footer-label">Altair Chart Engine</span>
+                  </div>
+                  <a href="#tabs" class="action-card-arrow-link" aria-label="Google Sheets &amp; Charts details">&rarr;</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4: Python Sandbox -->
+            <div class="action-card has-custom-image" role="group" tabindex="0" aria-label="Python Sandbox" style="--card-color: #7C5CFF;">
+              <div class="action-card-topbar"></div>
+              <div class="action-card-art action-card-art-pysandbox">
+                <div class="action-card-pysandbox-halo"></div>
+                <img src="/action-pysandbox.png" alt="PySandbox Isolated Runtime" class="action-card-img-pysandbox" loading="lazy">
+                <div class="action-card-dots"></div>
+                <span class="action-floating-chip chip-1">CSV parsing</span>
+                <span class="action-floating-chip chip-2">Statistics</span>
+                <span class="action-floating-chip chip-3">Isolated</span>
+              </div>
+              <div class="action-card-tag">SANDBOX &bull; EXEC</div>
+              <div class="action-card-overlay"></div>
+              <div class="action-card-content">
+                <h3 class="action-card-title">Python Sandbox</h3>
+                <p class="action-card-desc">Safely execute Python scripts, parse CSV dumps, compute statistical models, and render visual artifacts in isolated containers.</p>
+                <div class="action-card-footer">
+                  <div class="action-card-footer-left">
+                    <span class="action-card-dot" style="background-color: #7C5CFF;"></span>
+                    <span class="action-card-footer-label">Dockerized Runtime</span>
+                  </div>
+                  <a href="#dark-section" class="action-card-arrow-link" aria-label="Python Sandbox details">&rarr;</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 5: Model Context Protocol -->
+            <div class="action-card has-custom-image" role="group" tabindex="0" aria-label="Model Context Protocol" style="--card-color: #8B5CF6;">
+              <div class="action-card-topbar"></div>
+              <div class="action-card-art">
+                <img src="/action-mcp.png" alt="Model Context Protocol Client" class="action-card-bg-img" loading="lazy">
+                <div class="action-card-img-scrim"></div>
+                <div class="action-card-dots"></div>
+                <span class="action-floating-chip chip-1">MCP servers</span>
+                <span class="action-floating-chip chip-2">Internal tools</span>
+                <span class="action-floating-chip chip-3">Pipelines</span>
+              </div>
+              <div class="action-card-tag">STANDARD &bull; MCP</div>
+              <div class="action-card-overlay"></div>
+              <div class="action-card-content">
+                <h3 class="action-card-title">Model Context Protocol</h3>
+                <p class="action-card-desc">Plug into any standard MCP server to expose bespoke internal tool endpoints and data pipelines directly to agents.</p>
+                <div class="action-card-footer">
+                  <div class="action-card-footer-left">
+                    <span class="action-card-dot" style="background-color: #8B5CF6;"></span>
+                    <span class="action-card-footer-label">Open Protocol Client</span>
+                  </div>
+                  <a href="#stats" class="action-card-arrow-link" aria-label="Model Context Protocol details">&rarr;</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 6: OpenAPI Import -->
+            <div class="action-card has-custom-image" role="group" tabindex="0" aria-label="OpenAPI Import" style="--card-color: #0EA5E9;">
+              <div class="action-card-topbar"></div>
+              <div class="action-card-art">
+                <img src="/action-openapi.png" alt="OpenAPI Import Automation" class="action-card-bg-img action-card-img-openapi" loading="lazy">
+                <div class="action-card-img-scrim"></div>
+                <div class="action-card-dots"></div>
+                <span class="action-floating-chip chip-1">Swagger</span>
+                <span class="action-floating-chip chip-2">YAML / JSON</span>
+                <span class="action-floating-chip chip-3">Validated</span>
+              </div>
+              <div class="action-card-tag">REST &bull; SWAGGER</div>
+              <div class="action-card-overlay"></div>
+              <div class="action-card-content">
+                <h3 class="action-card-title">OpenAPI Import</h3>
+                <p class="action-card-desc">Upload Swagger / OpenAPI YAML or JSON specs to instantly convert enterprise REST endpoints into validated agent tools.</p>
+                <div class="action-card-footer">
+                  <div class="action-card-footer-left">
+                    <span class="action-card-dot" style="background-color: #0EA5E9;"></span>
+                    <span class="action-card-footer-label">YAML / JSON Schema</span>
+                  </div>
+                  <a href="#stats" class="action-card-arrow-link" aria-label="OpenAPI Import details">&rarr;</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 7: Live Web Search -->
+            <div class="action-card has-custom-image" role="group" tabindex="0" aria-label="Live Web Search" style="--card-color: #3B6BFF;">
+              <div class="action-card-topbar"></div>
+              <div class="action-card-art">
+                <img src="/action-websearch.png" alt="Live Web Search Engine" class="action-card-bg-img action-card-img-websearch" loading="lazy">
+                <div class="action-card-img-scrim"></div>
+                <div class="action-card-dots"></div>
+                <span class="action-floating-chip chip-1">Google PSE</span>
+                <span class="action-floating-chip chip-2">Brave</span>
+                <span class="action-floating-chip chip-3">Exa</span>
+              </div>
+              <div class="action-card-tag">SERP &bull; REAL-TIME</div>
+              <div class="action-card-overlay"></div>
+              <div class="action-card-content">
+                <h3 class="action-card-title">Live Web Search</h3>
+                <p class="action-card-desc">Real-time fact verification with Google PSE, Serper, Brave Search, SearXNG, Exa, and Firecrawl scraping.</p>
+                <div class="action-card-footer">
+                  <div class="action-card-footer-left">
+                    <span class="action-card-dot" style="background-color: #3B6BFF;"></span>
+                    <span class="action-card-footer-label">Multi-Engine Crawler</span>
+                  </div>
+                  <a href="#tabs" class="action-card-arrow-link" aria-label="Live Web Search details">&rarr;</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 8: Voice & Image Generation -->
+            <div class="action-card has-custom-image" role="group" tabindex="0" aria-label="Voice & Image Generation" style="--card-color: #E11D48;">
+              <div class="action-card-topbar"></div>
+              <div class="action-card-art">
+                <img src="/action-voice.png" alt="Voice & Image Generation Multimodal" class="action-card-bg-img action-card-img-voice" loading="lazy">
+                <div class="action-card-img-scrim"></div>
+                <div class="action-card-dots"></div>
+                <span class="action-floating-chip chip-1">Speech-to-text</span>
+                <span class="action-floating-chip chip-2">Text-to-speech</span>
+                <span class="action-floating-chip chip-3">Images</span>
+              </div>
+              <div class="action-card-tag">MULTIMODAL</div>
+              <div class="action-card-overlay"></div>
+              <div class="action-card-content">
+                <h3 class="action-card-title">Voice &amp; Image Generation</h3>
+                <p class="action-card-desc">High-fidelity Speech-to-Text (STT), natural Text-to-Speech (TTS), and automated image generation for presentations.</p>
+                <div class="action-card-footer">
+                  <div class="action-card-footer-left">
+                    <span class="action-card-dot" style="background-color: #E11D48;"></span>
+                    <span class="action-card-footer-label">Whisper &amp; Diffusion</span>
+                  </div>
+                  <a href="#statement" class="action-card-arrow-link" aria-label="Voice &amp; Image Generation details">&rarr;</a>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 12. Dark Section (The ONLY Dark Block) -->
+
+    <!-- 12. Dark Section -->
     <section class="dark-section" id="dark-section">
       <div class="container">
         <div class="dark-header">
@@ -829,8 +1454,8 @@
             <span class="dark-row-tag">Multi-step synthesis &rarr;</span>
           </div>
           <div class="dark-row-item" data-thumb="url('static-ai.png')">
-            <span class="dark-row-title">Autonomous Workflow Orchestration</span>
-            <span class="dark-row-tag">Multi-agent action mesh &rarr;</span>
+            <span class="dark-row-title">Craft / Build Mode (Agentic Sandbox)</span>
+            <span class="dark-row-tag">Live sandbox container &rarr;</span>
           </div>
           <div class="dark-row-item" data-thumb="linear-gradient(135deg, #d46bff, #ff9a76)">
             <span class="dark-row-title">Model Evaluations CLI</span>
@@ -842,20 +1467,20 @@
       <div class="cursor-thumbnail" id="cursor-thumbnail"></div>
     </section>
 
-    <!-- 13. From Knowledge to Action -->
+    <!-- 13. Example Scenario: From Knowledge to Action (UPDATED) -->
     <section class="action-plan-section" id="action-plan">
       <div class="container">
         <div class="action-plan-grid">
           <div class="action-intro-card">
             <div>
-              <span class="label-xs text-muted">Autonomous Workflow Orchestration</span>
+              <span class="label-xs text-muted">Example scenario</span>
               <h2 class="action-intro-title">From knowledge to action in one continuous thread.</h2>
               <p class="action-intro-text">
                 When an operational discrepancy occurs, ESAA doesn't just surface the PDF policy—it formulates a multi-step execution plan, verifies system parameters, and executes the resolution across your IT service mesh.
               </p>
             </div>
             <div>
-              <button class="btn btn-black demo-trigger-btn">See interactive workflow</button>
+              <button class="btn btn-black" id="open-workflow-modal-btn">See interactive workflow</button>
             </div>
           </div>
 
@@ -864,7 +1489,7 @@
             <div class="plan-card-header">
               <span class="plan-title-badge">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                Autonomous Plan: Incident #8921
+                Autonomous Plan: Example: Incident
               </span>
               <span class="label-xs text-muted" id="plan-counter">0 of 3 completed</span>
             </div>
@@ -898,6 +1523,7 @@
       </div>
     </section>
 
+
     <!-- 14. Resources Section -->
     <section class="resources-section" id="resources">
       <div class="container">
@@ -907,108 +1533,155 @@
         </div>
 
         <div class="resources-grid">
-          <article class="resource-cell">
+          <article class="resource-cell resource-disabled">
             <div>
-              <span class="resource-label">Whitepaper</span>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="resource-label">Whitepaper</span>
+                <span class="coming-soon-pill">Coming soon</span>
+              </div>
               <div class="resource-divider"></div>
               <h3 class="resource-title">Hybrid RAG at Enterprise Scale</h3>
             </div>
-            <div class="resource-bottom-link">Read whitepaper &rarr;</div>
+            <div class="resource-bottom-link disabled-link">Read whitepaper (Coming soon)</div>
           </article>
 
-          <article class="resource-cell">
+          <article class="resource-cell resource-disabled">
             <div>
-              <span class="resource-label">Architecture Guide</span>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="resource-label">Architecture Guide</span>
+                <span class="coming-soon-pill">Coming soon</span>
+              </div>
               <div class="resource-divider"></div>
               <h3 class="resource-title">Zero-Trust Document ACL Mirroring</h3>
             </div>
-            <div class="resource-bottom-link">View guide &rarr;</div>
+            <div class="resource-bottom-link disabled-link">View guide (Coming soon)</div>
           </article>
 
-          <article class="resource-cell">
+          <article class="resource-cell resource-disabled">
             <div>
-              <span class="resource-label">Benchmark</span>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="resource-label">Benchmark</span>
+                <span class="coming-soon-pill">Coming soon</span>
+              </div>
               <div class="resource-divider"></div>
               <h3 class="resource-title">Evals CLI &amp; Frontier Model Comparison</h3>
             </div>
-            <div class="resource-bottom-link">Review benchmark &rarr;</div>
+            <div class="resource-bottom-link disabled-link">Review benchmark (Coming soon)</div>
           </article>
         </div>
       </div>
     </section>
   </main>
 
+  <!-- Platform Page View Container -->
+  <div id="platform-page-view" class="platform-page-view" style="display: none;"></div>
+
   <!-- 15. Footer -->
-  <footer class="footer-section">
+  <!-- 15. Footer -->
+  <footer class="footer-section" id="footer" role="contentinfo" aria-label="Site Footer">
     <div class="container">
       <div class="footer-top">
+        <!-- Brand Column -->
         <div class="footer-brand-col">
-          <div class="logo-brand">
+          <a href="#" class="logo-brand" aria-label="ESAA Home">
             <img src="esaa-logo-light.png" alt="ESAA" class="brand-logo-img">
-          </div>
-          <p>
+          </a>
+          <p class="footer-brand-desc">
             Governed enterprise generative intelligence connecting knowledge, workflows, and autonomous agents across modern IT ecosystems.
           </p>
+          <div class="footer-status-pill">
+            <span class="footer-status-dot"></span>
+            <span class="footer-status-text">All Systems Operational &bull; 99.99% SLA</span>
+          </div>
+          <div class="footer-social-links">
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="GitHub">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+            </a>
+            <a href="https://discord.com" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="Discord">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6h0a14.5 14.5 0 0 0-4-1.2 9.6 9.6 0 0 0-.5 1.2 13 13 0 0 0-3 0 9.6 9.6 0 0 0-.5-1.2A14.5 14.5 0 0 0 6 6a15.8 15.8 0 0 0-3 10.5 14.9 14.9 0 0 0 4.5 2.3 11 11 0 0 0 1-1.7 9.8 9.8 0 0 1-1.6-.8l.4-.3a10.6 10.6 0 0 0 9.4 0l.4.3a9.8 9.8 0 0 1-1.6.8 11 11 0 0 0 1 1.7 14.9 14.9 0 0 0 4.5-2.3A15.8 15.8 0 0 0 18 6Z"></path><circle cx="9.5" cy="11.5" r="1.5"></circle><circle cx="14.5" cy="11.5" r="1.5"></circle></svg>
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="LinkedIn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+            </a>
+            <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="X / Twitter">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path></svg>
+            </a>
+          </div>
         </div>
 
-        <div>
-          <div class="footer-col-title">Platform</div>
+        <!-- Col 1: Platform -->
+        <div class="footer-col">
+          <div class="footer-col-title">Platform &amp; Core</div>
           <ul class="footer-link-list">
-            <li><a href="#statement">Hybrid RAG</a></li>
-            <li><a href="#stats">50+ Connectors</a></li>
-            <li><a href="#tabs">Deep Research</a></li>
-            <li><a href="#accordion">Pillars</a></li>
-            <li><a href="#tabs">Lite Mode</a></li>
+            <li><a href="#statement">Hybrid RAG Retrieval</a></li>
+            <li><a href="#connectors">50+ Connectors</a></li>
+            <li><a href="#dark-section">Frontier Intelligence</a></li>
+            <li><a href="#tabs">Autonomous Agents</a></li>
+            <li><a href="#accordion">8 Architecture Pillars</a></li>
+            <li><a href="#calculator">Interactive ROI Calculator</a></li>
           </ul>
         </div>
 
-        <div>
-          <div class="footer-col-title">Actions</div>
+        <!-- Col 2: Actions & Tools -->
+        <div class="footer-col">
+          <div class="footer-col-title">Actions &amp; Execution</div>
           <ul class="footer-link-list">
-            <li><a href="#action-plan">SAP S/4HANA</a></li>
-            <li><a href="#action-plan">ServiceNow</a></li>
-            <li><a href="#accordion">Model Context (MCP)</a></li>
-            <li><a href="#accordion">Python Sandbox</a></li>
-            <li><a href="#accordion">OpenAPI Tools</a></li>
+            <li><a href="#actions">SAP S/4HANA Write Actions</a></li>
+            <li><a href="#actions">ServiceNow ITSM Automation</a></li>
+            <li><a href="#actions">Model Context Protocol (MCP)</a></li>
+            <li><a href="#actions">Python Sandbox &amp; Charts</a></li>
+            <li><a href="#actions">OpenAPI Tool Binding</a></li>
+            <li><a href="#dark-section">Deep Research Engine</a></li>
           </ul>
         </div>
 
-        <div>
-          <div class="footer-col-title">Security</div>
+        <!-- Col 3: Security & Governance -->
+        <div class="footer-col">
+          <div class="footer-col-title">Security &amp; Governance</div>
           <ul class="footer-link-list">
-            <li><a href="#resources">SAML 2.0 / SSO</a></li>
-            <li><a href="#resources">SCIM 2.0 Sync</a></li>
-            <li><a href="#resources">Document ACLs</a></li>
-            <li><a href="#resources">PII Guardrails</a></li>
-            <li><a href="#dark-section">Evals CLI</a></li>
+            <li><a href="#security">SAML 2.0 &amp; OIDC SSO</a></li>
+            <li><a href="#security">Automated SCIM 2.0 Sync</a></li>
+            <li><a href="#security">Document-Level ACLs</a></li>
+            <li><a href="#security">Real-Time PII Masking</a></li>
+            <li><a href="#dark-section">Continuous Evals CLI</a></li>
+            <li><a href="#security">Zero Data Retention</a></li>
           </ul>
         </div>
 
-        <div>
-          <div class="footer-col-title">Deployment</div>
+        <!-- Col 4: Deployment & Enterprise -->
+        <div class="footer-col">
+          <div class="footer-col-title">Deployment &amp; Cloud</div>
           <ul class="footer-link-list">
-            <li><a href="#accordion">Self-Hosted Kubernetes</a></li>
-            <li><a href="#accordion">AWS / Azure / GCP</a></li>
-            <li><a href="#accordion">Air-Gapped Docker</a></li>
+            <li><a href="#resources">Private Cloud (AWS / Azure / GCP)</a></li>
+            <li><a href="#resources">Air-Gapped &amp; On-Premises</a></li>
+            <li><a href="#resources">Kubernetes Helm Charts</a></li>
             <li><a href="#accordion">Slack &amp; Discord Bots</a></li>
-            <li><a href="#accordion">White-labeling</a></li>
+            <li><a href="#stories">Enterprise Case Studies</a></li>
+            <li><a href="#resources">99.99% Enterprise SLA</a></li>
           </ul>
         </div>
       </div>
 
-      <!-- Badge Row -->
+      <!-- Badge Row (Certifications & Standards) -->
       <div class="footer-badge-row">
-        <span class="footer-badge">&#10003; SAML 2.0</span>
-        <span class="footer-badge">&#10003; OIDC Certified</span>
-        <span class="footer-badge">&#10003; Okta Verified</span>
-        <span class="footer-badge">&#10003; Microsoft Entra ID</span>
-        <span class="footer-badge">&#10003; Langfuse Traced</span>
-        <span class="footer-badge">&#10003; OpenTelemetry Native</span>
+        <div class="footer-badge"><span class="footer-badge-check">&#10003;</span> Supports SAML 2.0 &amp; OIDC</div>
+        <div class="footer-badge"><span class="footer-badge-check">&#10003;</span> Automated SCIM 2.0 Provisioning</div>
+        <div class="footer-badge"><span class="footer-badge-check">&#10003;</span> Okta &amp; Microsoft Entra ID</div>
+        <div class="footer-badge"><span class="footer-badge-check">&#10003;</span> SOC 2 Type II &amp; ISO 27001 Ready</div>
+        <div class="footer-badge"><span class="footer-badge-check">&#10003;</span> Zero Data Retention Guarantee</div>
+        <div class="footer-badge"><span class="footer-badge-check">&#10003;</span> Langfuse &amp; OpenTelemetry Tracing</div>
       </div>
 
+      <!-- Bottom Row -->
       <div class="footer-bottom-row">
-        <div>&copy; 2026 ESAA Intelligence Inc. All rights reserved. Light theme production build.</div>
-        <div>SOC2 Type II &bull; ISO 27001 &bull; GDPR Ready</div>
+        <div class="footer-copyright">&copy; 2026 ESAA Intelligence Inc. All rights reserved. Governed Enterprise AI Platform.</div>
+        <div class="footer-legal-links">
+          <a href="#security" class="footer-legal-link">Privacy Policy</a>
+          <a href="#security" class="footer-legal-link">Terms of Service</a>
+          <a href="#security" class="footer-legal-link">Security Portal</a>
+          <a href="#security" class="footer-legal-link">Responsible AI</a>
+          <a href="#resources" class="footer-legal-link">System Status</a>
+        </div>
       </div>
     </div>
   </footer>
@@ -1016,12 +1689,12 @@
   <!-- 17. Bottom-Right Chat Widget -->
   <div class="chat-widget-wrapper">
     <div class="chat-greeting-bubble" id="chat-greeting-bubble">
-      <span>Need answers about ESAA? Ask Esa.</span>
+      <span>Need answers about ESAA? Ask ESAA.</span>
       <span class="chat-bubble-close" id="chat-bubble-close">&times;</span>
     </div>
-    <button class="chat-toggle-pill" id="chat-toggle-btn" aria-label="Open Esa chat assistant">
+    <button class="chat-toggle-pill" id="chat-toggle-btn" aria-label="Open ESAA chat assistant">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-      <span>Ask Esa</span>
+      <span>Ask ESAA</span>
     </button>
 
     <!-- Chat Panel -->
@@ -1030,16 +1703,24 @@
         <div class="chat-header-info">
           <div class="chat-avatar">E</div>
           <div>
-            <div class="chat-header-title">Esa Assistant</div>
-            <div class="chat-header-status">&bull; Online &bull; ESAA Intelligence</div>
+            <div class="chat-header-title">ESAA Assistant</div>
+            <div class="chat-header-status">&bull; Online &bull; ESAA Platform Knowledge</div>
           </div>
         </div>
-        <button class="chat-close-btn" id="chat-close-btn">&times;</button>
+        <button class="chat-close-btn" id="chat-close-btn" aria-label="Close chat">&times;</button>
+      </div>
+
+      <!-- Suggested Question Chips -->
+      <div class="chat-chips-bar" id="chat-chips-bar">
+        <button type="button" class="chat-chip-btn">Which connectors do you support?</button>
+        <button type="button" class="chat-chip-btn">How is data kept secure?</button>
+        <button type="button" class="chat-chip-btn">Which AI models can I use?</button>
+        <button type="button" class="chat-chip-btn">How do I deploy?</button>
       </div>
 
       <div class="chat-messages-container" id="chat-messages">
         <div class="chat-msg esa">
-          Hello! I am Esa, your enterprise AI assistant. Ask me anything about our 50+ connectors, document ACL security, autonomous deep research, or deployment options.
+          Hello! I am ESAA, your enterprise AI assistant. I can answer questions about ESAA's architecture, 50+ connectors, live dashboards, supported AI models, role-based security, actions &amp; tools, or deployment options.
         </div>
         <div class="chat-typing-indicator" id="chat-typing-indicator">
           <span></span><span></span><span></span>
@@ -1047,7 +1728,7 @@
       </div>
 
       <form class="chat-input-row" id="chat-form">
-        <input type="text" class="chat-input-field" id="chat-input" placeholder="Type a message (e.g., connectors, security, demo)..." autocomplete="off">
+        <input type="text" class="chat-input-field" id="chat-input" placeholder="Ask about connectors, security, models, deploy..." autocomplete="off">
         <button type="submit" class="chat-send-btn" aria-label="Send message">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
         </button>
@@ -1055,13 +1736,13 @@
     </div>
   </div>
 
-  <!-- Search Modal -->
+  <!-- Search Modal (⌘K) -->
   <div class="modal-backdrop" id="search-modal">
     <div class="modal-box search-modal-box">
       <div class="search-input-header">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        <input type="text" class="search-main-input" id="search-query-input" placeholder="Search site topics, features, documentation..." autocomplete="off">
-        <button class="modal-close-icon" id="search-modal-close" style="position: static;">&times;</button>
+        <input type="text" class="search-main-input" id="search-query-input" placeholder="Search platform sections, connectors, features..." autocomplete="off">
+        <button class="modal-close-icon" id="search-modal-close" style="position: static;" aria-label="Close search">&times;</button>
       </div>
       <ul class="search-results-list" id="search-results-container">
         <!-- Injected via JavaScript -->
@@ -1072,51 +1753,143 @@
   <!-- "Get a Demo" Modal -->
   <div class="modal-backdrop" id="demo-modal">
     <div class="modal-box" id="demo-modal-box">
-      <button class="modal-close-icon" id="demo-modal-close">&times;</button>
+      <button class="modal-close-icon" id="demo-modal-close" aria-label="Close modal">&times;</button>
       <div id="demo-form-container">
-        <h3 class="modal-title">Experience ESAA</h3>
+        <h3 class="modal-title">Schedule an Enterprise Demo</h3>
         <p class="modal-subtitle">Connect with our enterprise architecture team for a tailored walkthrough.</p>
-        <form id="demo-form">
+        <form id="demo-form" novalidate>
           <div class="form-group">
-            <label class="form-label" for="demo-name">Full Name</label>
+            <label class="form-label" for="demo-name">Full Name <span style="color: #dc2626;">*</span></label>
             <input type="text" id="demo-name" class="form-input" placeholder="Alex Morgan" required>
+            <div class="form-error" id="demo-name-error"></div>
           </div>
           <div class="form-group">
-            <label class="form-label" for="demo-email">Work Email</label>
+            <label class="form-label" for="demo-email">Work Email <span style="color: #dc2626;">*</span></label>
             <input type="email" id="demo-email" class="form-input" placeholder="alex@company.com" required>
+            <div class="form-error" id="demo-email-error"></div>
           </div>
           <div class="form-group">
-            <label class="form-label" for="demo-company">Company</label>
+            <label class="form-label" for="demo-company">Company <span style="color: #dc2626;">*</span></label>
             <input type="text" id="demo-company" class="form-input" placeholder="Acme Enterprises" required>
+            <div class="form-error" id="demo-company-error"></div>
           </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 8px;">Schedule Enterprise Demo</button>
+          <div class="form-error form-error-general" id="demo-general-error"></div>
+          <button type="submit" class="btn btn-primary" id="demo-submit-btn" style="width: 100%; margin-top: 8px;">Schedule Enterprise Demo</button>
         </form>
       </div>
       <div id="demo-success-screen" style="display: none; text-align: center; padding: 24px 0;">
         <div style="font-size: 42px; margin-bottom: 12px;">🎉</div>
         <h3 class="modal-title">Thank you!</h3>
-        <p class="modal-subtitle" style="margin-bottom: 0;">Our solutions architect will contact you within 24 hours.</p>
+        <p class="modal-subtitle" style="margin-bottom: 0;">Our team will get in touch.</p>
       </div>
     </div>
   </div>
 
-  <!-- Sign In Modal -->
+  <!-- Sign In / SSO Modal -->
   <div class="modal-backdrop" id="signin-modal">
     <div class="modal-box">
-      <button class="modal-close-icon" id="signin-modal-close">&times;</button>
+      <button class="modal-close-icon" id="signin-modal-close" aria-label="Close modal">&times;</button>
       <h3 class="modal-title">Sign in to ESAA</h3>
-      <p class="modal-subtitle">Enter your enterprise credentials or single sign-on email.</p>
-      <form id="signin-form">
+      <p class="modal-subtitle">Enterprise access is managed through your organization's identity provider.</p>
+      
+      <div style="margin: 20px 0;">
+        <button type="button" class="btn btn-outline" id="sso-signin-btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          Sign in with SSO
+        </button>
+        <div id="sso-notice" style="display: none; margin-top: 10px; font-size: 13px; color: var(--chip-text); background: var(--chip-lavender); padding: 10px 14px; border-radius: 6px; text-align: center;">
+          SSO is configured per organization. Contact your admin.
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 12px; margin: 18px 0; color: var(--muted); font-size: 12px; text-transform: uppercase;">
+        <span style="flex: 1; height: 1px; background: var(--hairline);"></span>
+        <span>Or request access</span>
+        <span style="flex: 1; height: 1px; background: var(--hairline);"></span>
+      </div>
+
+      <form id="signin-form" novalidate>
         <div class="form-group">
-          <label class="form-label" for="signin-email">Corporate Email</label>
+          <label class="form-label" for="signin-email">Corporate Work Email</label>
           <input type="email" id="signin-email" class="form-input" placeholder="user@enterprise.com" required>
+          <div class="form-error" id="signin-email-error"></div>
         </div>
-        <div class="form-group">
-          <label class="form-label" for="signin-password">Password</label>
-          <input type="password" id="signin-password" class="form-input" placeholder="••••••••••••" required>
-        </div>
-        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 8px;">Sign in with SSO</button>
+        <button type="submit" class="btn btn-primary" id="signin-submit-btn" style="width: 100%; margin-top: 8px;">Request access</button>
       </form>
+    </div>
+  </div>
+
+  <!-- "See in Action" Modal -->
+  <div class="modal-backdrop" id="action-example-modal">
+    <div class="modal-box" style="max-width: 640px;">
+      <button class="modal-close-icon" id="action-modal-close" aria-label="Close modal">&times;</button>
+      <div style="display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--primary); background: var(--chip-lavender); padding: 3px 8px; border-radius: 4px; margin-bottom: 12px;">Illustrative example</div>
+      <h3 class="modal-title" id="action-modal-title">Hybrid RAG &amp; Verified Retrieval</h3>
+      <div style="margin-top: 14px; background: #f8fafc; border: 1px solid var(--hairline); border-radius: 8px; padding: 16px;">
+        <div style="font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; margin-bottom: 6px;">Example Query</div>
+        <div id="action-modal-prompt" style="font-size: 15px; font-weight: 500; color: var(--ink);">
+          "Locate the latest enterprise compliance policy across Confluence and Google Drive, then highlight data retention obligations."
+        </div>
+      </div>
+      <div style="margin-top: 16px; background: #ffffff; border: 1px solid var(--hairline); border-radius: 8px; padding: 16px;">
+        <div style="font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; margin-bottom: 6px;">Generated Answer with Citations</div>
+        <div id="action-modal-answer" style="font-size: 14px; color: var(--ink-secondary); line-height: 1.6;">
+          Based on the Enterprise Data Retention Standard v3.2, customer records must be retained for 7 years from transaction completion, while temporary operational telemetry must be redacted after 90 days.
+        </div>
+        <div style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--hairline); font-size: 12px; color: var(--muted);" id="action-modal-citations">
+          <strong>Sources cited:</strong> [Confluence: Legal/Policy-2026-v3] &bull; [Google Drive: Legal-Retention-Schedule.pdf (p. 14)]
+        </div>
+      </div>
+      <div style="margin-top: 20px; text-align: right;">
+        <button class="btn btn-sm btn-outline" id="action-modal-done-btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- "See Interactive Workflow" Modal -->
+  <div class="modal-backdrop" id="workflow-modal">
+    <div class="modal-box" style="max-width: 620px;">
+      <button class="modal-close-icon" id="workflow-modal-close" aria-label="Close modal">&times;</button>
+      <div style="display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--primary); background: var(--chip-lavender); padding: 3px 8px; border-radius: 4px; margin-bottom: 8px;">Interactive Workflow Demo</div>
+      <h3 class="modal-title">Example scenario: Autonomous Incident Remediation</h3>
+      <p class="modal-subtitle">Step-by-step automated execution across SAP, policy verification, and ServiceNow.</p>
+      
+      <div class="workflow-steps-track" style="margin: 24px 0 20px;">
+        <div class="wf-step-node wf-step-1" id="wf-node-1">
+          <div class="wf-step-badge">1</div>
+          <div class="wf-step-info">
+            <div class="wf-step-label">Fetch</div>
+            <div class="wf-step-desc">Fetch SAP Q3 ledger &amp; cross-reference Jira ticket</div>
+          </div>
+          <div class="wf-step-status" id="wf-status-1">Standby</div>
+        </div>
+
+        <div class="wf-step-node wf-step-2" id="wf-node-2">
+          <div class="wf-step-badge">2</div>
+          <div class="wf-step-info">
+            <div class="wf-step-label">Verify</div>
+            <div class="wf-step-desc">Run anomaly verification against policy doc</div>
+          </div>
+          <div class="wf-step-status" id="wf-status-2">Standby</div>
+        </div>
+
+        <div class="wf-step-node wf-step-3" id="wf-node-3">
+          <div class="wf-step-badge">3</div>
+          <div class="wf-step-info">
+            <div class="wf-step-label">Push</div>
+            <div class="wf-step-desc">Push remediation to ServiceNow &amp; notify on Slack</div>
+          </div>
+          <div class="wf-step-status" id="wf-status-3">Standby</div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 16px; border-top: 1px solid var(--hairline);">
+        <div id="wf-summary-text" style="font-size: 13px; color: var(--muted); font-weight: 500;">Ready to execute</div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-sm btn-primary" id="wf-play-btn">Play</button>
+          <button class="btn btn-sm btn-outline" id="wf-replay-btn">Replay</button>
+        </div>
+      </div>
     </div>
   </div>
 
