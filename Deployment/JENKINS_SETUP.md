@@ -31,15 +31,7 @@ REMOTE_DIR=/home/ubuntu/essa
 Open your Local Jenkins dashboard (`http://localhost:8080`) and go to:
 **Manage Jenkins** -> **Credentials** -> Click **(global)** under System -> **Add Credentials**.
 
-### Credential 1: The Secret File (`ec2-secret-file`)
-1. Click **Add Credentials**:
-   - **Kind**: Select `Secret file`.
-   - **File**: Choose your `ec2-secret.env` file created in Step 1.
-   - **ID**: `ec2-secret-file` *(Must match the `EC2_SECRET_FILE_ID` in `Jenkinsfile`)*.
-   - **Description**: `EC2 Host and User Secret Configuration`.
-2. Click **Create**.
-
-### Credential 2: The SSH Key (`ec2-ssh-key`)
+### Credential 1: The SSH Key (`ec2-ssh-key`)
 1. Click **Add Credentials**:
    - **Kind**: Select `SSH Username with private key`.
    - **ID**: `ec2-ssh-key` *(Must match `SSH_KEY_ID` in `Jenkinsfile`)*.
@@ -48,12 +40,15 @@ Open your Local Jenkins dashboard (`http://localhost:8080`) and go to:
    - **Description**: `EC2 Ubuntu Private Key`.
 2. Click **Create**.
 
----
+### Credential 2: The Secret File (`ec2-secret-file`) *(Optional if Deployment/ec2-secret.env exists)*
+1. Click **Add Credentials**:
+   - **Kind**: Select `Secret file`.
+   - **File**: Choose your `ec2-secret.env` file.
+   - **ID**: `ec2-secret-file` *(Must match `EC2_SECRET_FILE_ID` in `Jenkinsfile`)*.
+   - **Description**: `EC2 Host and User Secret Configuration`.
+2. Click **Create**.
 
-## Step 3: Ensure "SSH Agent Plugin" is Installed
-
-In Jenkins -> **Manage Jenkins** -> **Plugins** -> **Installed plugins**:
-Ensure **SSH Agent Plugin** is installed (if not, search and install it from **Available plugins**).
+*(Note: No extra plugins like "SSH Agent" are required. The pipeline uses Jenkins' built-in `sshUserPrivateKey` mechanism natively).*
 
 ---
 
