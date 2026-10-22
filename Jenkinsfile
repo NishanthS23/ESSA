@@ -10,76 +10,81 @@ pipeline {
     environment {
         // Jenkins Credential IDs
         SSH_KEY_ID         = 'ec2-ssh-key'      // SSH Username with private key (ESSA.pem)
-        EC2_SECRET_FILE_ID = 'ec2-secret-file'  // Secret file credential (with EC2_HOST, EC2_USER, REMOTE_DIR)
+        EC2_SECRET_FILE_ID = 'ec2-secret-file'  // Secret file (or workspace Deployment/ec2-secret.env)
     }
 
     stages {
         stage('Checkout') {
             steps {
-                echo '>>> [1/4] Checking out repository in Jenkins...'
+                echo '>>> [1/3] Checking out repository in Jenkins...'
                 checkout scm
             }
         }
 
-        stage('Transfer & Deploy to EC2') {
+        stage('Deploy to EC2 via SSH') {
             steps {
-                echo '>>> [2/4] Authenticating with SSH key and deploying to EC2...'
+                echo '>>> [2/3] Authenticating with SSH key and deploying to EC2...'
                 withCredentials([
                     file(credentialsId: env.EC2_SECRET_FILE_ID, variable: 'SECRET_CONFIG'),
                     sshUserPrivateKey(credentialsId: env.SSH_KEY_ID, keyFileVariable: 'SSH_KEY_FILE', usernameVariable: 'SSH_USER')
                 ]) {
-                    sh '''
-                        # 1. Load host and user from secret file (or workspace fallback)
-                        if [ -n "${SECRET_CONFIG}" ] && [ -f "${SECRET_CONFIG}" ]; then
-                            set -a
-                            . "${SECRET_CONFIG}"
-                            set +a
-                        elif [ -f "Deployment/ec2-secret.env" ]; then
-                            set -a
-                            . "Deployment/ec2-secret.env"
-                            set +a
-                        fi
+                    powershell '''
+                        $ErrorActionPreference = "Stop"
 
-                        # Use SSH_USER from Jenkins credential if not specified in file
-                        EC2_USER="${EC2_USER:-${SSH_USER}}"
+                        # 1. Load host & user from secret file (or workspace fallback)
+                        $configFile = if ($env:SECRET_CONFIG -and (Test-Path $env:SECRET_CONFIG)) {
+                            $env:SECRET_CONFIG
+                        } elseif (Test-Path "Deployment/ec2-secret.env") {
+                            "Deployment/ec2-secret.env"
+                        } else {
+                            $null
+                        }
 
-                        if [ -z "${EC2_HOST}" ] || [ -z "${EC2_USER}" ]; then
-                            echo "ERROR: EC2_HOST or EC2_USER is not defined in the secret file."
+                        if ($configFile) {
+                            Write-Host ">>> Loading config from: $configFile"
+                            Get-Content $configFile | ForEach-Object {
+                                $line = $_.Trim()
+                                if ($line -and -not $line.StartsWith('#') -and $line.Contains('=')) {
+                                    $parts = $line.Split('=', 2)
+                                    [System.Environment]::SetEnvironmentVariable($parts[0].Trim(), $parts[1].Trim(), 'Process')
+                                }
+                            }
+                        }
+
+                        $HOST = $env:EC2_HOST
+                        $USER = if ($env:EC2_USER) { $env:EC2_USER } else { $env:SSH_USER }
+                        $DIR  = if ($env:REMOTE_DIR) { $env:REMOTE_DIR } else { "/home/$USER/essa" }
+                        $KEY  = $env:SSH_KEY_FILE
+
+                        if (-not $HOST -or -not $USER) {
+                            Write-Error "ERROR: EC2_HOST or EC2_USER is not defined."
                             exit 1
-                        fi
+                        }
 
-                        TARGET_DIR="${REMOTE_DIR:-/home/${EC2_USER}/essa}"
-                        echo "Target destination: ${EC2_USER}@${EC2_HOST}:${TARGET_DIR}"
+                        Write-Host "Connecting to: $USER@$HOST : $DIR"
 
-                        # Configure SSH command using the keyfile provided by Jenkins
-                        SSH_CMD="ssh -i ${SSH_KEY_FILE} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+                        # 2. Ensure remote directory exists on EC2
+                        Write-Host ">>> Ensuring target directory exists on EC2..."
+                        & ssh -i "$KEY" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$USER@$HOST" "mkdir -p $DIR"
 
-                        # 2. Ensure remote directory exists
-                        echo "Creating target directory on EC2..."
-                        ${SSH_CMD} ${EC2_USER}@${EC2_HOST} "mkdir -p ${TARGET_DIR}"
+                        # 3. Package and transfer project files to EC2
+                        Write-Host ">>> Packaging and uploading project files..."
+                        $archive = "essa-deploy.tar.gz"
+                        if (Test-Path $archive) { Remove-Item -Force $archive }
+                        & tar.exe --exclude='.git' --exclude='node_modules' --exclude='dist' --exclude='*.tar.gz' -czf $archive .
+                        & scp -i "$KEY" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $archive "$USER@${HOST}:$DIR/$archive"
+                        Remove-Item -Force $archive
 
-                        # 3. Stream files to EC2 (excludes node_modules and .git for speed)
-                        echo "Syncing code files to EC2..."
-                        tar --exclude='.git' --exclude='node_modules' --exclude='dist' -czf - . | \
-                            ${SSH_CMD} ${EC2_USER}@${EC2_HOST} "tar -xzf - -C ${TARGET_DIR}"
+                        # 4. Extract archive on EC2
+                        Write-Host ">>> Extracting files on EC2..."
+                        & ssh -i "$KEY" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$USER@$HOST" "tar -xzf $DIR/$archive -C $DIR && rm -f $DIR/$archive"
 
-                        # 4. Verify Docker is running on EC2
-                        ${SSH_CMD} ${EC2_USER}@${EC2_HOST} "
-                            if ! command -v docker &> /dev/null || ! docker compose version &> /dev/null; then
-                                echo 'Installing Docker on EC2...'
-                                sudo apt-get update -y && sudo apt-get install -y docker.io docker-compose-v2
-                                sudo systemctl enable --now docker
-                                sudo usermod -aG docker ${EC2_USER} || true
-                            fi
-                        "
+                        # 5. Build and launch Docker container on EC2 port 80
+                        Write-Host ">>> Building and starting frontend container on EC2..."
+                        $deployCmd = "cd $DIR && docker compose -f Deployment/docker-compose.yml up -d --build --remove-orphans && docker image prune -f"
+                        & ssh -i "$KEY" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$USER@$HOST" $deployCmd
 
-                        # 5. Build and launch container on EC2 port 80
-                        echo "Building and launching frontend container on EC2..."
-                        ${SSH_CMD} ${EC2_USER}@${EC2_HOST} "
-                            cd ${TARGET_DIR}
-                            docker compose -f Deployment/docker-compose.yml up -d --build --remove-orphans
-                            docker image prune -f
-                        "
+                        Write-Host ">>> Deployment completed successfully!"
                     '''
                 }
             }
@@ -87,32 +92,42 @@ pipeline {
 
         stage('Remote Health Check') {
             steps {
-                echo '>>> [3/4] Performing remote health check on EC2...'
+                echo '>>> [3/3] Performing remote health check on EC2...'
                 withCredentials([
                     file(credentialsId: env.EC2_SECRET_FILE_ID, variable: 'SECRET_CONFIG')
                 ]) {
-                    sh '''
-                        if [ -n "${SECRET_CONFIG}" ] && [ -f "${SECRET_CONFIG}" ]; then
-                            set -a
-                            . "${SECRET_CONFIG}"
-                            set +a
-                        elif [ -f "Deployment/ec2-secret.env" ]; then
-                            set -a
-                            . "Deployment/ec2-secret.env"
-                            set +a
-                        fi
+                    powershell '''
+                        $configFile = if ($env:SECRET_CONFIG -and (Test-Path $env:SECRET_CONFIG)) {
+                            $env:SECRET_CONFIG
+                        } elseif (Test-Path "Deployment/ec2-secret.env") {
+                            "Deployment/ec2-secret.env"
+                        } else {
+                            $null
+                        }
 
-                        echo "Pinging http://${EC2_HOST} on port 80..."
-                        sleep 5
+                        if ($configFile) {
+                            Get-Content $configFile | ForEach-Object {
+                                $line = $_.Trim()
+                                if ($line -and -not $line.StartsWith('#') -and $line.Contains('=')) {
+                                    $parts = $line.Split('=', 2)
+                                    [System.Environment]::SetEnvironmentVariable($parts[0].Trim(), $parts[1].Trim(), 'Process')
+                                }
+                            }
+                        }
 
-                        HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 http://${EC2_HOST} || echo "000")
-                        echo "HTTP Response Status Code: ${HTTP_STATUS}"
+                        $HOST = $env:EC2_HOST
+                        Write-Host "Pinging http://$HOST on port 80..."
+                        Start-Sleep -Seconds 5
 
-                        if [ "${HTTP_STATUS}" -eq 200 ] || [ "${HTTP_STATUS}" -eq 304 ]; then
-                            echo "SUCCESS: Remote EC2 is responding with HTTP ${HTTP_STATUS} OK!"
-                        else
-                            echo "WARNING: Expected 200/304, got ${HTTP_STATUS}. Please ensure AWS Security Group allows Port 80."
-                        fi
+                        try {
+                            $res = Invoke-WebRequest -Uri "http://$HOST" -UseBasicParsing -TimeoutSec 10 -Method Head -ErrorAction SilentlyContinue
+                            Write-Host "HTTP Response Code: $($res.StatusCode)"
+                            if ($res.StatusCode -eq 200 -or $res.StatusCode -eq 304) {
+                                Write-Host "SUCCESS: Remote EC2 is responding with HTTP $($res.StatusCode) OK!"
+                            }
+                        } catch {
+                            Write-Host "Health check response: $($_.Exception.Message)"
+                        }
                     '''
                 }
             }

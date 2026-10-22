@@ -1,27 +1,25 @@
-# Local Jenkins to EC2 Deployment Plan
+# Streamline Deployment (Remove Extra Scripts & Inline into Jenkinsfile)
 
-- [x] **Phase 1: Architecture Definition**
-  - [x] Topology: Local Jenkins (running on host) -> SSH Deployment -> Remote Ubuntu EC2
-  - [x] Authentication: SSH Key-based authentication using `ESSA.pem` (`ec2-ssh-key` credential)
-  - [x] Secret Management: Decouple `EC2_HOST` and `EC2_USER` into a separate Jenkins "Secret file" credential (`ec2-secret-file`)
+- [x] **Phase 1: Inline All Steps into Jenkinsfile**
+  - [x] Consolidate SSH, SCP, and Docker Compose execution directly into `Jenkinsfile` using native Windows `powershell`
+  - [x] Embed the health check directly into `Jenkinsfile`
 
-- [x] **Phase 2: Jenkinsfile Update**
-  - [x] Update root `Jenkinsfile` to remove hardcoded IP and user
-  - [x] Use `withCredentials([file(credentialsId: 'ec2-secret-file', variable: 'SECRET_CONFIG')])` to dynamically load `EC2_HOST` and `EC2_USER`
-  - [x] Add template example file [`Deployment/ec2-secret.env.example`](file:///c:/Users/Work/Documents/work/essa/Deployment/ec2-secret.env.example)
-  - [x] Ensure `.gitignore` ignores `*.pem` and `.env*`
+- [x] **Phase 2: Remove Redundant Scripts**
+  - [x] Removed `Deployment/deploy.sh`
+  - [x] Removed `Deployment/deploy-remote.ps1`
+  - [x] Removed `Deployment/deploy-remote.sh`
+  - [x] Removed `Deployment/health-check.ps1`
+  - [x] Removed `Deployment/health-check.sh`
+  - [x] Removed `Deployment/install-jenkins.sh`
 
-- [x] **Phase 3: Local Jenkins Setup Guide**
-  - [x] Step 1: Create secret file and add as Jenkins Secret File credential (`ec2-secret-file`)
-  - [x] Step 2: Add `ESSA.pem` as Jenkins SSH credential (`ec2-ssh-key`)
-  - [x] Step 3: Run pipeline and verify deployment
+- [x] **Phase 3: Verification**
+  - [x] Verified `Jenkinsfile` is completely self-contained
+  - [x] Verified `Deployment/` folder only contains essential configuration (`docker-compose.yml`, `nginx.conf`, `ec2-secret.env`)
 
 ---
 
 ## Review & Audit Results
 
-1. **Zero Hardcoded Secrets**:
-   - Neither the EC2 IP address (`15.206.174.225`), the username (`ubuntu`), nor the SSH private key exist in the tracked code or `Jenkinsfile`.
-   - All server connection details are loaded dynamically at runtime via Jenkins' encrypted credential store using the `ec2-secret-file` secret file.
-2. **Easy Multi-Environment / Migration Support**:
-   - Changing instances, switching IPs, or migrating servers only requires uploading a new secret file in Jenkins, with zero code changes needed.
+1. **Zero External Script Dependencies**:
+   - [`Jenkinsfile`](file:///c:/Users/Work/Documents/work/essa/Jenkinsfile) handles the full deployment lifecycle (reading credentials, tar streaming over SCP, executing Docker Compose on EC2, and health check) directly inline.
+   - All 6 redundant `.sh` and `.ps1` helper scripts have been removed, leaving a clean, minimal repository.
