@@ -26,7 +26,15 @@
   - [x] Added `$LASTEXITCODE` validation for robust error trapping
   - [x] Tested flow end-to-end with remote EC2 host
 
+- [x] **Phase 5: Post-Health-Check Remote Cleanup on EC2**
+  - [x] Add `Cleanup Remote Workspace` stage to `Jenkinsfile` after `Remote Health Check`
+  - [x] Safely delete `$targetDir` on EC2 via SSH
+  - [x] Fix Docker container healthcheck endpoint to `http://127.0.0.1/` (IPv4)
+  - [x] Add retry loop and failure throwing in Jenkins `Remote Health Check` stage
+  - [x] Commit and push changes to GitHub
+
 ---
+
 
 ## Review & Audit Results
 

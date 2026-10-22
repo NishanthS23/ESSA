@@ -16,14 +16,14 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo '>>> [1/3] Checking out repository in Jenkins...'
+                echo '>>> [1/4] Checking out repository in Jenkins...'
                 checkout scm
             }
         }
 
         stage('Deploy to EC2 via SSH') {
             steps {
-                echo '>>> [2/3] Authenticating with SSH key and deploying to EC2...'
+                echo '>>> [2/4] Authenticating with SSH key and deploying to EC2...'
                 withCredentials([
                     file(credentialsId: env.EC2_SECRET_FILE_ID, variable: 'SECRET_CONFIG'),
                     sshUserPrivateKey(credentialsId: env.SSH_KEY_ID, keyFileVariable: 'SSH_KEY_FILE', usernameVariable: 'SSH_USER')
@@ -111,7 +111,7 @@ pipeline {
 
         stage('Remote Health Check') {
             steps {
-                echo '>>> [3/3] Performing remote health check on EC2...'
+                echo '>>> [3/4] Performing remote health check on EC2...'
                 withCredentials([
                     file(credentialsId: env.EC2_SECRET_FILE_ID, variable: 'SECRET_CONFIG')
                 ]) {
@@ -136,17 +136,84 @@ pipeline {
 
                         $targetHost = $env:EC2_HOST
                         Write-Host "Pinging http://$targetHost on port 80..."
-                        Start-Sleep -Seconds 5
 
-                        try {
-                            $res = Invoke-WebRequest -Uri "http://$targetHost" -UseBasicParsing -TimeoutSec 10 -Method Head -ErrorAction SilentlyContinue
-                            Write-Host "HTTP Response Code: $($res.StatusCode)"
-                            if ($res.StatusCode -eq 200 -or $res.StatusCode -eq 304) {
-                                Write-Host "SUCCESS: Remote EC2 is responding with HTTP $($res.StatusCode) OK!"
+                        $healthy = $false
+                        for ($i = 1; $i -le 6; $i++) {
+                            try {
+                                $res = Invoke-WebRequest -Uri "http://$targetHost" -UseBasicParsing -TimeoutSec 10 -Method Head -ErrorAction Stop
+                                Write-Host "Attempt $i: HTTP Response Code: $($res.StatusCode)"
+                                if ($res.StatusCode -eq 200 -or $res.StatusCode -eq 304) {
+                                    Write-Host "SUCCESS: Remote EC2 is responding with HTTP $($res.StatusCode) OK!"
+                                    $healthy = $true
+                                    break
+                                }
+                            } catch {
+                                Write-Host "Attempt $i: Waiting for container to respond... ($($_.Exception.Message))"
+                                Start-Sleep -Seconds 5
                             }
-                        } catch {
-                            Write-Host "Health check response: $($_.Exception.Message)"
                         }
+
+                        if (-not $healthy) {
+                            throw "Health check failed: http://$targetHost did not return HTTP 200/304 within 30 seconds"
+                        }
+                    '''
+                }
+            }
+        }
+
+        stage('Cleanup Remote Workspace') {
+            steps {
+                echo '>>> [4/4] Removing cloned deployment repository on EC2...'
+                withCredentials([
+                    file(credentialsId: env.EC2_SECRET_FILE_ID, variable: 'SECRET_CONFIG'),
+                    sshUserPrivateKey(credentialsId: env.SSH_KEY_ID, keyFileVariable: 'SSH_KEY_FILE', usernameVariable: 'SSH_USER')
+                ]) {
+                    powershell '''
+                        $configFile = if ($env:SECRET_CONFIG -and (Test-Path $env:SECRET_CONFIG)) {
+                            $env:SECRET_CONFIG
+                        } elseif (Test-Path "Deployment/ec2-secret.env") {
+                            "Deployment/ec2-secret.env"
+                        } else {
+                            $null
+                        }
+
+                        if ($configFile) {
+                            Get-Content $configFile | ForEach-Object {
+                                $line = $_.Trim()
+                                if ($line -and -not $line.StartsWith('#') -and $line.Contains('=')) {
+                                    $parts = $line.Split('=', 2)
+                                    [System.Environment]::SetEnvironmentVariable($parts[0].Trim(), $parts[1].Trim(), 'Process')
+                                }
+                            }
+                        }
+
+                        $targetHost = $env:EC2_HOST
+                        $targetUser = if ($env:EC2_USER) { $env:EC2_USER } else { $env:SSH_USER }
+                        $targetDir  = if ($env:REMOTE_DIR) { $env:REMOTE_DIR } else { "/home/$targetUser/essa" }
+                        $sshKey     = $env:SSH_KEY_FILE
+
+                        if ($sshKey -and (Test-Path $sshKey)) {
+                            & icacls.exe "$sshKey" /reset /c /q
+                            & icacls.exe "$sshKey" /inheritance:r /c /q
+                            & icacls.exe "$sshKey" /grant:r "*S-1-5-32-544:(R)" /c /q
+                            & icacls.exe "$sshKey" /grant:r "*S-1-5-18:(R)" /c /q
+                            if ($env:USERNAME) {
+                                & icacls.exe "$sshKey" /grant:r "$($env:USERNAME):(R)" /c /q
+                            }
+                        }
+
+                        $sshOpts = @("-i", "$sshKey", "-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null", "-o", "LogLevel=ERROR")
+
+                        if (-not $targetDir -or $targetDir -eq "/" -or $targetDir -eq "/home/$targetUser") {
+                            Write-Error "Invalid target directory for cleanup: '$targetDir'"
+                            exit 1
+                        }
+
+                        Write-Host ">>> Cleaning up remote repository at $targetDir on $targetHost..."
+                        & ssh @sshOpts "$targetUser@$targetHost" "rm -rf $targetDir"
+                        if ($LASTEXITCODE -ne 0) { throw "Remote directory removal failed with exit code $LASTEXITCODE" }
+
+                        Write-Host ">>> Remote repository $targetDir successfully removed from EC2."
                     '''
                 }
             }
