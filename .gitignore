@@ -9,7 +9,7 @@ dist-ssr
 
 # Environment and local files
 *.local
-.env
+*.env
 .env.*
 *.pem
 
