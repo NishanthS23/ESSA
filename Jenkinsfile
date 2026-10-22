@@ -51,38 +51,39 @@ pipeline {
                             }
                         }
 
-                        $HOST = $env:EC2_HOST
-                        $USER = if ($env:EC2_USER) { $env:EC2_USER } else { $env:SSH_USER }
-                        $DIR  = if ($env:REMOTE_DIR) { $env:REMOTE_DIR } else { "/home/$USER/essa" }
-                        $KEY  = $env:SSH_KEY_FILE
+                        $targetHost = $env:EC2_HOST
+                        $targetUser = if ($env:EC2_USER) { $env:EC2_USER } else { $env:SSH_USER }
+                        $targetDir  = if ($env:REMOTE_DIR) { $env:REMOTE_DIR } else { "/home/$targetUser/essa" }
+                        $sshKey     = $env:SSH_KEY_FILE
 
-                        if (-not $HOST -or -not $USER) {
+                        if (-not $targetHost -or -not $targetUser) {
                             Write-Error "ERROR: EC2_HOST or EC2_USER is not defined."
                             exit 1
                         }
 
-                        Write-Host "Connecting to: $USER@$HOST : $DIR"
+                        Write-Host "Connecting to: $targetUser@$targetHost : $targetDir"
 
                         # 2. Ensure remote directory exists on EC2
                         Write-Host ">>> Ensuring target directory exists on EC2..."
-                        & ssh -i "$KEY" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$USER@$HOST" "mkdir -p $DIR"
+                        & ssh -i "$sshKey" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$targetUser@$targetHost" "mkdir -p $targetDir"
 
                         # 3. Package and transfer project files to EC2
                         Write-Host ">>> Packaging and uploading project files..."
                         $archive = "essa-deploy.tar.gz"
                         if (Test-Path $archive) { Remove-Item -Force $archive }
                         & tar.exe --exclude='.git' --exclude='node_modules' --exclude='dist' --exclude='*.tar.gz' -czf $archive .
-                        & scp -i "$KEY" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $archive "$USER@${HOST}:$DIR/$archive"
+                        $remoteDest = "$targetUser@$targetHost" + ":$targetDir/$archive"
+                        & scp -i "$sshKey" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $archive "$remoteDest"
                         Remove-Item -Force $archive
 
                         # 4. Extract archive on EC2
                         Write-Host ">>> Extracting files on EC2..."
-                        & ssh -i "$KEY" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$USER@$HOST" "tar -xzf $DIR/$archive -C $DIR && rm -f $DIR/$archive"
+                        & ssh -i "$sshKey" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$targetUser@$targetHost" "tar -xzf $targetDir/$archive -C $targetDir && rm -f $targetDir/$archive"
 
                         # 5. Build and launch Docker container on EC2 port 80
                         Write-Host ">>> Building and starting frontend container on EC2..."
-                        $deployCmd = "cd $DIR && docker compose -f Deployment/docker-compose.yml up -d --build --remove-orphans && docker image prune -f"
-                        & ssh -i "$KEY" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$USER@$HOST" $deployCmd
+                        $deployCmd = "cd $targetDir && docker compose -f Deployment/docker-compose.yml up -d --build --remove-orphans && docker image prune -f"
+                        & ssh -i "$sshKey" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$targetUser@$targetHost" $deployCmd
 
                         Write-Host ">>> Deployment completed successfully!"
                     '''
@@ -115,12 +116,12 @@ pipeline {
                             }
                         }
 
-                        $HOST = $env:EC2_HOST
-                        Write-Host "Pinging http://$HOST on port 80..."
+                        $targetHost = $env:EC2_HOST
+                        Write-Host "Pinging http://$targetHost on port 80..."
                         Start-Sleep -Seconds 5
 
                         try {
-                            $res = Invoke-WebRequest -Uri "http://$HOST" -UseBasicParsing -TimeoutSec 10 -Method Head -ErrorAction SilentlyContinue
+                            $res = Invoke-WebRequest -Uri "http://$targetHost" -UseBasicParsing -TimeoutSec 10 -Method Head -ErrorAction SilentlyContinue
                             Write-Host "HTTP Response Code: $($res.StatusCode)"
                             if ($res.StatusCode -eq 200 -or $res.StatusCode -eq 304) {
                                 Write-Host "SUCCESS: Remote EC2 is responding with HTTP $($res.StatusCode) OK!"
