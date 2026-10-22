@@ -19,6 +19,13 @@
   - [x] Update health check block to use `$targetHost`
   - [x] Commit and push changes to GitHub
 
+- [x] **Phase 4: Fix OpenSSH Key Permissions on Windows (Jenkins Agent)**
+  - [x] Identified that Jenkins creates temporary key files inheriting `BUILTIN\Users` permissions under `C:\ProgramData`
+  - [x] Applied `icacls.exe` to strip inheritance and restrict access strictly to Administrators, SYSTEM, and the current user
+  - [x] Added `-o LogLevel=ERROR` to suppress non-fatal `Warning: Permanently added ...` stderr output
+  - [x] Added `$LASTEXITCODE` validation for robust error trapping
+  - [x] Tested flow end-to-end with remote EC2 host
+
 ---
 
 ## Review & Audit Results
@@ -27,7 +34,9 @@
    - [`Jenkinsfile`](file:///c:/Users/Work/Documents/work/essa/Jenkinsfile) handles the full deployment lifecycle (reading credentials, tar streaming over SCP, executing Docker Compose on EC2, and health check) directly inline.
    - All 6 redundant `.sh` and `.ps1` helper scripts have been removed, leaving a clean, minimal repository.
 
-2. **PowerShell Compatibility**:
+2. **PowerShell & OpenSSH Compatibility**:
    - Resolved built-in read-only variable collision (`$Host`) by using distinct variable names (`$targetHost`, `$targetUser`, `$targetDir`, `$sshKey`).
-   - Cleaned up SCP remote target concatenation to prevent variable scope drive parsing errors.
+   - Hardened OpenSSH private key file permissions via `icacls` so Jenkins's Windows agent passes OpenSSH strict key checks.
+   - Configured `-o LogLevel=ERROR` to eliminate benign stderr warnings that trigger PowerShell CI wrapper failures.
+
 

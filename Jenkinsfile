@@ -61,29 +61,47 @@ pipeline {
                             exit 1
                         }
 
+                        # 2. Fix permissions on temporary private key file created by Jenkins on Windows
+                        if ($sshKey -and (Test-Path $sshKey)) {
+                            Write-Host ">>> Securing SSH private key permissions..."
+                            & icacls.exe "$sshKey" /reset /c /q
+                            & icacls.exe "$sshKey" /inheritance:r /c /q
+                            & icacls.exe "$sshKey" /grant:r "*S-1-5-32-544:(R)" /c /q
+                            & icacls.exe "$sshKey" /grant:r "*S-1-5-18:(R)" /c /q
+                            if ($env:USERNAME) {
+                                & icacls.exe "$sshKey" /grant:r "$($env:USERNAME):(R)" /c /q
+                            }
+                        }
+
+                        $sshOpts = @("-i", "$sshKey", "-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null", "-o", "LogLevel=ERROR")
+
                         Write-Host "Connecting to: $targetUser@$targetHost : $targetDir"
 
-                        # 2. Ensure remote directory exists on EC2
+                        # 3. Ensure remote directory exists on EC2
                         Write-Host ">>> Ensuring target directory exists on EC2..."
-                        & ssh -i "$sshKey" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$targetUser@$targetHost" "mkdir -p $targetDir"
+                        & ssh @sshOpts "$targetUser@$targetHost" "mkdir -p $targetDir"
+                        if ($LASTEXITCODE -ne 0) { throw "SSH mkdir failed with exit code $LASTEXITCODE" }
 
-                        # 3. Package and transfer project files to EC2
+                        # 4. Package and transfer project files to EC2
                         Write-Host ">>> Packaging and uploading project files..."
                         $archive = "essa-deploy.tar.gz"
                         if (Test-Path $archive) { Remove-Item -Force $archive }
                         & tar.exe --exclude='.git' --exclude='node_modules' --exclude='dist' --exclude='*.tar.gz' -czf $archive .
                         $remoteDest = "$targetUser@$targetHost" + ":$targetDir/$archive"
-                        & scp -i "$sshKey" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $archive "$remoteDest"
+                        & scp @sshOpts $archive "$remoteDest"
+                        if ($LASTEXITCODE -ne 0) { throw "SCP upload failed with exit code $LASTEXITCODE" }
                         Remove-Item -Force $archive
 
-                        # 4. Extract archive on EC2
+                        # 5. Extract archive on EC2
                         Write-Host ">>> Extracting files on EC2..."
-                        & ssh -i "$sshKey" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$targetUser@$targetHost" "tar -xzf $targetDir/$archive -C $targetDir && rm -f $targetDir/$archive"
+                        & ssh @sshOpts "$targetUser@$targetHost" "tar -xzf $targetDir/$archive -C $targetDir && rm -f $targetDir/$archive"
+                        if ($LASTEXITCODE -ne 0) { throw "SSH extract failed with exit code $LASTEXITCODE" }
 
-                        # 5. Build and launch Docker container on EC2 port 80
+                        # 6. Build and launch Docker container on EC2 port 80
                         Write-Host ">>> Building and starting frontend container on EC2..."
                         $deployCmd = "cd $targetDir && docker compose -f Deployment/docker-compose.yml up -d --build --remove-orphans && docker image prune -f"
-                        & ssh -i "$sshKey" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$targetUser@$targetHost" $deployCmd
+                        & ssh @sshOpts "$targetUser@$targetHost" $deployCmd
+                        if ($LASTEXITCODE -ne 0) { throw "Docker deployment failed with exit code $LASTEXITCODE" }
 
                         Write-Host ">>> Deployment completed successfully!"
                     '''
