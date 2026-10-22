@@ -33,6 +33,13 @@
   - [x] Add retry loop and failure throwing in Jenkins `Remote Health Check` stage
   - [x] Commit and push changes to GitHub
 
+- [x] **Phase 6: Fix PowerShell Variable Drive Scope Parsing ($i:)**
+  - [x] Identified that `"Attempt $i:"` is parsed by PowerShell as drive scope reference `$i:`
+  - [x] Replaced with `"Attempt [$i/6]"`
+  - [x] Verified PowerShell health check script syntax locally
+  - [x] Updated lessons in `tasks/lessons.md`
+  - [x] Commit and push changes to GitHub
+
 ---
 
 

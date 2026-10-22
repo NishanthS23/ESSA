@@ -19,3 +19,8 @@
   ```
 - **SSH Logging**: Always add `-o LogLevel=ERROR` to SSH/SCP command arguments to suppress harmless `Permanently added ... to the list of known hosts` stderr warnings that can trigger error conditions in PowerShell wrappers.
 
+### 3. PowerShell Colon Syntax After Variables
+- **Pattern**: When a variable is directly followed by a colon in a string (e.g. `"$i:"` or `"$host:"`), PowerShell treats `:` as a drive/namespace delimiter (e.g. `$env:`, `$global:`) and throws `InvalidVariableReferenceWithDrive: Variable reference is not valid. ':' was not followed by a valid variable name character.`
+- **Rule**: Never place a colon directly after a variable in string interpolation. Delimit with brackets `Attempt [$i/6]`, curly braces `${i}:`, or subexpression `$($i):`.
+
+

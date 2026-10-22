@@ -141,14 +141,14 @@ pipeline {
                         for ($i = 1; $i -le 6; $i++) {
                             try {
                                 $res = Invoke-WebRequest -Uri "http://$targetHost" -UseBasicParsing -TimeoutSec 10 -Method Head -ErrorAction Stop
-                                Write-Host "Attempt $i: HTTP Response Code: $($res.StatusCode)"
+                                Write-Host "Attempt [$i/6] HTTP Response Code: $($res.StatusCode)"
                                 if ($res.StatusCode -eq 200 -or $res.StatusCode -eq 304) {
                                     Write-Host "SUCCESS: Remote EC2 is responding with HTTP $($res.StatusCode) OK!"
                                     $healthy = $true
                                     break
                                 }
                             } catch {
-                                Write-Host "Attempt $i: Waiting for container to respond... ($($_.Exception.Message))"
+                                Write-Host "Attempt [$i/6] - Waiting for container to respond... ($($_.Exception.Message))"
                                 Start-Sleep -Seconds 5
                             }
                         }
