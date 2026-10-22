@@ -11,13 +11,23 @@ const MIME = {
   '.json': 'application/json',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
-  '.webp': 'image/webp'
+  '.webp': 'image/webp',
+  '.mp4': 'video/mp4',
+  '.mkv': 'video/x-matroska',
+  '.webm': 'video/webm'
 };
 
 const server = http.createServer((req, res) => {
   let reqPath = req.url.split('?')[0];
   if (reqPath === '/') reqPath = '/index.html';
-  const filePath = path.join(__dirname, reqPath);
+  let filePath = path.join(__dirname, 'frontend', reqPath);
+
+  if (!fs.existsSync(filePath)) {
+    const publicPath = path.join(__dirname, 'frontend', 'public', reqPath);
+    if (fs.existsSync(publicPath)) {
+      filePath = publicPath;
+    }
+  }
 
   fs.readFile(filePath, (err, content) => {
     if (err) {

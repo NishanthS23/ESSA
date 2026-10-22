@@ -172,7 +172,7 @@ export function initSecurityTabs() {
 
         <!-- ESAA Logo Mark -->
         <div class="sec-chip sec-esaa-mark" title="ESAA Enterprise">
-          <img src="esaa-logo-light.png" alt="ESAA" class="sec-esaa-img" />
+          <img src="/images/esaa-logo-light.png" alt="ESAA" class="sec-esaa-img" />
         </div>
       </div>
     `;

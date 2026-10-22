@@ -1,0 +1,23 @@
+services:
+  frontend:
+    build:
+      context: ..
+      dockerfile: frontend/Dockerfile
+    container_name: essa-frontend
+    restart: unless-stopped
+    ports:
+      - "${PORT:-80}:80"
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+      - essa-network
+
+networks:
+  essa-network:
+    driver: bridge
