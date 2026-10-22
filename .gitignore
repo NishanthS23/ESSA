@@ -11,6 +11,7 @@ dist-ssr
 *.local
 .env
 .env.*
+*.pem
 
 # Logs
 npm-debug.log*

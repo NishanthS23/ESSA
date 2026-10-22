@@ -1,90 +1,86 @@
 # Local Jenkins to Remote Ubuntu EC2 Deployment Guide
 
-This guide explains how to configure your **Local Jenkins** instance to automatically build and deploy the ESAA frontend to your **remote Ubuntu EC2 instance (`15.206.174.225`)** over SSH.
+This guide explains how to configure your **Local Jenkins** to deploy to your **Ubuntu EC2 instance** securely using a separate secret file for host and user credentials.
 
 ---
 
-## Architecture Overview
+## Security Architecture
 
+No sensitive server information (IP address, username, private key) is hardcoded in the codebase:
+- **`ec2-ssh-key`**: Jenkins SSH private key credential (your `ESSA.pem` file).
+- **`ec2-secret-file`**: Jenkins Secret file credential containing `EC2_HOST`, `EC2_USER`, and `REMOTE_DIR`.
+
+---
+
+## Step 1: Create Your Secret File
+
+Create a small file on your local computer named `ec2-secret.env` (or any name you like) with the following content:
+
+```env
+EC2_HOST=15.206.174.225
+EC2_USER=ubuntu
+REMOTE_DIR=/home/ubuntu/essa
 ```
-[ Local Machine / Local Jenkins ]
-       │
-       │  1. Clones repository code locally
-       │  2. Connects over SSH using ESSA.pem
-       │  3. Syncs project files to EC2 (~/essa)
-       │  4. Runs "docker compose up -d --build" remotely
-       ▼
-[ Remote Ubuntu EC2 (15.206.174.225) ]
-       │
-       ▼  Serves live frontend on Port 80
-```
+
+*(You can refer to the template in [`Deployment/ec2-secret.env.example`](./ec2-secret.env.example)).*
 
 ---
 
-## Step 1: Install "SSH Agent" Plugin in Local Jenkins
+## Step 2: Add Credentials in Local Jenkins
 
-1. Open your Local Jenkins dashboard (e.g. `http://localhost:8080`).
-2. Go to **Manage Jenkins** -> **Plugins** -> **Installed plugins**.
-3. Check if **"SSH Agent Plugin"** is installed.
-   - If not installed, go to **Available plugins**, search for **SSH Agent**, and click **Install**.
+Open your Local Jenkins dashboard (`http://localhost:8080`) and go to:
+**Manage Jenkins** -> **Credentials** -> Click **(global)** under System -> **Add Credentials**.
 
----
+### Credential 1: The Secret File (`ec2-secret-file`)
+1. Click **Add Credentials**:
+   - **Kind**: Select `Secret file`.
+   - **File**: Choose your `ec2-secret.env` file created in Step 1.
+   - **ID**: `ec2-secret-file` *(Must match the `EC2_SECRET_FILE_ID` in `Jenkinsfile`)*.
+   - **Description**: `EC2 Host and User Secret Configuration`.
+2. Click **Create**.
 
-## Step 2: Add your `ESSA.pem` Key to Jenkins Credentials
-
-1. On your Local Jenkins dashboard, go to:
-   **Manage Jenkins** -> **Credentials** -> Click **(global)** under System -> **Add Credentials**.
-2. Fill in the fields:
+### Credential 2: The SSH Key (`ec2-ssh-key`)
+1. Click **Add Credentials**:
    - **Kind**: Select `SSH Username with private key`.
-   - **ID**: `ec2-ssh-key` *(Must match the `SSH_KEY_ID` in `Jenkinsfile`)*.
-   - **Description**: `EC2 Ubuntu SSH Key`.
+   - **ID**: `ec2-ssh-key` *(Must match `SSH_KEY_ID` in `Jenkinsfile`)*.
    - **Username**: `ubuntu`.
-   - **Private Key**: Select **Enter directly**, click **Add**, and paste the full contents of your `ESSA.pem` file:
-     ```
-     -----BEGIN RSA PRIVATE KEY-----
-     ...
-     -----END RSA PRIVATE KEY-----
-     ```
-3. Click **Create**.
+   - **Private Key**: Select **Enter directly** -> **Add** -> paste the entire contents of your `ESSA.pem` file.
+   - **Description**: `EC2 Ubuntu Private Key`.
+2. Click **Create**.
 
 ---
 
-## Step 3: Create the Pipeline Job in Local Jenkins
+## Step 3: Ensure "SSH Agent Plugin" is Installed
 
-1. On your Local Jenkins dashboard, click **New Item**.
-2. Enter a job name (e.g., `essa-ec2-deployment`).
-3. Select **Pipeline** and click **OK**.
-4. In the job configuration page, scroll down to **Pipeline**:
-   - **Definition**: `Pipeline script from SCM`
-   - **SCM**: `Git`
-   - **Repository URL**: Paste your repository URL.
-   - **Credentials**: If the Git repository is private, add your Git credentials.
-   - **Branch Specifier**: `*/main` (or `*/master`).
-   - **Script Path**: `Jenkinsfile`.
-5. Click **Save**.
+In Jenkins -> **Manage Jenkins** -> **Plugins** -> **Installed plugins**:
+Ensure **SSH Agent Plugin** is installed (if not, search and install it from **Available plugins**).
 
 ---
 
 ## Step 4: Run the Pipeline
 
-1. Click **Build Now** on the pipeline page.
-2. Click on the build number (e.g., `#1`) -> **Console Output** to watch the deployment:
-   - Connects to `ubuntu@15.206.174.225`.
-   - Syncs project files (excluding `node_modules` and `.git` for fast transfer).
-   - Executes `docker compose -f Deployment/docker-compose.yml up -d --build` on EC2.
-   - Performs a remote health check on `http://15.206.174.225`.
-3. Open your browser to verify:
-   ```
-   http://15.206.174.225
-   ```
+1. In Jenkins, create or open your Pipeline job.
+2. In the job configuration under **Pipeline**:
+   - **Definition**: `Pipeline script from SCM`
+   - **SCM**: `Git`
+   - **Repository URL**: Your repository URL.
+   - **Branch Specifier**: `*/main`.
+   - **Script Path**: `Jenkinsfile`.
+3. Click **Save** and then click **Build Now**.
+
+### Pipeline Execution Flow:
+1. Jenkins checks out the repository.
+2. Securely loads `EC2_HOST` and `EC2_USER` from the secret file via `withCredentials`.
+3. Opens the SSH session with `ec2-ssh-key`.
+4. Streams the project files to the EC2 directory (`/home/ubuntu/essa`).
+5. Executes `docker compose -f Deployment/docker-compose.yml up -d --build` on the remote EC2 instance.
+6. Runs an automated remote health check on `http://${EC2_HOST}`.
+7. Shuts down and cleans up credentials in memory.
 
 ---
 
-## Step 5: (Optional) Automatic Trigger on `git push`
+## Changing Server IP or User in the Future
 
-If your Git repository is on GitHub:
-1. In your pipeline configuration under **Build Triggers**, check:
-   - **GitHub hook trigger for GITScm polling**
-2. In your GitHub repository -> **Settings** -> **Webhooks** -> **Add webhook**:
-   - **Payload URL**: `http://<YOUR_LOCAL_OR_TUNNELED_JENKINS_URL>/github-webhook/`
-   - *(Note: If Local Jenkins is behind a home/office router, you can use [ngrok](https://ngrok.com) like `ngrok http 8080` to expose the webhook).*
+If you ever change EC2 instances, elastic IPs, or users:
+- **You do NOT need to touch or modify any code in Git.**
+- Simply update the `ec2-secret-file` credential in Jenkins with the new IP address.

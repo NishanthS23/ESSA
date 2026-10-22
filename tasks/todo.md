@@ -1,28 +1,27 @@
 # Local Jenkins to EC2 Deployment Plan
 
 - [x] **Phase 1: Architecture Definition**
-  - [x] Topology: Local Jenkins (running on host) -> SSH Deployment -> Remote Ubuntu EC2 (`15.206.174.225`)
+  - [x] Topology: Local Jenkins (running on host) -> SSH Deployment -> Remote Ubuntu EC2
   - [x] Authentication: SSH Key-based authentication using `ESSA.pem` (`ec2-ssh-key` credential)
-  - [x] Mechanism: Code transfer over SSH + remote Docker Compose execution on EC2
+  - [x] Secret Management: Decouple `EC2_HOST` and `EC2_USER` into a separate Jenkins "Secret file" credential (`ec2-secret-file`)
 
 - [x] **Phase 2: Jenkinsfile Update**
-  - [x] Update root `Jenkinsfile` for remote SSH deployment to EC2
-  - [x] Add `EC2_HOST`, `EC2_USER`, `SSH_KEY_ID`, `REMOTE_DIR` environment configurations
-  - [x] Implement remote Docker Compose build & health check
+  - [x] Update root `Jenkinsfile` to remove hardcoded IP and user
+  - [x] Use `withCredentials([file(credentialsId: 'ec2-secret-file', variable: 'SECRET_CONFIG')])` to dynamically load `EC2_HOST` and `EC2_USER`
+  - [x] Add template example file [`Deployment/ec2-secret.env.example`](file:///c:/Users/Work/Documents/work/essa/Deployment/ec2-secret.env.example)
+  - [x] Ensure `.gitignore` ignores `*.pem` and `.env*`
 
 - [x] **Phase 3: Local Jenkins Setup Guide**
-  - [x] Step 1: Add `ESSA.pem` as Jenkins Credential (SSH Username with private key)
-  - [x] Step 2: Ensure "SSH Agent Plugin" is installed
-  - [x] Step 3: Run pipeline and verify deployment on `http://15.206.174.225`
+  - [x] Step 1: Create secret file and add as Jenkins Secret File credential (`ec2-secret-file`)
+  - [x] Step 2: Add `ESSA.pem` as Jenkins SSH credential (`ec2-ssh-key`)
+  - [x] Step 3: Run pipeline and verify deployment
 
 ---
 
 ## Review & Audit Results
 
-1. **Local Jenkins to Remote EC2 Pipeline**:
-   - [`Jenkinsfile`](file:///c:/Users/Work/Documents/work/essa/Jenkinsfile): Configured with `EC2_HOST = '15.206.174.225'`, `EC2_USER = 'ubuntu'`, and `SSH_KEY_ID = 'ec2-ssh-key'`.
-   - Uses `sshagent` to securely authenticate with your EC2 instance using your `ESSA.pem` key.
-   - Syncs project code (excluding `node_modules` and `.git` for fast streaming), builds the multi-stage Docker container on the EC2 host, and tests the live HTTP response.
-
-2. **Step-by-Step Guide**:
-   - Detailed setup instructions saved in [`Deployment/JENKINS_SETUP.md`](file:///c:/Users/Work/Documents/work/essa/Deployment/JENKINS_SETUP.md).
+1. **Zero Hardcoded Secrets**:
+   - Neither the EC2 IP address (`15.206.174.225`), the username (`ubuntu`), nor the SSH private key exist in the tracked code or `Jenkinsfile`.
+   - All server connection details are loaded dynamically at runtime via Jenkins' encrypted credential store using the `ec2-secret-file` secret file.
+2. **Easy Multi-Environment / Migration Support**:
+   - Changing instances, switching IPs, or migrating servers only requires uploading a new secret file in Jenkins, with zero code changes needed.
